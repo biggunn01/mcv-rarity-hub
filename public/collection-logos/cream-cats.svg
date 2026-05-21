@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Cream Cats">
+  <defs>
+    <radialGradient id="bg" cx="42%" cy="30%" r="72%">
+      <stop offset="0" stop-color="#fff0ba"/>
+      <stop offset="0.45" stop-color="#f3b84f"/>
+      <stop offset="1" stop-color="#402713"/>
+    </radialGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" fill="#0b0907"/>
+  <circle cx="256" cy="256" r="224" fill="url(#bg)"/>
+  <circle cx="256" cy="264" r="136" fill="#fff3ca" filter="url(#glow)"/>
+  <path d="M150 225 112 148l83 41M362 225l38-77-83 41" fill="#fff3ca" stroke="#2a160b" stroke-width="16" stroke-linejoin="round"/>
+  <circle cx="207" cy="258" r="18" fill="#221108"/>
+  <circle cx="305" cy="258" r="18" fill="#221108"/>
+  <path d="M256 284c-20 0-31 13-31 13s11 19 31 19 31-19 31-19-11-13-31-13Z" fill="#d77d38" stroke="#221108" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M196 326c24 28 96 28 120 0" fill="none" stroke="#221108" stroke-width="14" stroke-linecap="round"/>
+  <path d="M132 288h72M128 328h76M380 288h-72M384 328h-76" stroke="#221108" stroke-width="10" stroke-linecap="round"/>
+  <text x="256" y="448" text-anchor="middle" fill="#fff6d6" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="900">CREAM CATS</text>
+</svg>

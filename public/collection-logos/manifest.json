@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "mars-cats-voyage",
+    "source": "https://i2c.seadn.io/ethereum/feb88918ade548598f1ba0ad750ccd15/354456debaea0d734f1d7819c4faaa/d8354456debaea0d734f1d7819c4faaa.png",
+    "file": "/collection-logos/mars-cats-voyage.avif",
+    "bytes": 1476,
+    "contentType": "image/avif"
+  },
+  {
+    "slug": "mars-alien-cats",
+    "source": "https://i2c.seadn.io/ethereum/13274530e7a246b190d84e0f48ff3d1c/402b5c856d7dd96a54aa4bcc5542fe/66402b5c856d7dd96a54aa4bcc5542fe.png",
+    "file": "/collection-logos/mars-alien-cats.avif",
+    "bytes": 4096,
+    "contentType": "image/avif"
+  },
+  {
+    "slug": "mars-cats-in-spacesuits",
+    "source": "https://i2c.seadn.io/ethereum/0fc754c413524a9fa9ef45c3a659b21e/f3dabd691253a78b5b363b2ff34ebf/6cf3dabd691253a78b5b363b2ff34ebf.png",
+    "file": "/collection-logos/mars-cats-in-spacesuits.avif",
+    "bytes": 1746,
+    "contentType": "image/avif"
+  },
+  {
+    "slug": "mars-cats-snipers",
+    "source": "https://i2c.seadn.io/base/66dccc3c88264d1f9c7d9347c7a151c7/3c778d964f71d82f515e2b9e302aec/113c778d964f71d82f515e2b9e302aec.jpeg",
+    "file": "/collection-logos/mars-cats-snipers.avif",
+    "bytes": 3069,
+    "contentType": "image/avif"
+  },
+  {
+    "slug": "metazoku",
+    "source": "https://i2c.seadn.io/ethereum/f4a0f2725f8b45a0ac563139d2c9c060/96897ca2fc2e2cd3dd0286267d11a5/0096897ca2fc2e2cd3dd0286267d11a5.png",
+    "file": "/collection-logos/metazoku.avif",
+    "bytes": 2560,
+    "contentType": "image/avif"
+  },
+  {
+    "slug": "battle-pawss",
+    "source": "https://i2c.seadn.io/collection/battle-pawss-tails-of-the-fracture-voyage-to-abyssoria/image_type_logo/3108fa6a40fd8da67614c66cad14b6/f23108fa6a40fd8da67614c66cad14b6.png",
+    "file": "/collection-logos/battle-pawss.avif",
+    "bytes": 55844,
+    "contentType": "image/avif"
+  }
+]

@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2026-05-21T23:51:18.686Z",
+  "official": true,
+  "warning": "11 imported token(s) had no trait metadata and were excluded from scoring. Rankings use real imported metadata.",
+  "collections": [
+    {
+      "slug": "mars-cats-voyage",
+      "name": "Mars Cats Voyage",
+      "status": "Real Imported Data",
+      "actualTokenCount": 9999,
+      "importedTokenCount": 9999,
+      "excludedTokenCount": 0,
+      "hasMockData": false,
+      "output": "data/processed/mars-cats-voyage.json"
+    },
+    {
+      "slug": "mars-alien-cats",
+      "name": "Mars Alien Cats Collection",
+      "status": "Real Imported Data",
+      "actualTokenCount": 9900,
+      "importedTokenCount": 9900,
+      "excludedTokenCount": 0,
+      "hasMockData": false,
+      "output": "data/processed/mars-alien-cats.json"
+    },
+    {
+      "slug": "mars-cats-in-spacesuits",
+      "name": "Mars Cats in Spacesuits",
+      "status": "Real Imported Data",
+      "actualTokenCount": 2052,
+      "importedTokenCount": 2063,
+      "excludedTokenCount": 11,
+      "hasMockData": false,
+      "output": "data/processed/mars-cats-in-spacesuits.json"
+    },
+    {
+      "slug": "mars-cats-snipers",
+      "name": "Mars Cats Snipers",
+      "status": "Real Imported Data",
+      "actualTokenCount": 100,
+      "importedTokenCount": 100,
+      "excludedTokenCount": 0,
+      "hasMockData": false,
+      "output": "data/processed/mars-cats-snipers.json"
+    },
+    {
+      "slug": "metazoku",
+      "name": "MetaZoku",
+      "status": "Real Imported Data",
+      "actualTokenCount": 1000,
+      "importedTokenCount": 1000,
+      "excludedTokenCount": 0,
+      "hasMockData": false,
+      "output": "data/processed/metazoku.json"
+    },
+    {
+      "slug": "battle-pawss",
+      "name": "Battle Pawss: Voyage to Abyssoria",
+      "status": "Real Imported Data",
+      "actualTokenCount": 5453,
+      "importedTokenCount": 5453,
+      "excludedTokenCount": 0,
+      "hasMockData": false,
+      "output": "data/processed/battle-pawss.json"
+    },
+    {
+      "slug": "cream-cats",
+      "name": "Cream Cats",
+      "status": "Real Imported Data",
+      "actualTokenCount": 333,
+      "importedTokenCount": 333,
+      "excludedTokenCount": 0,
+      "hasMockData": false,
+      "output": "data/processed/cream-cats.json"
+    }
+  ]
+}

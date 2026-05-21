@@ -1,0 +1,98 @@
+[
+  {
+    "tokenId": "1",
+    "canonicalTokenId": "1",
+    "name": "Mars Cat #1",
+    "image": "/mock-token.svg",
+    "chain": "Ethereum",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Background", "value": "Icaria Dawn" },
+      { "trait_type": "Fur", "value": "Nebula" },
+      { "trait_type": "Eyes", "value": "Gold" },
+      { "trait_type": "Headwear", "value": "Voyager Helmet" },
+      { "trait_type": "Mouth", "value": "Smirk" },
+      { "trait_type": "Suit", "value": "Flight Jacket" }
+    ]
+  },
+  {
+    "tokenId": "2",
+    "canonicalTokenId": "2",
+    "name": "Mars Cat #2",
+    "image": "/mock-token.svg",
+    "chain": "Ethereum",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Background", "value": "Deep Space" },
+      { "trait_type": "Fur", "value": "Red Tabby" },
+      { "trait_type": "Eyes", "value": "Green" },
+      { "trait_type": "Mouth", "value": "Calm" }
+    ]
+  },
+  {
+    "tokenId": "3",
+    "canonicalTokenId": "3",
+    "name": "Mars Cat #3",
+    "image": "/mock-token.svg",
+    "chain": "ApeChain",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Background", "value": "Deep Space" },
+      { "trait_type": "Fur", "value": "Nebula" },
+      { "trait_type": "Eyes", "value": "Blue" },
+      { "trait_type": "Headwear", "value": "None" },
+      { "trait_type": "Mouth", "value": "Calm" }
+    ]
+  },
+  {
+    "tokenId": "4",
+    "canonicalTokenId": "4",
+    "name": "Mars Cat #4",
+    "image": "/mock-token.svg",
+    "chain": "Ethereum",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Background", "value": "Icaria Dawn" },
+      { "trait_type": "Fur", "value": "Black" },
+      { "trait_type": "Eyes", "value": "Gold" },
+      { "trait_type": "Mouth", "value": "Smile" }
+    ]
+  },
+  {
+    "tokenId": "5",
+    "canonicalTokenId": "5",
+    "name": "Mars Cat #5",
+    "image": "/mock-token.svg",
+    "chain": "ApeChain",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Background", "value": "Red Planet" },
+      { "trait_type": "Fur", "value": "Black" },
+      { "trait_type": "Eyes", "value": "Green" },
+      { "trait_type": "Headwear", "value": "Comms Cap" },
+      { "trait_type": "Mouth", "value": "Smirk" },
+      { "trait_type": "Suit", "value": "Explorer Vest" }
+    ]
+  },
+  {
+    "tokenId": "6",
+    "canonicalTokenId": "6",
+    "name": "Mars Cat #6",
+    "image": "/mock-token.svg",
+    "chain": "Ethereum",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Background", "value": "Red Planet" },
+      { "trait_type": "Fur", "value": "Red Tabby" },
+      { "trait_type": "Eyes", "value": "Blue" },
+      { "trait_type": "Headwear", "value": "None" },
+      { "trait_type": "Mouth", "value": "Smile" }
+    ]
+  }
+]

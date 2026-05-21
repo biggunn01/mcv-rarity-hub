@@ -1,0 +1,116 @@
+[
+  {
+    "tokenId": "289",
+    "canonicalTokenId": "289",
+    "chain": "Ethereum",
+    "contractAddress": "0xbe477f544a6d1d4143ce3115be30489c26ee14e2",
+    "marketplaceUrl": "https://opensea.io/item/ethereum/0xbe477f544a6d1d4143ce3115be30489c26ee14e2/289",
+    "orderHash": "0xf716073e6dc3b894f13b8f2d03d78c872bfb75f3ea6ff5c40ebc2f0277cac9d4",
+    "status": "ACTIVE",
+    "price": {
+      "value": "14000000000000000",
+      "decimals": 18,
+      "currency": "ETH",
+      "native": 0.014,
+      "display": "0.014 ETH"
+    },
+    "seller": "0x5118e729847382c3f25dfedd0d6fbd57cb48a471",
+    "createdAt": 1778924114,
+    "source": "opensea:listings:collection-all"
+  },
+  {
+    "tokenId": "412",
+    "canonicalTokenId": "412",
+    "chain": "Ethereum",
+    "contractAddress": "0xbe477f544a6d1d4143ce3115be30489c26ee14e2",
+    "marketplaceUrl": "https://opensea.io/item/ethereum/0xbe477f544a6d1d4143ce3115be30489c26ee14e2/412",
+    "orderHash": "0xbb56cefb9624f59658bc1f209c8fa9b2cf4e2a48fe81362e4ddbf60d14a4b46d",
+    "status": "ACTIVE",
+    "price": {
+      "value": "18000000000000000",
+      "decimals": 18,
+      "currency": "ETH",
+      "native": 0.018,
+      "display": "0.018 ETH"
+    },
+    "seller": "0x5118e729847382c3f25dfedd0d6fbd57cb48a471",
+    "createdAt": 1778924114,
+    "source": "opensea:listings:collection-all"
+  },
+  {
+    "tokenId": "741",
+    "canonicalTokenId": "741",
+    "chain": "Ethereum",
+    "contractAddress": "0xbe477f544a6d1d4143ce3115be30489c26ee14e2",
+    "marketplaceUrl": "https://opensea.io/item/ethereum/0xbe477f544a6d1d4143ce3115be30489c26ee14e2/741",
+    "orderHash": "0xeb4da1711db6a66caf6f6b6bc2d7976a122a21e213410900ce99946ee23c561f",
+    "status": "ACTIVE",
+    "price": {
+      "value": "20000000000000000",
+      "decimals": 18,
+      "currency": "ETH",
+      "native": 0.02,
+      "display": "0.02 ETH"
+    },
+    "seller": "0x5118e729847382c3f25dfedd0d6fbd57cb48a471",
+    "createdAt": 1778924114,
+    "source": "opensea:listings:collection-all"
+  },
+  {
+    "tokenId": "772",
+    "canonicalTokenId": "772",
+    "chain": "Ethereum",
+    "contractAddress": "0xbe477f544a6d1d4143ce3115be30489c26ee14e2",
+    "marketplaceUrl": "https://opensea.io/item/ethereum/0xbe477f544a6d1d4143ce3115be30489c26ee14e2/772",
+    "orderHash": "0x18e36859e25dbbc802211ba235d6f367e931aa64cdf536433ca13833d7ef6501",
+    "status": "ACTIVE",
+    "price": {
+      "value": "10000000000000000",
+      "decimals": 18,
+      "currency": "ETH",
+      "native": 0.01,
+      "display": "0.01 ETH"
+    },
+    "seller": "0x5118e729847382c3f25dfedd0d6fbd57cb48a471",
+    "createdAt": 1778924114,
+    "source": "opensea:listings:collection-all"
+  },
+  {
+    "tokenId": "862",
+    "canonicalTokenId": "862",
+    "chain": "Ethereum",
+    "contractAddress": "0xbe477f544a6d1d4143ce3115be30489c26ee14e2",
+    "marketplaceUrl": "https://opensea.io/item/ethereum/0xbe477f544a6d1d4143ce3115be30489c26ee14e2/862",
+    "orderHash": "0xf407636e7b486400ec2ac7269437cbc44fee03d96362bf165e65e961ecbc76d3",
+    "status": "ACTIVE",
+    "price": {
+      "value": "16000000000000000",
+      "decimals": 18,
+      "currency": "ETH",
+      "native": 0.016,
+      "display": "0.016 ETH"
+    },
+    "seller": "0x5118e729847382c3f25dfedd0d6fbd57cb48a471",
+    "createdAt": 1778924114,
+    "source": "opensea:listings:collection-all"
+  },
+  {
+    "tokenId": "953",
+    "canonicalTokenId": "953",
+    "chain": "Ethereum",
+    "contractAddress": "0xbe477f544a6d1d4143ce3115be30489c26ee14e2",
+    "marketplaceUrl": "https://opensea.io/item/ethereum/0xbe477f544a6d1d4143ce3115be30489c26ee14e2/953",
+    "orderHash": "0xc5f09679337254b26a134b37611e1deeecbde8ddfb654b8dc45d2439f5a1d8e2",
+    "status": "ACTIVE",
+    "price": {
+      "value": "12000000000000000",
+      "decimals": 18,
+      "currency": "ETH",
+      "native": 0.012,
+      "display": "0.012 ETH"
+    },
+    "seller": "0x5118e729847382c3f25dfedd0d6fbd57cb48a471",
+    "createdAt": 1778924114,
+    "source": "opensea:listings:collection-all"
+  }
+]

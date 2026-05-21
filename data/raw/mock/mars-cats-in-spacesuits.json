@@ -1,0 +1,16 @@
+[
+  {
+    "tokenId": "1115",
+    "name": "Mars Cat in Spacesuit #1115",
+    "image": "/mock-token.svg",
+    "chain": "Ethereum",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Suit", "value": "Sample" },
+      { "trait_type": "Helmet", "value": "Sample" },
+      { "trait_type": "Cat", "value": "Sample" },
+      { "trait_type": "Background", "value": "Sample" }
+    ]
+  }
+]

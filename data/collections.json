@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "mars-cats-voyage",
+    "name": "Mars Cats Voyage",
+    "group": "MCV",
+    "status": "Real Imported Data",
+    "summary": "Unified rarity group for Mars Cats Voyage cats across Ethereum and ApeChain.",
+    "tokenCountExpected": 10000,
+    "bannerImage": "/collection-mcv.svg",
+    "sources": [
+      {
+        "chain": "Ethereum",
+        "contractAddress": "0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d",
+        "metadataSource": "etherscan:tokenURI",
+        "scannerApiBaseUrl": "https://api.etherscan.io/v2/api",
+        "scannerApiKeyEnv": "ETHERSCAN_API_KEY",
+        "scannerChainId": "1",
+        "explorerBaseUrl": "https://etherscan.io/token/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d?a=",
+        "marketplaceBaseUrl": "https://opensea.io/item/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/",
+        "openSea": {
+          "type": "collection",
+          "slug": "marscatsvoyage"
+        }
+      },
+      {
+        "chain": "ApeChain",
+        "contractAddress": "0xca76944acbc4675f566d062d658bfadf6f469ca7",
+        "metadataSource": "etherscan-v2:tokenURI",
+        "scannerApiBaseUrl": "https://api.etherscan.io/v2/api",
+        "scannerApiKeyEnv": "ETHERSCAN_API_KEY",
+        "scannerChainId": "33139",
+        "explorerBaseUrl": "https://apescan.io/nft/0xca76944acbc4675f566d062d658bfadf6f469ca7/",
+        "marketplaceBaseUrl": "https://opensea.io/item/ape_chain/0xca76944acbc4675f566d062d658bfadf6f469ca7/",
+        "openSea": {
+          "type": "contract",
+          "chain": "ape_chain",
+          "contractAddress": "0xca76944acbc4675f566d062d658bfadf6f469ca7"
+        }
+      }
+    ],
+    "canonicalIdentity": {
+      "strategy": "canonicalTokenId",
+      "notes": "ETH and ApeChain records must resolve to one canonical token before ranking. Mirrored or bridged duplicates are excluded from scoring."
+    },
+    "rarityScoring": {
+      "traitCountScarcityExponent": 0.33,
+      "notes": "MCV 4-trait cats are structurally scarce. Trait Count rarity is used as a scarcity boost so the 173 four-trait cats are ranked as rare instead of being buried by average trait math."
+    },
+    "rawMetadataFile": "data/raw/imported/mars-cats-voyage.json"
+  },
+  {
+    "slug": "mars-alien-cats",
+    "name": "Mars Alien Cats Collection",
+    "group": "MCV",
+    "status": "Real Imported Data",
+    "summary": "Mars Alien Cats collection on Ethereum.",
+    "tokenCountExpected": 9900,
+    "bannerImage": "/collection-mcv.svg",
+    "sources": [
+      {
+        "chain": "Ethereum",
+        "contractAddress": "0xe5903df9d94cbacc0b9696137316c74a2f1d8909",
+        "metadataSource": "etherscan:tokenURI",
+        "scannerApiBaseUrl": "https://api.etherscan.io/v2/api",
+        "scannerApiKeyEnv": "ETHERSCAN_API_KEY",
+        "scannerChainId": "1",
+        "explorerBaseUrl": "https://etherscan.io/token/0xe5903df9d94cbacc0b9696137316c74a2f1d8909?a=",
+        "marketplaceBaseUrl": "https://opensea.io/item/ethereum/0xe5903df9d94cbacc0b9696137316c74a2f1d8909/",
+        "openSea": {
+          "type": "collection",
+          "slug": "marsaliencats"
+        }
+      }
+    ],
+    "canonicalIdentity": {
+      "strategy": "sourceTokenId",
+      "notes": "Rank only inside the Mars Alien Cats collection group."
+    },
+    "rawMetadataFile": "data/raw/imported/mars-alien-cats.json"
+  },
+  {
+    "slug": "mars-cats-in-spacesuits",
+    "name": "Mars Cats in Spacesuits",
+    "group": "MCV",
+    "status": "Real Imported Data",
+    "summary": "Spacesuited Mars Cats collection on Ethereum.",
+    "tokenCountExpected": 2063,
+    "bannerImage": "/collection-mcv.svg",
+    "sources": [
+      {
+        "chain": "Ethereum",
+        "contractAddress": "0xf148438326e50ec1c703cb8fc946a6b5a7884e98",
+        "metadataSource": "etherscan:tokenURI",
+        "scannerApiBaseUrl": "https://api.etherscan.io/v2/api",
+        "scannerApiKeyEnv": "ETHERSCAN_API_KEY",
+        "scannerChainId": "1",
+        "explorerBaseUrl": "https://etherscan.io/token/0xf148438326e50ec1c703cb8fc946a6b5a7884e98?a=",
+        "marketplaceBaseUrl": "https://opensea.io/item/ethereum/0xf148438326e50ec1c703cb8fc946a6b5a7884e98/",
+        "openSea": {
+          "type": "collection",
+          "slug": "marscatsinspacesuits"
+        }
+      }
+    ],
+    "canonicalIdentity": {
+      "strategy": "sourceTokenId",
+      "notes": "Rank only inside the Mars Cats in Spacesuits collection group."
+    },
+    "rawMetadataFile": "data/raw/imported/mars-cats-in-spacesuits.json"
+  },
+  {
+    "slug": "mars-cats-snipers",
+    "name": "Mars Cats Snipers",
+    "group": "MCV",
+    "status": "Real Imported Data",
+    "summary": "Mars Cats Snipers collection on Base.",
+    "tokenCountExpected": 100,
+    "bannerImage": "/collection-mcv.svg",
+    "sources": [
+      {
+        "chain": "Base",
+        "contractAddress": "0x97b8158554154748bb7f80efe1a1ea002f898db8",
+        "metadataSource": "etherscan-v2:tokenURI",
+        "scannerApiBaseUrl": "https://api.etherscan.io/v2/api",
+        "scannerApiKeyEnv": "ETHERSCAN_API_KEY",
+        "scannerChainId": "8453",
+        "rpcUrlEnv": "BASE_RPC_URL",
+        "fallbackMetadataSource": "local-import-cache",
+        "explorerBaseUrl": "https://basescan.org/token/0x97b8158554154748bb7f80efe1a1ea002f898db8?a=",
+        "marketplaceBaseUrl": "https://opensea.io/item/base/0x97b8158554154748bb7f80efe1a1ea002f898db8/",
+        "openSea": {
+          "type": "collection",
+          "slug": "mars-cats-snipers"
+        }
+      }
+    ],
+    "canonicalIdentity": {
+      "strategy": "sourceTokenId",
+      "notes": "Rank only inside the Mars Cats Snipers collection group."
+    },
+    "rawMetadataFile": "data/raw/imported/mars-cats-snipers.json"
+  },
+  {
+    "slug": "metazoku",
+    "name": "MetaZoku",
+    "group": "MetaZoku",
+    "status": "Real Imported Data",
+    "summary": "Separate rarity group with its own trait schema and rank table.",
+    "tokenCountExpected": 1000,
+    "bannerImage": "/collection-metazoku.svg",
+    "sources": [
+      {
+        "chain": "Ethereum",
+        "contractAddress": "0xbe477f544a6d1d4143ce3115be30489c26ee14e2",
+        "metadataSource": "etherscan:tokenURI",
+        "scannerApiBaseUrl": "https://api.etherscan.io/v2/api",
+        "scannerApiKeyEnv": "ETHERSCAN_API_KEY",
+        "scannerChainId": "1",
+        "explorerBaseUrl": "https://etherscan.io/token/0xbe477f544a6d1d4143ce3115be30489c26ee14e2?a=",
+        "marketplaceBaseUrl": "https://opensea.io/item/ethereum/0xbe477f544a6d1d4143ce3115be30489c26ee14e2/",
+        "openSea": {
+          "type": "collection",
+          "slug": "mtzk"
+        }
+      }
+    ],
+    "canonicalIdentity": {
+      "strategy": "sourceTokenId",
+      "notes": "Rank only inside the MetaZoku collection group."
+    },
+    "rawMetadataFile": "data/raw/imported/metazoku.json"
+  },
+  {
+    "slug": "battle-pawss",
+    "name": "Battle Pawss: Voyage to Abyssoria",
+    "group": "Battle Pawss",
+    "status": "Real Imported Data",
+    "summary": "Separate rarity group with its own trait schema and rank table.",
+    "tokenCountExpected": 5453,
+    "bannerImage": "/collection-battle-pawss.svg",
+    "sources": [
+      {
+        "chain": "ApeChain",
+        "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
+        "metadataSource": "etherscan-v2:tokenURI",
+        "scannerApiBaseUrl": "https://api.etherscan.io/v2/api",
+        "scannerApiKeyEnv": "ETHERSCAN_API_KEY",
+        "scannerChainId": "33139",
+        "fallbackMetadataSource": "opensea-collection-export-or-local-json",
+        "explorerBaseUrl": "https://apescan.io/nft/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/",
+        "marketplaceBaseUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/",
+        "openSea": {
+          "type": "collection",
+          "slug": "battle-pawss-voyage-to-abyssoria"
+        }
+      }
+    ],
+    "canonicalIdentity": {
+      "strategy": "sourceTokenId",
+      "notes": "Rank only inside the Battle Pawss collection group."
+    },
+    "rawMetadataFile": "data/raw/imported/battle-pawss.json"
+  },
+  {
+    "slug": "cream-cats",
+    "name": "Cream Cats",
+    "group": "MCV",
+    "status": "Real Imported Data",
+    "summary": "BTC Ordinals Cream Cats collection using imported marketplace metadata with Satflow rendered previews for token artwork.",
+    "tokenCountExpected": 333,
+    "bannerImage": "/collection-mcv.svg",
+    "sources": [
+      {
+        "chain": "Bitcoin",
+        "contractAddress": "33U66KU5hi94szaebiTShvVTDGVsnZur7q",
+        "metadataSource": "okx:btc:cream-cats metadata plus Satflow rendered inscription previews",
+        "explorerBaseUrl": "https://ordinals.com/inscription/",
+        "marketplaceBaseUrl": "https://web3.okx.com/nft/asset/btc/",
+        "okx": {
+          "projectId": 3274990,
+          "collectionSlug": "cream-cats",
+          "collectionUrl": "https://web3.okx.com/nft/collection/btc/cream-cats",
+          "profileImage": "https://web3.okx.com/cdn/nft/files/collection/3274990-logo.webp",
+          "officialSite": "https://creamcats.io/",
+          "twitter": "https://twitter.com/MarsCatsVoyage",
+          "totalItems": 333,
+          "owners": 168,
+          "totalListed": 0
+        },
+        "satflow": {
+          "collectionUrl": "https://www.satflow.com/ordinals/creamcats",
+          "rendererBaseUrl": "https://rendererv2.satflow.com/render"
+        }
+      }
+    ],
+    "canonicalIdentity": {
+      "strategy": "inscriptionId",
+      "notes": "Each Cream Cats BTC Ordinals token is keyed by inscription ID and rendered through Satflow preview images."
+    },
+    "rawMetadataFile": "data/raw/imported/cream-cats.json"
+  }
+]

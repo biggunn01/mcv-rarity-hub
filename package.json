@@ -1,0 +1,30 @@
+{
+  "name": "mcv-rarity-hub",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "import:metadata": "node scripts/import-metadata.mjs",
+    "import:opensea": "node scripts/import-opensea.mjs",
+    "import:okx:cream-cats": "node scripts/import-okx-cream-cats.mjs",
+    "build:rarity": "node scripts/build-rarity.mjs && node scripts/validate-data.mjs && node scripts/validate-four-trait-cats.mjs mars-cats-voyage",
+    "prebuild": "npm run build:rarity",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.6",
+    "typescript": "^5"
+  }
+}

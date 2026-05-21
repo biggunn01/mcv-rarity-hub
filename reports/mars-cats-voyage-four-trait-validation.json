@@ -1,0 +1,1221 @@
+{
+  "collection": "mars-cats-voyage",
+  "generatedAt": "2026-05-21T23:51:19.433Z",
+  "scoringFormula": {
+    "name": "Trait-count scarcity boosted inverse frequency",
+    "explanation": "Each trait weight is collection supply divided by that trait occurrence count. Trait Count is measured by occurrence rarity and applied as a scarcity boost to the token's average trait weight. This collection uses a 0.33 exponent on Trait Count rarity, so structurally scarce low-trait-count tokens rank higher while individual trait rarity still orders tokens inside that group.",
+    "traitCountScarcityExponent": 0.33
+  },
+  "totalTokens": 9999,
+  "totalFourTraitCats": 173,
+  "rankDistribution": {
+    "bestRank": 2,
+    "worstRank": 174,
+    "topHalfCount": 173,
+    "bottomHalfCount": 0
+  },
+  "topRankedFourTraitCats": [
+    {
+      "tokenId": "5020",
+      "canonicalTokenId": "5020",
+      "name": "Mars Cat #5020",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/17c4026348e2ec918d8ae36f614775/ec17c4026348e2ec918d8ae36f614775.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Tiger",
+          "count": 401,
+          "percentage": 4.0104,
+          "rarityWeight": 24.9352,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Closed",
+          "count": 733,
+          "percentage": 7.3307,
+          "rarityWeight": 13.6412,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Whistling",
+          "count": 260,
+          "percentage": 2.6003,
+          "rarityWeight": 38.4577,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Mars",
+          "count": 831,
+          "percentage": 8.3108,
+          "rarityWeight": 12.0325,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 22.2666,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 84.9347,
+      "rawTraitScore": 146.8643,
+      "rank": 2
+    },
+    {
+      "tokenId": "9993",
+      "canonicalTokenId": "9993",
+      "name": "Mars Cat #9993",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/6e705d3a9a2efc0fe7087284003143/956e705d3a9a2efc0fe7087284003143.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Macchiato",
+          "count": 417,
+          "percentage": 4.1704,
+          "rarityWeight": 23.9784,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Bored",
+          "count": 757,
+          "percentage": 7.5708,
+          "rarityWeight": 13.2087,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Whistling",
+          "count": 260,
+          "percentage": 2.6003,
+          "rarityWeight": 38.4577,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Sand",
+          "count": 795,
+          "percentage": 7.9508,
+          "rarityWeight": 12.5774,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 22.0556,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 84.1295,
+      "rawTraitScore": 146.0199,
+      "rank": 3
+    },
+    {
+      "tokenId": "7435",
+      "canonicalTokenId": "7435",
+      "name": "Mars Cat #7435",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/6ff6122122426e79dbec588fb8ef43/cb6ff6122122426e79dbec588fb8ef43.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Сhocolate",
+          "count": 386,
+          "percentage": 3.8604,
+          "rarityWeight": 25.9041,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Closed",
+          "count": 733,
+          "percentage": 7.3307,
+          "rarityWeight": 13.6412,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Broad Smile",
+          "count": 281,
+          "percentage": 2.8103,
+          "rarityWeight": 35.5836,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Mars",
+          "count": 831,
+          "percentage": 8.3108,
+          "rarityWeight": 12.0325,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 21.7903,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 83.1179,
+      "rawTraitScore": 144.9591,
+      "rank": 4
+    },
+    {
+      "tokenId": "7123",
+      "canonicalTokenId": "7123",
+      "name": "Mars Cat #7123",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/62005585ddcf4f6b963d351a12dee4/2162005585ddcf4f6b963d351a12dee4.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": {
+        "tokenId": "7123",
+        "canonicalTokenId": "7123",
+        "chain": "Ethereum",
+        "contractAddress": "0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d",
+        "marketplaceUrl": "https://opensea.io/item/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/7123",
+        "orderHash": "0x03bf9393a3f73355fa911f370802097dd9377cc5f66ffb08a628826fc5f15105",
+        "status": "ACTIVE",
+        "price": {
+          "value": "110000000000000000",
+          "decimals": 18,
+          "currency": "ETH",
+          "native": 0.11,
+          "display": "0.11 ETH"
+        },
+        "seller": "0x8f5794eb6b97afb43737bcf105e35a7f042da59b",
+        "createdAt": 1777979433,
+        "source": "opensea:listings:collection-all"
+      },
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Neon Pink",
+          "count": 376,
+          "percentage": 3.7604,
+          "rarityWeight": 26.5931,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Lashes",
+          "count": 767,
+          "percentage": 7.6708,
+          "rarityWeight": 13.0365,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Broad Smile",
+          "count": 281,
+          "percentage": 2.8103,
+          "rarityWeight": 35.5836,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Emerald",
+          "count": 841,
+          "percentage": 8.4108,
+          "rarityWeight": 11.8894,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 21.7757,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 83.0619,
+      "rawTraitScore": 144.9003,
+      "rank": 5
+    },
+    {
+      "tokenId": "3662",
+      "canonicalTokenId": "3662",
+      "name": "Mars Cat #3662",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/49f7a54489c57bbdcb8891849ad146/e149f7a54489c57bbdcb8891849ad146.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Neon Pink",
+          "count": 376,
+          "percentage": 3.7604,
+          "rarityWeight": 26.5931,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Tricky",
+          "count": 709,
+          "percentage": 7.0907,
+          "rarityWeight": 14.103,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Grumpy",
+          "count": 289,
+          "percentage": 2.8903,
+          "rarityWeight": 34.5986,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Jade Green",
+          "count": 853,
+          "percentage": 8.5309,
+          "rarityWeight": 11.7222,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 21.7542,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 82.9801,
+      "rawTraitScore": 144.8146,
+      "rank": 6
+    },
+    {
+      "tokenId": "6202",
+      "canonicalTokenId": "6202",
+      "name": "Mars Cat #6202",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/51cdebdc91f37e1fccb91dba8ad389/6851cdebdc91f37e1fccb91dba8ad389.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Melted Ice",
+          "count": 426,
+          "percentage": 4.2604,
+          "rarityWeight": 23.4718,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Robot",
+          "count": 758,
+          "percentage": 7.5808,
+          "rarityWeight": 13.1913,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Whistling",
+          "count": 260,
+          "percentage": 2.6003,
+          "rarityWeight": 38.4577,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Emerald",
+          "count": 841,
+          "percentage": 8.4108,
+          "rarityWeight": 11.8894,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 21.7526,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 82.9737,
+      "rawTraitScore": 144.8079,
+      "rank": 7
+    },
+    {
+      "tokenId": "8130",
+      "canonicalTokenId": "8130",
+      "name": "Mars Cat #8130",
+      "image": "https://i2c.seadn.io/ape_chain/0xca76944acbc4675f566d062d658bfadf6f469ca7/75fd3bab8169e743464bee6329c102/2675fd3bab8169e743464bee6329c102.png",
+      "chain": "ApeChain",
+      "source": "opensea:contract-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Shadow",
+          "count": 400,
+          "percentage": 4.0004,
+          "rarityWeight": 24.9975,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Tricky",
+          "count": 709,
+          "percentage": 7.0907,
+          "rarityWeight": 14.103,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Smoking Pipe",
+          "count": 280,
+          "percentage": 2.8003,
+          "rarityWeight": 35.7107,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Graphite",
+          "count": 834,
+          "percentage": 8.3408,
+          "rarityWeight": 11.9892,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 21.7001,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 82.7737,
+      "rawTraitScore": 144.5981,
+      "rank": 8
+    },
+    {
+      "tokenId": "9500",
+      "canonicalTokenId": "9500",
+      "name": "Mars Cat #9500",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/b1fb9bdf1672590206288d86057ef2/e6b1fb9bdf1672590206288d86057ef2.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Tattoo Pink",
+          "count": 415,
+          "percentage": 4.1504,
+          "rarityWeight": 24.094,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Winks",
+          "count": 798,
+          "percentage": 7.9808,
+          "rarityWeight": 12.5301,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "BDSM",
+          "count": 267,
+          "percentage": 2.6703,
+          "rarityWeight": 37.4494,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Sand",
+          "count": 795,
+          "percentage": 7.9508,
+          "rarityWeight": 12.5774,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 21.6627,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 82.6311,
+      "rawTraitScore": 144.4486,
+      "rank": 9
+    },
+    {
+      "tokenId": "1288",
+      "canonicalTokenId": "1288",
+      "name": "Mars Cat #1288",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/59a743ac17898f20948f9a78d33c38/6059a743ac17898f20948f9a78d33c38.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Сhocolate",
+          "count": 386,
+          "percentage": 3.8604,
+          "rarityWeight": 25.9041,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Lashes",
+          "count": 767,
+          "percentage": 7.6708,
+          "rarityWeight": 13.0365,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Joint",
+          "count": 285,
+          "percentage": 2.8503,
+          "rarityWeight": 35.0842,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Lavender",
+          "count": 794,
+          "percentage": 7.9408,
+          "rarityWeight": 12.5932,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 21.6545,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 82.5997,
+      "rawTraitScore": 144.4157,
+      "rank": 10
+    },
+    {
+      "tokenId": "2134",
+      "canonicalTokenId": "2134",
+      "name": "Mars Cat #2134",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/e73d880ebcaa9523dba07fbeb64cd7/7ce73d880ebcaa9523dba07fbeb64cd7.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Neon Turquoise",
+          "count": 419,
+          "percentage": 4.1904,
+          "rarityWeight": 23.864,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Winks",
+          "count": 798,
+          "percentage": 7.9808,
+          "rarityWeight": 12.5301,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "BDSM",
+          "count": 267,
+          "percentage": 2.6703,
+          "rarityWeight": 37.4494,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Peach",
+          "count": 786,
+          "percentage": 7.8608,
+          "rarityWeight": 12.7214,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 21.6412,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 82.5491,
+      "rawTraitScore": 144.3626,
+      "rank": 11
+    }
+  ],
+  "bottomRankedFourTraitCats": [
+    {
+      "tokenId": "5375",
+      "canonicalTokenId": "5375",
+      "name": "Mars Cat #5375",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/6fdec7d28a0eb4d25240e14f0f76d3/e96fdec7d28a0eb4d25240e14f0f76d3.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Tabasco",
+          "count": 428,
+          "percentage": 4.2804,
+          "rarityWeight": 23.3621,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Big Game",
+          "count": 813,
+          "percentage": 8.1308,
+          "rarityWeight": 12.2989,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Red Lips",
+          "count": 336,
+          "percentage": 3.3603,
+          "rarityWeight": 29.7589,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Ice",
+          "count": 883,
+          "percentage": 8.8309,
+          "rarityWeight": 11.3239,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 19.1859,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 73.1836,
+      "rawTraitScore": 134.5415,
+      "rank": 174
+    },
+    {
+      "tokenId": "3551",
+      "canonicalTokenId": "3551",
+      "name": "Mars Cat #3551",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/5a85c227f5d1167370ee96f2d59adb/d35a85c227f5d1167370ee96f2d59adb.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Tattoo White",
+          "count": 438,
+          "percentage": 4.3804,
+          "rarityWeight": 22.8288,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Lashes",
+          "count": 767,
+          "percentage": 7.6708,
+          "rarityWeight": 13.0365,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Red Lips",
+          "count": 336,
+          "percentage": 3.3603,
+          "rarityWeight": 29.7589,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Ice",
+          "count": 883,
+          "percentage": 8.8309,
+          "rarityWeight": 11.3239,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 19.237,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 73.3784,
+      "rawTraitScore": 134.7458,
+      "rank": 173
+    },
+    {
+      "tokenId": "1569",
+      "canonicalTokenId": "1569",
+      "name": "Mars Cat #1569",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/981994e40db6d96e3ec93fb1fd3953/b7981994e40db6d96e3ec93fb1fd3953.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Black Milk",
+          "count": 453,
+          "percentage": 4.5305,
+          "rarityWeight": 22.0728,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Tricky",
+          "count": 709,
+          "percentage": 7.0907,
+          "rarityWeight": 14.103,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Red Lips",
+          "count": 336,
+          "percentage": 3.3603,
+          "rarityWeight": 29.7589,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Ice",
+          "count": 883,
+          "percentage": 8.8309,
+          "rarityWeight": 11.3239,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 19.3147,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 73.6745,
+      "rawTraitScore": 135.0563,
+      "rank": 172
+    },
+    {
+      "tokenId": "9802",
+      "canonicalTokenId": "9802",
+      "name": "Mars Cat #9802",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/524f1d7765bb55ebcdbad430a350a4/d7524f1d7765bb55ebcdbad430a350a4.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "White",
+          "count": 442,
+          "percentage": 4.4204,
+          "rarityWeight": 22.6222,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Stoned",
+          "count": 757,
+          "percentage": 7.5708,
+          "rarityWeight": 13.2087,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Party Horn",
+          "count": 322,
+          "percentage": 3.2203,
+          "rarityWeight": 31.0528,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Ice",
+          "count": 883,
+          "percentage": 8.8309,
+          "rarityWeight": 11.3239,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 19.5519,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 74.5795,
+      "rawTraitScore": 136.0053,
+      "rank": 171
+    },
+    {
+      "tokenId": "9532",
+      "canonicalTokenId": "9532",
+      "name": "Mars Cat #9532",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/b601fe874799358a7e052fc99a4fde/c1b601fe874799358a7e052fc99a4fde.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Black Milk",
+          "count": 453,
+          "percentage": 4.5305,
+          "rarityWeight": 22.0728,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Crossed",
+          "count": 804,
+          "percentage": 8.0408,
+          "rarityWeight": 12.4366,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Cigare",
+          "count": 316,
+          "percentage": 3.1603,
+          "rarityWeight": 31.6424,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Sky",
+          "count": 824,
+          "percentage": 8.2408,
+          "rarityWeight": 12.1347,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 19.5716,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 74.6547,
+      "rawTraitScore": 136.0842,
+      "rank": 170
+    },
+    {
+      "tokenId": "3749",
+      "canonicalTokenId": "3749",
+      "name": "Mars Cat #3749",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/9c4aaaaa1af6603bd4297273313b4f/fb9c4aaaaa1af6603bd4297273313b4f.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Blue Tiger",
+          "count": 442,
+          "percentage": 4.4204,
+          "rarityWeight": 22.6222,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Stoned",
+          "count": 757,
+          "percentage": 7.5708,
+          "rarityWeight": 13.2087,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Grimaced",
+          "count": 328,
+          "percentage": 3.2803,
+          "rarityWeight": 30.4848,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Blue Sea",
+          "count": 829,
+          "percentage": 8.2908,
+          "rarityWeight": 12.0615,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 19.5943,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 74.7412,
+      "rawTraitScore": 136.1749,
+      "rank": 169
+    },
+    {
+      "tokenId": "1245",
+      "canonicalTokenId": "1245",
+      "name": "Mars Cat #1245",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/e914db6e320890ab6c1728188f2427/15e914db6e320890ab6c1728188f2427.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Macchiato",
+          "count": 417,
+          "percentage": 4.1704,
+          "rarityWeight": 23.9784,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Winks",
+          "count": 798,
+          "percentage": 7.9808,
+          "rarityWeight": 12.5301,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Red Lips",
+          "count": 336,
+          "percentage": 3.3603,
+          "rarityWeight": 29.7589,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Sky",
+          "count": 824,
+          "percentage": 8.2408,
+          "rarityWeight": 12.1347,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 19.6005,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 74.765,
+      "rawTraitScore": 136.1998,
+      "rank": 168
+    },
+    {
+      "tokenId": "3450",
+      "canonicalTokenId": "3450",
+      "name": "Mars Cat #3450",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/79278a5cc593fc0cb8616cd09fe9ef/a679278a5cc593fc0cb8616cd09fe9ef.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Leopard",
+          "count": 415,
+          "percentage": 4.1504,
+          "rarityWeight": 24.094,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Big Game",
+          "count": 813,
+          "percentage": 8.1308,
+          "rarityWeight": 12.2989,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Dislike",
+          "count": 326,
+          "percentage": 3.2603,
+          "rarityWeight": 30.6718,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Violet",
+          "count": 871,
+          "percentage": 8.7109,
+          "rarityWeight": 11.4799,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 19.6362,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 74.9009,
+      "rawTraitScore": 136.3423,
+      "rank": 167
+    },
+    {
+      "tokenId": "6379",
+      "canonicalTokenId": "6379",
+      "name": "Mars Cat #6379",
+      "image": "https://i2c.seadn.io/ethereum/0xdd467a6c8ae2b39825a452e06b4fa82f73d4253d/535cc06d1beee4a37ae4e49e04b2f3/73535cc06d1beee4a37ae4e49e04b2f3.png",
+      "chain": "Ethereum",
+      "source": "opensea:collection-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Blue Tiger",
+          "count": 442,
+          "percentage": 4.4204,
+          "rarityWeight": 22.6222,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Big Game",
+          "count": 813,
+          "percentage": 8.1308,
+          "rarityWeight": 12.2989,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Confused",
+          "count": 316,
+          "percentage": 3.1603,
+          "rarityWeight": 31.6424,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Mars",
+          "count": 831,
+          "percentage": 8.3108,
+          "rarityWeight": 12.0325,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 19.649,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 74.9499,
+      "rawTraitScore": 136.3937,
+      "rank": 166
+    },
+    {
+      "tokenId": "7416",
+      "canonicalTokenId": "7416",
+      "name": "Mars Cat #7416",
+      "image": "https://i2c.seadn.io/ape_chain/0xca76944acbc4675f566d062d658bfadf6f469ca7/23f6efc1764d4846a59cf637f015c7/7c23f6efc1764d4846a59cf637f015c7.png",
+      "chain": "ApeChain",
+      "source": "opensea:contract-nfts",
+      "isMock": false,
+      "listing": null,
+      "attributes": [
+        {
+          "traitType": "Fur",
+          "value": "Black Milk",
+          "count": 453,
+          "percentage": 4.5305,
+          "rarityWeight": 22.0728,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Eyes",
+          "value": "Winks",
+          "count": 798,
+          "percentage": 7.9808,
+          "rarityWeight": 12.5301,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Mouth",
+          "value": "Crazy",
+          "count": 310,
+          "percentage": 3.1003,
+          "rarityWeight": 32.2548,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Background",
+          "value": "Emerald",
+          "count": 841,
+          "percentage": 8.4108,
+          "rarityWeight": 11.8894,
+          "includedInScore": true
+        },
+        {
+          "traitType": "Trait Count",
+          "value": "4 traits",
+          "count": 173,
+          "percentage": 1.7302,
+          "rarityWeight": 57.7977,
+          "includedInScore": true
+        }
+      ],
+      "traitCount": 4,
+      "scoringTraitCount": 5,
+      "baseTraitAverage": 19.6868,
+      "traitCountScarcityBoost": 3.8144,
+      "rarityScore": 75.094,
+      "rawTraitScore": 136.5448,
+      "rank": 165
+    }
+  ],
+  "suspiciousRankingAnomalies": [],
+  "approvalRequired": "4-trait cat distribution must be reviewed by MCV before Mars Cats Voyage rankings are labeled official."
+}

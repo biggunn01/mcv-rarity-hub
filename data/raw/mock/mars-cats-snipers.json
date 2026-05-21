@@ -1,0 +1,16 @@
+[
+  {
+    "tokenId": "62",
+    "name": "Mars Cats Snipers #73",
+    "image": "/mock-token.svg",
+    "chain": "Base",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Sniper", "value": "Sample" },
+      { "trait_type": "Pose", "value": "Sample" },
+      { "trait_type": "Background", "value": "Sample" },
+      { "trait_type": "Rank", "value": "Sample" }
+    ]
+  }
+]

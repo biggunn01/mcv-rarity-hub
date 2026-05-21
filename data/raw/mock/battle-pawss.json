@@ -1,0 +1,30 @@
+[
+  {
+    "tokenId": "201",
+    "name": "Battle Pawss #201",
+    "image": "/mock-token.svg",
+    "chain": "ApeChain",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Character", "value": "K-Finn" },
+      { "trait_type": "Faction", "value": "Flotti" },
+      { "trait_type": "Weapon", "value": "Bubble Cannon" },
+      { "trait_type": "Arena", "value": "Abyssoria" }
+    ]
+  },
+  {
+    "tokenId": "202",
+    "name": "Battle Pawss #202",
+    "image": "/mock-token.svg",
+    "chain": "ApeChain",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Character", "value": "Drex" },
+      { "trait_type": "Faction", "value": "Ironclaw" },
+      { "trait_type": "Weapon", "value": "Plasma Net" },
+      { "trait_type": "Arena", "value": "Dock Nine" }
+    ]
+  }
+]

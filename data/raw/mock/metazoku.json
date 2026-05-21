@@ -1,0 +1,30 @@
+[
+  {
+    "tokenId": "101",
+    "name": "MetaZoku #101",
+    "image": "/mock-token.svg",
+    "chain": "Ethereum",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Clan", "value": "Decryptor" },
+      { "trait_type": "Bike", "value": "Streetline" },
+      { "trait_type": "Mask", "value": "Chrome" },
+      { "trait_type": "Aura", "value": "Signal" }
+    ]
+  },
+  {
+    "tokenId": "102",
+    "name": "MetaZoku #102",
+    "image": "/mock-token.svg",
+    "chain": "Ethereum",
+    "source": "mock",
+    "isMock": true,
+    "attributes": [
+      { "trait_type": "Clan", "value": "Runner" },
+      { "trait_type": "Bike", "value": "Nightframe" },
+      { "trait_type": "Mask", "value": "Matte" },
+      { "trait_type": "Aura", "value": "None" }
+    ]
+  }
+]
