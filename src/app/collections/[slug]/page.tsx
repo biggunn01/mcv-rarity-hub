@@ -249,6 +249,13 @@ export default async function CollectionPage({ params, searchParams }: Props) {
               <input name="q" placeholder="Token ID..." defaultValue={filters.q ?? ""} />
             </label>
             {sort !== "rank-asc" && <input type="hidden" name="sort" value={sort} />}
+            <div className="filterActions topFilterActions">
+              <label className="listedToggle">
+                <input name="listed" type="checkbox" value="true" defaultChecked={listedOnly} />
+                <span>Listed</span>
+              </label>
+              <Link href={`/collections/${slug}`}>Clear all</Link>
+            </div>
             <div className="traitValueFilters">
               <details className="traitCategory traitParent" open>
                 <summary>
@@ -309,13 +316,6 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                 ))}
               </div>
             )}
-            <div className="filterActions">
-              <label className="listedToggle">
-                <input name="listed" type="checkbox" value="true" defaultChecked={listedOnly} />
-                <span>Filter active listings</span>
-              </label>
-              <Link href={`/collections/${slug}`}>Clear all</Link>
-            </div>
           </CollectionFilterForm>
         </aside>
 
@@ -337,9 +337,11 @@ export default async function CollectionPage({ params, searchParams }: Props) {
               </tr>
             </thead>
             <tbody>
-              {tokens.map((token) => (
-                <tr key={token.canonicalTokenId}>
-                  <td>#{token.rank}</td>
+              {tokens.map((token) => {
+                const isOneOfOneTier = data.collection.slug === "metazoku" && token.rank <= 4;
+                return (
+                <tr className={isOneOfOneTier ? "oneOfOneTier" : undefined} key={token.canonicalTokenId}>
+                  <td className={`rankCell ${isOneOfOneTier ? "isOneOfOne" : ""}`}>#{token.rank}</td>
                   <td>
                     <Link
                       className="tokenThumb"
@@ -369,9 +371,9 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                     )}
                     </span>
                   </td>
-                  <td className="keyTraitsCell">{token.attributes.slice(0, 3).map((item) => `${item.value}`).join(" · ")}</td>
+                  <td className="keyTraitsCell">{token.attributes.slice(0, 3).map((item) => `${item.value}`).join(" - ")}</td>
                 </tr>
-              ))}
+              )})}
             </tbody>
           </table>
         </div>

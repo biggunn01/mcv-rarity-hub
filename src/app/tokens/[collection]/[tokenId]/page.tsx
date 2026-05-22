@@ -95,7 +95,9 @@ export default async function TokenPage({ params }: Props) {
               </div>
               <div>
                 <dt>Listed</dt>
-                <dd>{token.listing?.marketplaceUrl ? <a href={token.listing.marketplaceUrl}>{listingText}</a> : listingText}</dd>
+                <dd className={token.listing?.marketplaceUrl ? "listedValue" : undefined}>
+                  {token.listing?.marketplaceUrl ? <a href={token.listing.marketplaceUrl}>{listingText}</a> : listingText}
+                </dd>
               </div>
               <div>
                 <dt>
@@ -130,7 +132,7 @@ export default async function TokenPage({ params }: Props) {
               <strong>{trait.value}</strong>
               <div>
                 <span>{trait.count} total</span>
-                <span>{trait.percentage.toFixed(2)}%</span>
+                <span>Rarity {trait.percentage.toFixed(2)}%</span>
                 <span>Weight {trait.rarityWeight.toFixed(2)}</span>
               </div>
               <small>{trait.includedInScore === false ? "Display only" : "Included in score"}</small>

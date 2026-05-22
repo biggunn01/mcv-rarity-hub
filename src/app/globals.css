@@ -2366,6 +2366,12 @@ td a {
   margin: 0;
 }
 
+.marketFilterRail .topFilterActions {
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--collection-line);
+}
+
 .marketFilterRail .traitParent {
   border: 0;
   background: transparent;
@@ -2373,13 +2379,24 @@ td a {
 
 .marketFilterRail .traitParent > summary {
   min-height: auto;
-  padding: 0;
+  padding: 0 0 0 0;
   border: 0;
   background: transparent;
   box-shadow: none;
   color: rgba(255, 255, 255, 0.42);
   letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+
+.marketFilterRail .traitParent > summary::after {
+  color: var(--collection-accent);
+  content: "collapse";
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+
+.marketFilterRail .traitParent:not([open]) > summary::after {
+  content: "open";
 }
 
 .marketFilterRail .nestedTraitGroups {
@@ -2442,7 +2459,7 @@ td a {
 
 .marketFilterRail .listedToggle {
   justify-content: flex-start;
-  min-height: 74px;
+  min-height: 58px;
   border-color: rgba(var(--collection-accent-rgb), 0.28);
   border-radius: 14px;
   padding: 0 24px;
@@ -2502,11 +2519,25 @@ td a {
   background: rgba(8, 9, 16, 0.56);
 }
 
-.marketRankTable td:first-child,
-.scoreCell {
-  color: var(--collection-accent);
+.rankCell {
+  color: rgba(255, 255, 255, 0.62);
   font-size: 1.35rem;
   font-weight: 950;
+}
+
+.rankCell.isOneOfOne {
+  color: var(--collection-accent);
+  text-shadow: 0 0 16px rgba(var(--collection-accent-rgb), 0.2);
+}
+
+.oneOfOneTier .scoreCell {
+  color: white;
+  font-weight: 950;
+}
+
+.scoreCell {
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 850;
 }
 
 .marketRankTable .tokenThumb {
@@ -2656,8 +2687,9 @@ td a {
 }
 
 .marketTokenStats .rankValue,
-.marketTokenStats dd:nth-child(2) {
+.marketTokenStats .listedValue {
   color: var(--collection-accent);
+  font-weight: 950;
 }
 
 .marketTokenFacts .links {
