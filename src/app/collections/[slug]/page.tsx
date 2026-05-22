@@ -287,7 +287,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
         </div>
         <div>
           <span>Top Offer</span>
-          <strong>Needed</strong>
+          <strong>N/A</strong>
         </div>
         <div>
           <span>Floor</span>
