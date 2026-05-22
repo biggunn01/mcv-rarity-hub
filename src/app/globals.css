@@ -2833,11 +2833,39 @@ td a {
 }
 
 .tokenTraitCard {
+  --trait-tier-bg: rgba(255, 255, 255, 0.025);
+  --trait-tier-border: var(--collection-line);
+  --trait-tier-color: rgba(255, 255, 255, 0.58);
+
   min-height: 132px;
-  border: 1px solid var(--collection-line);
+  border: 1px solid var(--trait-tier-border);
   border-radius: 8px;
   padding: 18px;
-  background: rgba(255, 255, 255, 0.025);
+  background: var(--trait-tier-bg);
+}
+
+.tokenTraitCard.traitRarityMythic {
+  --trait-tier-bg: rgba(255, 138, 36, 0.12);
+  --trait-tier-border: rgba(255, 151, 43, 0.48);
+  --trait-tier-color: #ff9b2e;
+}
+
+.tokenTraitCard.traitRarityRare {
+  --trait-tier-bg: rgba(143, 82, 205, 0.12);
+  --trait-tier-border: rgba(166, 96, 230, 0.46);
+  --trait-tier-color: #b77cff;
+}
+
+.tokenTraitCard.traitRarityUncommon {
+  --trait-tier-bg: rgba(29, 134, 209, 0.12);
+  --trait-tier-border: rgba(58, 161, 232, 0.46);
+  --trait-tier-color: #48b7ff;
+}
+
+.tokenTraitCard.traitRarityNotable {
+  --trait-tier-bg: rgba(25, 117, 143, 0.1);
+  --trait-tier-border: rgba(54, 156, 185, 0.34);
+  --trait-tier-color: #5ac7d8;
 }
 
 .tokenTraitCard > span {
@@ -2873,8 +2901,8 @@ td a {
 }
 
 .tokenTraitCard div span:nth-child(2) {
-  background: rgba(var(--collection-accent-rgb), 0.13);
-  color: var(--collection-accent);
+  background: color-mix(in srgb, var(--trait-tier-color) 18%, transparent);
+  color: var(--trait-tier-color);
 }
 
 .tokenTraitCard small {

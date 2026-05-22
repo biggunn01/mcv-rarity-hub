@@ -274,7 +274,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
         <div className="marketHeaderActions">
           <div className="rankedBadge">
             <span aria-hidden="true" />
-            {data.collection.actualTokenCount.toLocaleString()} tokens ranked
+            {formatRankedCount(data.collection.actualTokenCount)} tokens ranked
           </div>
           <Link href="/" className="marketBackLink">Back</Link>
         </div>
@@ -556,6 +556,22 @@ function parseOptionalNumber(value: string | string[] | undefined) {
   if (typeof value !== "string" || value.trim() === "") return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+function formatRankedCount(count: number) {
+  if (count >= 1_000_000) {
+    return `${trimCompactNumber(count / 1_000_000)}m`;
+  }
+
+  if (count >= 1_000) {
+    return `${trimCompactNumber(count / 1_000)}k`;
+  }
+
+  return count.toLocaleString();
+}
+
+function trimCompactNumber(value: number) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, "");
 }
 
 function chainIconLabel(chain: string) {

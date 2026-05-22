@@ -127,7 +127,7 @@ export default async function TokenPage({ params }: Props) {
         </div>
         <div className="tokenTraitCards">
           {token.attributes.map((trait) => (
-            <article className="tokenTraitCard" key={`${trait.traitType}-${trait.value}`}>
+            <article className={`tokenTraitCard ${getTraitRarityClass(trait.percentage)}`} key={`${trait.traitType}-${trait.value}`}>
               <span>{trait.traitType}</span>
               <strong>{trait.value}</strong>
               <div>
@@ -142,4 +142,12 @@ export default async function TokenPage({ params }: Props) {
       </section>
     </main>
   );
+}
+
+function getTraitRarityClass(percentage: number) {
+  if (percentage < 1) return "traitRarityMythic";
+  if (percentage < 5) return "traitRarityRare";
+  if (percentage < 10) return "traitRarityUncommon";
+  if (percentage < 25) return "traitRarityNotable";
+  return "traitRarityCommon";
 }
