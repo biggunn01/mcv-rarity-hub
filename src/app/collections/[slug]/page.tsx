@@ -286,7 +286,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
           <strong>{data.collection.actualTokenCount.toLocaleString()}</strong>
         </div>
         <div>
-          <span>Owners</span>
+          <span>Top Offer</span>
           <strong>Needed</strong>
         </div>
         <div>
