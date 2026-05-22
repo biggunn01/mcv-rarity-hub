@@ -1,9 +1,30 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { CSSProperties } from "react";
 import { getCollection, getToken } from "@/lib/rarity-data";
 
 type Props = {
   params: Promise<{ collection: string; tokenId: string }>;
+};
+
+const collectionLogoMap: Record<string, string> = {
+  "mars-cats-voyage": "/collection-logos/mcv-official-logo.png",
+  "mars-alien-cats": "/collection-logos/mars-alien-cats.avif",
+  "mars-cats-in-spacesuits": "/collection-logos/mars-cats-in-spacesuits.avif",
+  "mars-cats-snipers": "/collection-logos/mars-cats-snipers.avif",
+  metazoku: "/collection-logos/metazoku.avif",
+  "battle-pawss": "/collection-logos/battle-pawss.avif",
+  "cream-cats": "/collection-logos/cream-cats.webp",
+};
+
+const collectionThemeMap: Record<string, { accent: string; accentRgb: string; warm: string }> = {
+  "mars-cats-voyage": { accent: "#ff8a3d", accentRgb: "255, 138, 61", warm: "#ffb45f" },
+  "mars-alien-cats": { accent: "#75e6ff", accentRgb: "117, 230, 255", warm: "#b36cff" },
+  "mars-cats-in-spacesuits": { accent: "#72d8ff", accentRgb: "114, 216, 255", warm: "#ffffff" },
+  "mars-cats-snipers": { accent: "#8dff9f", accentRgb: "141, 255, 159", warm: "#ffdc6c" },
+  metazoku: { accent: "#c8ff2f", accentRgb: "200, 255, 47", warm: "#ffe65d" },
+  "battle-pawss": { accent: "#ff6a3d", accentRgb: "255, 106, 61", warm: "#ffd36f" },
+  "cream-cats": { accent: "#f4cf7a", accentRgb: "244, 207, 122", warm: "#ffffff" },
 };
 
 export const dynamic = "force-dynamic";
@@ -25,33 +46,53 @@ export default async function TokenPage({ params }: Props) {
   const rawScoreExplainer =
     "Raw score is the sum of included inverse-frequency weights before any collection-specific trait-count scarcity boost is applied.";
   const listingText = token.listing?.price.display ?? "Not listed";
+  const collectionLogo = collectionLogoMap[data.collection.slug];
+  const collectionTheme = collectionThemeMap[data.collection.slug] ?? { accent: "#8adce8", accentRgb: "138, 220, 232", warm: "#ff8b63" };
 
   return (
-    <main className="shell collectionShell tokenShell">
-      <section className="tokenPageTop">
+    <main
+      className="shell collectionShell tokenShell marketplaceShell"
+      style={{
+        "--collection-accent": collectionTheme.accent,
+        "--collection-accent-rgb": collectionTheme.accentRgb,
+        "--collection-warm": collectionTheme.warm,
+      } as CSSProperties}
+    >
+      <section className="tokenPageTop marketTokenTop">
         <Link href={`/collections/${collection}`} className="backLink">Back to {data.collection.name}</Link>
         {token.isMock && <div className="notice">Mock token</div>}
       </section>
 
-      <section className="tokenLayout">
+      <section className="tokenLayout marketTokenLayout">
         <div className="tokenArtworkCard">
           <div className="tokenImage" aria-label={`${token.name} image`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={token.image} alt={token.name} />
           </div>
-          <div className="tokenImageTitle">
-            <strong>{token.name}</strong>
-          </div>
         </div>
         <div className="tokenSidePanel">
-          <div className="tokenTitleBlock">
-          <p className="eyebrow">{data.collection.name}</p>
-          <h1>{token.name}</h1>
-          <p className="tokenRankDisplay">Rank #{token.rank}</p>
-          <p className="lede">Score {token.rarityScore.toFixed(4)} across {token.traitCount} traits on {token.chain}.</p>
+          <div className="tokenTitleBlock marketTokenTitle">
+            <h1>{token.name}</h1>
+            <div className="marketTokenMeta">
+              {collectionLogo && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={collectionLogo} alt="" />
+              )}
+              <span>{data.collection.name}</span>
+              <span>{token.chain}</span>
+              <span>Token #{token.canonicalTokenId}</span>
+            </div>
           </div>
-          <div className="tokenFacts">
-            <dl className="tokenStats">
+          <div className="tokenFacts marketTokenFacts">
+            <dl className="tokenStats marketTokenStats">
+              <div>
+                <dt>Rank</dt>
+                <dd className="rankValue">#{token.rank}</dd>
+              </div>
+              <div>
+                <dt>Trait count</dt>
+                <dd>{token.traitCount}</dd>
+              </div>
               <div>
                 <dt>Listed</dt>
                 <dd>{token.listing?.marketplaceUrl ? <a href={token.listing.marketplaceUrl}>{listingText}</a> : listingText}</dd>
@@ -77,33 +118,24 @@ export default async function TokenPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="section">
-        <h2>Traits</h2>
-        <div className="tableWrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Value</th>
-                <th>Count</th>
-                <th>Percentage</th>
-                <th>Weight</th>
-                <th>Scoring</th>
-              </tr>
-            </thead>
-            <tbody>
-              {token.attributes.map((trait) => (
-                <tr key={`${trait.traitType}-${trait.value}`}>
-                  <td>{trait.traitType}</td>
-                  <td>{trait.value}</td>
-                  <td>{trait.count}</td>
-                  <td>{trait.percentage.toFixed(2)}%</td>
-                  <td>{trait.rarityWeight.toFixed(4)}</td>
-                  <td>{trait.includedInScore === false ? "Display only" : "Included in score"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <section className="section marketTraitSection">
+        <div className="marketTraitHeader">
+          <h2>Traits</h2>
+          <span>{token.attributes.length} traits</span>
+        </div>
+        <div className="tokenTraitCards">
+          {token.attributes.map((trait) => (
+            <article className="tokenTraitCard" key={`${trait.traitType}-${trait.value}`}>
+              <span>{trait.traitType}</span>
+              <strong>{trait.value}</strong>
+              <div>
+                <span>{trait.count} total</span>
+                <span>{trait.percentage.toFixed(2)}%</span>
+                <span>Weight {trait.rarityWeight.toFixed(2)}</span>
+              </div>
+              <small>{trait.includedInScore === false ? "Display only" : "Included in score"}</small>
+            </article>
+          ))}
         </div>
       </section>
     </main>

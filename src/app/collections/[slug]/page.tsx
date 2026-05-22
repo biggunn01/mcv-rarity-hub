@@ -30,6 +30,16 @@ const collectionLogoMap: Record<string, string> = {
   "cream-cats": "/collection-logos/cream-cats.webp",
 };
 
+const collectionThemeMap: Record<string, { accent: string; accentRgb: string; warm: string }> = {
+  "mars-cats-voyage": { accent: "#ff8a3d", accentRgb: "255, 138, 61", warm: "#ffb45f" },
+  "mars-alien-cats": { accent: "#75e6ff", accentRgb: "117, 230, 255", warm: "#b36cff" },
+  "mars-cats-in-spacesuits": { accent: "#72d8ff", accentRgb: "114, 216, 255", warm: "#ffffff" },
+  "mars-cats-snipers": { accent: "#8dff9f", accentRgb: "141, 255, 159", warm: "#ffdc6c" },
+  metazoku: { accent: "#c8ff2f", accentRgb: "200, 255, 47", warm: "#ffe65d" },
+  "battle-pawss": { accent: "#ff6a3d", accentRgb: "255, 106, 61", warm: "#ffd36f" },
+  "cream-cats": { accent: "#f4cf7a", accentRgb: "244, 207, 122", warm: "#ffffff" },
+};
+
 export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
@@ -149,6 +159,9 @@ export default async function CollectionPage({ params, searchParams }: Props) {
       : []),
   ];
   const collectionLogo = collectionLogoMap[data.collection.slug];
+  const collectionTheme = collectionThemeMap[data.collection.slug] ?? { accent: "#8adce8", accentRgb: "138, 220, 232", warm: "#ff8b63" };
+  const topScore = data.tokens.reduce((max, token) => Math.max(max, token.rarityScore), 0);
+  const primaryChain = data.collection.sources[0]?.chain ?? tokens[0]?.chain ?? "Mixed";
   const filterStateKey = JSON.stringify({
     q: filters.q ?? "",
     traitCounts: toArray(filters.traitCount),
@@ -174,42 +187,79 @@ export default async function CollectionPage({ params, searchParams }: Props) {
   }
 
   return (
-    <main className="shell collectionShell">
-      <section className="pageHeader">
-        <div className="collectionTitleBlock">
+    <main
+      className="shell collectionShell marketplaceShell"
+      style={{
+        "--collection-accent": collectionTheme.accent,
+        "--collection-accent-rgb": collectionTheme.accentRgb,
+        "--collection-warm": collectionTheme.warm,
+      } as CSSProperties}
+    >
+      <section className="marketCollectionHeader">
+        <div className="marketCollectionTitle">
           {collectionLogo && (
             <div className="collectionHeaderLogo" aria-hidden="true">
-              <Image src={collectionLogo} alt="" fill sizes="336px" priority />
+              <Image src={collectionLogo} alt="" fill sizes="96px" priority />
             </div>
           )}
           <div>
-            <Link href="/" className="backLink">Back to collections</Link>
-            <p className="eyebrow">{data.collection.group}</p>
             <h1>{data.collection.name}</h1>
-            <p className="lede">{data.collection.summary}</p>
+            <p className="marketSubtitle">Rarity rankings</p>
           </div>
         </div>
-        <div className="notice">
-          {data.collection.hasMockData ? "Mock data only." : `${data.collection.actualTokenCount.toLocaleString()} ranked tokens from imported metadata`}
+        <div className="marketHeaderActions">
+          <div className="rankedBadge">
+            <span aria-hidden="true" />
+            {data.collection.actualTokenCount.toLocaleString()} tokens ranked
+          </div>
+          <Link href="/" className="marketBackLink">Back</Link>
         </div>
       </section>
 
-      <section className="section">
-        <div className="filterBar">
+      <section className="marketStats" aria-label={`${data.collection.name} overview`}>
+        <div>
+          <span>Collection</span>
+          <strong>{data.collection.actualTokenCount.toLocaleString()}</strong>
+        </div>
+        <div>
+          <span>Top score</span>
+          <strong>{topScore.toFixed(2)}</strong>
+        </div>
+        <div>
+          <span>Chain</span>
+          <strong>{primaryChain}</strong>
+        </div>
+        <div>
+          <span>Page</span>
+          <strong>{page} of {totalPages}</strong>
+        </div>
+      </section>
+
+      {data.collection.hasMockData && (
+        <div className="notice">
+          {data.collection.hasMockData ? "Mock data only." : `${data.collection.actualTokenCount.toLocaleString()} ranked tokens from imported metadata`}
+        </div>
+      )}
+
+      <section className="marketCollectionGrid">
+        <aside className="filterBar marketFilterRail" aria-label="Collection filters">
           <CollectionFilterForm key={filterStateKey}>
-            <input name="q" placeholder="Search token ID" defaultValue={filters.q ?? ""} />
+            <label className="marketControlGroup">
+              <span>Search</span>
+              <input name="q" placeholder="Token ID..." defaultValue={filters.q ?? ""} />
+            </label>
             {sort !== "rank-asc" && <input type="hidden" name="sort" value={sort} />}
             <div className="traitValueFilters">
-              <details className="traitCategory traitParent" open={hasTraitFilters}>
+              <details className="traitCategory traitParent" open>
                 <summary>
                   <span>Traits</span>
-                  <small>{hasTraitFilters ? "Filtered" : "Collapsed"}</small>
+                  <small>{hasTraitFilters ? "Filtered" : `${data.categories.length} groups`}</small>
                 </summary>
                 <div className="nestedTraitGroups">
                   <details className="traitCategory">
                     <summary>
                       <span>Trait Count</span>
-                      <small>{traitCounts.length ? "Filtered" : "Open"}</small>
+                      <small>{traitCounts.length ? "Filtered" : `${[...new Set(data.tokens.map((token) => token.traitCount))].length}`}</small>
                     </summary>
                     <div className="traitOptionGrid">
                       {[...new Set(data.tokens.map((token) => token.traitCount))]
@@ -229,7 +279,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                       <details className="traitCategory" key={category.traitType}>
                         <summary>
                           <span>{category.traitType}</span>
-                          <small>{isFiltered ? "Filtered" : "Open"}</small>
+                          <small>{isFiltered ? "Filtered" : category.values.length}</small>
                         </summary>
                         <div className="traitOptionGrid">
                           {category.values.map((traitValue) => {
@@ -262,28 +312,27 @@ export default async function CollectionPage({ params, searchParams }: Props) {
             <div className="filterActions">
               <label className="listedToggle">
                 <input name="listed" type="checkbox" value="true" defaultChecked={listedOnly} />
-                <span>Listed</span>
+                <span>Filter active listings</span>
               </label>
               <Link href={`/collections/${slug}`}>Clear all</Link>
             </div>
           </CollectionFilterForm>
-        </div>
+        </aside>
 
-        <div className="tableWrap">
+        <div className="tableWrap marketTableWrap">
           <div className="tableMeta">
-            <span>{filteredTokens.length.toLocaleString()} ranked tokens</span>
-            <span>Showing {tokens.length.toLocaleString()} on page {page.toLocaleString()} of {totalPages.toLocaleString()}</span>
+            <span>Showing {tokens.length.toLocaleString()} of {filteredTokens.length.toLocaleString()} tokens</span>
+            <span>Page {page.toLocaleString()} of {totalPages.toLocaleString()}</span>
           </div>
-          <table>
+          <table className="marketRankTable">
             <thead>
               <tr>
                 <th><ClientSortLink href={sortHref(sort === "rank-asc" ? "rank-desc" : "rank-asc")}>Rank</ClientSortLink></th>
                 <th>Preview</th>
                 <th><ClientSortLink href={sortHref(sort === "token-asc" ? "token-desc" : "token-asc")}>Token</ClientSortLink></th>
                 <th><ClientSortLink href={sortHref(sort === "score-desc" ? "score-asc" : "score-desc")}>Score</ClientSortLink></th>
-                <th><ClientSortLink href={sortHref(sort === "listed-asc" ? "listed-desc" : "listed-asc")}>Listed</ClientSortLink></th>
                 <th><ClientSortLink href={sortHref(sort === "trait-count-desc" ? "trait-count-asc" : "trait-count-desc")}>Traits</ClientSortLink></th>
-                <th><ClientSortLink href={sortHref("category:Chain:asc")}>Chain</ClientSortLink></th>
+                <th><ClientSortLink href={sortHref(sort === "listed-asc" ? "listed-desc" : "listed-asc")}>Listed</ClientSortLink></th>
                 <th>Key Traits</th>
               </tr>
             </thead>
@@ -303,20 +352,24 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                   </td>
                   <td>
                     <Link href={`/tokens/${data.collection.slug}/${token.canonicalTokenId}`}>
-                      {token.name}
+                      <span className="tokenName">{token.name}</span>
+                      <span className="tokenChain">{token.chain}</span>
                     </Link>
                   </td>
-                  <td>{token.rarityScore.toFixed(4)}</td>
+                  <td className="scoreCell">{token.rarityScore.toFixed(2)}</td>
                   <td>
+                    <span className="traitCountPill" title={`${token.traitCount} scoring traits`}>{token.traitCount} traits</span>
+                  </td>
+                  <td>
+                    <span className="listingPill">
                     {token.listing?.marketplaceUrl ? (
                       <a href={token.listing.marketplaceUrl}>{token.listing.price.display}</a>
                     ) : (
-                      "Not listed"
+                      "Unlisted"
                     )}
+                    </span>
                   </td>
-                  <td>{token.traitCount}</td>
-                  <td>{token.chain}</td>
-                  <td>{token.attributes.slice(0, 3).map((item) => `${item.traitType}: ${item.value}`).join(", ")}</td>
+                  <td className="keyTraitsCell">{token.attributes.slice(0, 3).map((item) => `${item.value}`).join(" · ")}</td>
                 </tr>
               ))}
             </tbody>
