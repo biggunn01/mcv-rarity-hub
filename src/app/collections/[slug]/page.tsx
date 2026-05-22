@@ -208,8 +208,16 @@ export default async function CollectionPage({ params, searchParams }: Props) {
   ];
   const collectionLogo = collectionLogoMap[data.collection.slug];
   const collectionTheme = collectionThemeMap[data.collection.slug] ?? { accent: "#8adce8", accentRgb: "138, 220, 232", warm: "#ff8b63" };
-  const topScore = data.tokens.reduce((max, token) => Math.max(max, token.rarityScore), 0);
-  const primaryChain = data.collection.sources[0]?.chain ?? tokens[0]?.chain ?? "Mixed";
+  const listedTokens = data.tokens.filter((token) => token.listing);
+  const floorListing = listedTokens.reduce<(typeof listedTokens)[number] | null>((floor, token) => {
+    if (!token.listing) return floor;
+    if (!floor?.listing) return token;
+    return token.listing.price.native < floor.listing.price.native ? token : floor;
+  }, null);
+  const floorText = floorListing?.listing?.price.display ?? "Needed";
+  const listedText = listedTokens.length > 0
+    ? `${listedTokens.length.toLocaleString()} (${Math.round((listedTokens.length / data.tokens.length) * 100)}%)`
+    : "Needed";
   const filterStateKey = JSON.stringify({
     q: filters.q ?? "",
     traitCounts: toArray(filters.traitCount),
@@ -274,20 +282,20 @@ export default async function CollectionPage({ params, searchParams }: Props) {
 
       <section className="marketStats" aria-label={`${data.collection.name} overview`}>
         <div>
-          <span>Collection</span>
+          <span>Items</span>
           <strong>{data.collection.actualTokenCount.toLocaleString()}</strong>
         </div>
         <div>
-          <span>Top score</span>
-          <strong>{topScore.toFixed(2)}</strong>
+          <span>Owners</span>
+          <strong>Needed</strong>
         </div>
         <div>
-          <span>Chain</span>
-          <strong>{primaryChain}</strong>
+          <span>Floor</span>
+          <strong>{floorText}</strong>
         </div>
         <div>
-          <span>Page</span>
-          <strong>{page} of {totalPages}</strong>
+          <span>Listed</span>
+          <strong>{listedText}</strong>
         </div>
       </section>
 

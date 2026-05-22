@@ -2342,6 +2342,11 @@ td a {
 }
 
 .marketStats div:nth-child(2) strong {
+  color: #fff;
+}
+
+.marketStats div:nth-child(3) strong,
+.marketStats div:nth-child(4) strong {
   color: var(--collection-accent);
 }
 
@@ -2412,16 +2417,14 @@ td a {
 }
 
 .rangeFilterGroup summary::after {
-  color: var(--collection-accent);
-  content: "collapse";
-  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.72);
+  content: "⌃";
+  font-size: 1rem;
   font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .rangeFilterGroup:not([open]) summary::after {
-  content: "open";
+  content: "⌄";
 }
 
 .rangeCurrency {
@@ -2484,14 +2487,13 @@ td a {
 }
 
 .marketFilterRail .traitParent > summary::after {
-  color: var(--collection-accent);
-  content: "collapse";
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.72);
+  content: "⌃";
+  font-size: 1rem;
 }
 
 .marketFilterRail .traitParent:not([open]) > summary::after {
-  content: "open";
+  content: "⌄";
 }
 
 .marketFilterRail .nestedTraitGroups {
@@ -2864,10 +2866,15 @@ td a {
 .tokenTraitCard div span {
   border-radius: 5px;
   padding: 4px 7px;
-  background: rgba(var(--collection-accent-rgb), 0.13);
-  color: var(--collection-accent);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.58);
   font-size: 0.78rem;
   font-weight: 900;
+}
+
+.tokenTraitCard div span:nth-child(2) {
+  background: rgba(var(--collection-accent-rgb), 0.13);
+  color: var(--collection-accent);
 }
 
 .tokenTraitCard small {
