@@ -2372,6 +2372,101 @@ td a {
   border-bottom: 1px solid var(--collection-line);
 }
 
+.statusSegment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.statusSegment a {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  border: 1px solid var(--collection-line);
+  border-radius: 7px;
+  padding: 0 12px;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.statusSegment a.isActive {
+  border-color: rgba(var(--collection-accent-rgb), 0.48);
+  background: rgba(var(--collection-accent-rgb), 0.12);
+  color: var(--collection-accent);
+}
+
+.rangeFilterGroup {
+  border-bottom: 1px solid var(--collection-line);
+  padding-bottom: 22px;
+}
+
+.rangeFilterGroup summary {
+  display: flex;
+  min-height: 34px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 850;
+}
+
+.rangeFilterGroup summary::after {
+  color: var(--collection-accent);
+  content: "collapse";
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rangeFilterGroup:not([open]) summary::after {
+  content: "open";
+}
+
+.rangeCurrency {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 0 12px;
+  border: 1px solid var(--collection-line);
+  border-radius: 7px;
+  padding: 0 12px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.rangeInputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.rangeInputs span {
+  color: rgba(255, 255, 255, 0.74);
+  font-weight: 900;
+}
+
+.rangeFilterGroup input {
+  width: 100%;
+  min-height: 34px;
+}
+
+.rangeFilterGroup button {
+  width: 100%;
+  min-height: 36px;
+  margin-top: 12px;
+  border-color: var(--collection-line);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.56);
+  font-weight: 900;
+}
+
 .marketFilterRail .traitParent {
   border: 0;
   background: transparent;
@@ -2563,7 +2658,8 @@ td a {
 }
 
 .traitCountPill,
-.listingPill {
+.listingPill,
+.chainIcon {
   display: inline-flex;
   min-height: 40px;
   align-items: center;
@@ -2579,6 +2675,16 @@ td a {
   border-color: rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.045);
   color: rgba(255, 255, 255, 0.62);
+}
+
+.chainIcon {
+  min-width: 48px;
+  justify-content: center;
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
 }
 
 .keyTraitsCell {
