@@ -114,6 +114,8 @@ const orbitPresets = [
 
 const ORBIT_TILT_X = -0.42;
 const ORBIT_TILT_Z = -0.1;
+const BODY_FACE_TILT_X = -0.58;
+const BODY_FACE_TILT_Z = -0.04;
 const ORBIT_VARIANCE = [
   { x: -0.05, y: -0.07, z: -0.02 },
   { x: -0.12, y: 0.03, z: 0.08 },
@@ -183,8 +185,8 @@ export function OrbitLanding({ collections }: Props) {
     const runtimePlanets: PlanetRuntime[] = [];
     const orbitTrails: OrbitTrail[] = [];
     const sunGroup = new THREE.Group();
-    sunGroup.rotation.x = ORBIT_TILT_X * 0.42;
-    sunGroup.rotation.z = ORBIT_TILT_Z;
+    sunGroup.rotation.x = BODY_FACE_TILT_X;
+    sunGroup.rotation.z = BODY_FACE_TILT_Z;
     scene.add(sunGroup);
 
     const ambient = new THREE.AmbientLight(0xffffff, 0.78);
@@ -885,8 +887,8 @@ export function OrbitLanding({ collections }: Props) {
       const transitionElapsed = transition ? time - transition.startTime : 0;
 
       sunGroup.rotation.y = Math.PI * 0.5 + time * 0.28;
-      sunGroup.rotation.x = ORBIT_TILT_X * 0.42 + Math.sin(time * 0.14) * 0.018;
-      sunGroup.rotation.z = ORBIT_TILT_Z;
+      sunGroup.rotation.x = BODY_FACE_TILT_X + Math.sin(time * 0.14) * 0.018;
+      sunGroup.rotation.z = BODY_FACE_TILT_Z;
       const glowPulse = 1 + Math.sin(time * 1.4) * 0.035;
       sunGlow.scale.set(3.0 * glowPulse, 3.0 * glowPulse, 1);
 
@@ -963,7 +965,8 @@ export function OrbitLanding({ collections }: Props) {
           group.position.copy(transition.fromPosition).lerp(targetPosition, easedApproach);
           group.scale.setScalar(THREE.MathUtils.lerp(transition.fromScale, transition.targetScale, easedApproach));
           sphere.rotation.y += config.spinSpeed * 0.075;
-          sphere.rotation.x = Math.sin(time * 1.25) * 0.18;
+          sphere.rotation.x = BODY_FACE_TILT_X + Math.sin(time * 1.25) * 0.08;
+          sphere.rotation.z = BODY_FACE_TILT_Z;
           sphere.material.emissiveIntensity = 0.62;
           atmosphere.material.opacity = transition.hasExploded ? 0 : 0.58;
 
@@ -993,8 +996,8 @@ export function OrbitLanding({ collections }: Props) {
           group.scale.setScalar(isTransitioningOtherPlanet ? scale * 0.92 : scale);
           group.renderOrder = Math.round(closeness * 20);
           sphere.rotation.y += (isActive ? config.spinSpeed * 0.15 : config.spinSpeed) * 0.016;
-          sphere.rotation.x = ORBIT_TILT_X * 0.18 + Math.sin(time * 0.18 + index) * 0.08;
-          sphere.rotation.z = ORBIT_TILT_Z * 0.65;
+          sphere.rotation.x = BODY_FACE_TILT_X + Math.sin(time * 0.18 + index) * 0.05;
+          sphere.rotation.z = BODY_FACE_TILT_Z;
           sphere.material.emissiveIntensity = isActive ? 0.5 : 0.3 + closeness * 0.12;
           atmosphere.material.opacity = (isTransitioningOtherPlanet ? 0.08 : isActive ? 0.46 : 0.2 + closeness * 0.16) * overlapFade;
         }
