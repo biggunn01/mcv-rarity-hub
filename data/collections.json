@@ -206,14 +206,14 @@
     "name": "Cream Cats",
     "group": "MCV",
     "status": "Real Imported Data",
-    "summary": "BTC Ordinals Cream Cats collection using imported marketplace metadata with Satflow rendered previews for token artwork.",
+    "summary": "BTC Ordinals Cream Cats collection using imported inscription metadata with Satflow rendered previews for token artwork.",
     "tokenCountExpected": 333,
     "bannerImage": "/collection-mcv.svg",
     "sources": [
       {
         "chain": "Bitcoin",
         "contractAddress": "33U66KU5hi94szaebiTShvVTDGVsnZur7q",
-        "metadataSource": "okx:btc:cream-cats metadata plus Satflow rendered inscription previews",
+        "metadataSource": "btc ordinal inscription metadata plus Satflow rendered inscription previews",
         "explorerBaseUrl": "https://ordinals.com/inscription/",
         "marketplaceBaseUrl": "https://web3.okx.com/nft/asset/btc/",
         "okx": {

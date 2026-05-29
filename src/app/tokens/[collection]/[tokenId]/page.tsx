@@ -35,8 +35,13 @@ export default async function TokenPage({ params }: Props) {
   const token = getToken(collection, tokenId);
   if (!data || !token) notFound();
 
+  const isOrdinalCollection = data.collection.slug === "cream-cats" || data.collection.sources.some((source) => {
+    const chain = source.chain.toLowerCase();
+    const metadataSource = source.metadataSource.toLowerCase();
+    return chain.includes("bitcoin") || chain.includes("btc") || metadataSource.includes("ordinal");
+  });
   const firstSource = data.collection.sources.find((source) => source.chain === token.chain) ?? data.collection.sources[0];
-  const marketplaceUrl = firstSource?.marketplaceBaseUrl?.includes("DATA_NEEDED")
+  const marketplaceUrl = isOrdinalCollection || firstSource?.marketplaceBaseUrl?.includes("DATA_NEEDED")
     ? null
     : `${firstSource.marketplaceBaseUrl}${token.tokenId}`;
   const explorerUrl = firstSource?.explorerBaseUrl?.includes("DATA_NEEDED")
@@ -45,7 +50,7 @@ export default async function TokenPage({ params }: Props) {
   const scoreExplainer = data.formula.explanation;
   const rawScoreExplainer =
     "Raw score is the sum of included inverse-frequency weights before any collection-specific trait-count scarcity boost is applied.";
-  const listingText = token.listing?.price.display ?? "Not listed";
+  const listingText = isOrdinalCollection ? "Bitcoin Ordinal" : token.listing?.price.display ?? "Not listed";
   const collectionLogo = collectionLogoMap[data.collection.slug];
   const collectionTheme = collectionThemeMap[data.collection.slug] ?? { accent: "#8adce8", accentRgb: "138, 220, 232", warm: "#ff8b63" };
 
@@ -94,9 +99,9 @@ export default async function TokenPage({ params }: Props) {
                 <dd>{token.traitCount}</dd>
               </div>
               <div>
-                <dt>Listed</dt>
-                <dd className={token.listing?.marketplaceUrl ? "listedValue" : undefined}>
-                  {token.listing?.marketplaceUrl ? <a href={token.listing.marketplaceUrl}>{listingText}</a> : listingText}
+                <dt>{isOrdinalCollection ? "Type" : "Listed"}</dt>
+                <dd className={!isOrdinalCollection && token.listing?.marketplaceUrl ? "listedValue" : undefined}>
+                  {!isOrdinalCollection && token.listing?.marketplaceUrl ? <a href={token.listing.marketplaceUrl}>{listingText}</a> : listingText}
                 </dd>
               </div>
               <div>
