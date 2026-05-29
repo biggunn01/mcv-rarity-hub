@@ -609,7 +609,7 @@ select {
 .solarSystemStage {
   position: relative;
   z-index: 3;
-  width: min(1180px, 100%);
+  width: min(1440px, 100vw);
   min-height: min(730px, calc(100vh - 230px));
   place-self: stretch center;
   overflow: visible;
@@ -627,6 +627,46 @@ select {
   filter: saturate(1.18);
   mask-image: radial-gradient(ellipse at 50% 50%, #000 0 56%, transparent 76%);
   pointer-events: none;
+}
+
+.solarSunTrajectory {
+  position: absolute;
+  z-index: 1;
+  top: calc(50% + 12px);
+  left: max(-12vw, -120px);
+  width: calc(50% + 120px);
+  height: 3px;
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(
+      270deg,
+      rgba(255, 226, 84, 0) 0 16px,
+      rgba(255, 226, 84, 0.95) 16px 48px,
+      rgba(255, 167, 34, 0.72) 48px 62px,
+      rgba(255, 226, 84, 0) 62px 86px
+    );
+  background-size: 172px 100%;
+  box-shadow:
+    0 0 14px rgba(255, 221, 77, 0.54),
+    0 0 34px rgba(255, 162, 38, 0.22);
+  filter: drop-shadow(0 0 8px rgba(255, 226, 84, 0.42));
+  opacity: 0.86;
+  pointer-events: none;
+  transform: rotate(-7deg);
+  transform-origin: right center;
+  animation: solarTrajectorySweep 1.6s linear infinite;
+}
+
+.solarSunTrajectory::after {
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 247, 178, 0.95), rgba(255, 188, 54, 0.36) 42%, transparent 70%);
+  content: "";
+  transform: translateY(-50%);
 }
 
 .solarSystemCanvas {
@@ -947,6 +987,16 @@ select {
 @keyframes orbitCounterSpin {
   to {
     transform: rotate(-360deg);
+  }
+}
+
+@keyframes solarTrajectorySweep {
+  from {
+    background-position: 172px 0;
+  }
+
+  to {
+    background-position: 0 0;
   }
 }
 

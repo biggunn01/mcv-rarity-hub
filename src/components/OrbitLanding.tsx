@@ -78,6 +78,13 @@ type TransitionParticle = {
   size: number;
 };
 
+type OrbitTrail = {
+  line: THREE.LineLoop;
+  material: THREE.LineDashedMaterial;
+  shaderStore: { current: { uniforms: Record<string, { value: number }> } | null };
+  dashSpeed: number;
+};
+
 type TransitionTargetConfig = Pick<PlanetConfig, "slug" | "name" | "route" | "spinSpeed" | "accent" | "color">;
 
 type LandingTransition = {
@@ -97,13 +104,20 @@ type LandingTransition = {
 };
 
 const orbitPresets = [
-  { orbitRadius: 3.15, orbitHeight: 0.72, orbitDepth: 1.34, phase: 2.9, orbitSpeed: 0.18, radius: 0.33, spinSpeed: 0.28 },
-  { orbitRadius: 4.0, orbitHeight: 0.94, orbitDepth: 1.72, phase: 5.85, orbitSpeed: 0.145, radius: 0.3, spinSpeed: 0.24 },
-  { orbitRadius: 4.75, orbitHeight: 1.16, orbitDepth: 2.04, phase: 3.95, orbitSpeed: 0.12, radius: 0.32, spinSpeed: 0.22 },
-  { orbitRadius: 5.55, orbitHeight: 1.38, orbitDepth: 2.38, phase: 0.55, orbitSpeed: 0.1, radius: 0.36, spinSpeed: 0.2 },
-  { orbitRadius: 4.45, orbitHeight: 1.72, orbitDepth: 2.62, phase: 1.55, orbitSpeed: 0.088, radius: 0.31, spinSpeed: 0.17 },
-  { orbitRadius: 6.05, orbitHeight: 1.92, orbitDepth: 3.02, phase: 4.75, orbitSpeed: 0.078, radius: 0.33, spinSpeed: 0.15 },
+  { orbitRadius: 3.15, orbitHeight: 0.72, orbitDepth: 1.34, phase: 2.55, orbitSpeed: 0.18, radius: 0.33, spinSpeed: 0.28 },
+  { orbitRadius: 4.05, orbitHeight: 0.94, orbitDepth: 1.72, phase: 5.05, orbitSpeed: 0.145, radius: 0.3, spinSpeed: 0.24 },
+  { orbitRadius: 4.95, orbitHeight: 1.16, orbitDepth: 2.04, phase: 3.35, orbitSpeed: 0.12, radius: 0.32, spinSpeed: 0.22 },
+  { orbitRadius: 5.85, orbitHeight: 1.38, orbitDepth: 2.38, phase: 0.2, orbitSpeed: 0.1, radius: 0.36, spinSpeed: 0.2 },
+  { orbitRadius: 4.55, orbitHeight: 1.72, orbitDepth: 2.62, phase: 1.35, orbitSpeed: 0.088, radius: 0.31, spinSpeed: 0.17 },
+  { orbitRadius: 6.35, orbitHeight: 1.92, orbitDepth: 3.02, phase: 4.45, orbitSpeed: 0.078, radius: 0.33, spinSpeed: 0.15 },
 ];
+
+const ORBIT_TILT_X = -0.34;
+const ORBIT_TILT_Z = -0.1;
+const TRANSITION_APPROACH_SECONDS = 0.53;
+const TRANSITION_EXPLODE_SECONDS = 2.03;
+const TRANSITION_NAV_SECONDS = 2.44;
+const TRANSITION_EXPLOSION_SECONDS = 0.41;
 
 export function OrbitLanding({ collections }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -154,12 +168,15 @@ export function OrbitLanding({ collections }: Props) {
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x03050d, 0.035);
 
-    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 80);
-    camera.position.set(0, 1.15, 10.2);
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 80);
+    camera.position.set(0, 1.15, 12.9);
     camera.lookAt(0, 0, 0);
 
     const runtimePlanets: PlanetRuntime[] = [];
+    const orbitTrails: OrbitTrail[] = [];
     const sunGroup = new THREE.Group();
+    sunGroup.rotation.x = ORBIT_TILT_X * 0.42;
+    sunGroup.rotation.z = ORBIT_TILT_Z;
     scene.add(sunGroup);
 
     const ambient = new THREE.AmbientLight(0xffffff, 0.78);
@@ -306,6 +323,8 @@ export function OrbitLanding({ collections }: Props) {
       if (!sourceContext) return image;
 
       const drawSize = size - padding * 2;
+      sourceContext.imageSmoothingEnabled = true;
+      sourceContext.imageSmoothingQuality = "high";
       sourceContext.drawImage(image, padding, padding, drawSize, drawSize);
       const imageData = sourceContext.getImageData(0, 0, size, size);
       const { data } = imageData;
@@ -316,10 +335,10 @@ export function OrbitLanding({ collections }: Props) {
         const blueDelta = data[pixel + 2] - backgroundColor.b;
         const distance = Math.sqrt(redDelta * redDelta + greenDelta * greenDelta + blueDelta * blueDelta);
 
-        if (distance <= 28) {
+        if (distance <= 44) {
           data[pixel + 3] = 0;
-        } else if (distance < 76) {
-          data[pixel + 3] = Math.round(data[pixel + 3] * ((distance - 28) / 48));
+        } else if (distance < 112) {
+          data[pixel + 3] = Math.round(data[pixel + 3] * ((distance - 44) / 68));
         }
       }
 
@@ -461,7 +480,7 @@ export function OrbitLanding({ collections }: Props) {
     scene.add(sunGlow);
 
     const sunParticleTexture = makeSunParticleTexture();
-    const sunParticles = Array.from({ length: 34 }, (_, index) => {
+    const sunParticles = Array.from({ length: 26 }, (_, index) => {
       const angle = index * 2.39996;
       const lift = Math.sin(index * 1.73) * 0.46;
       const direction = new THREE.Vector3(Math.cos(angle), lift, Math.sin(angle) * 0.34).normalize();
@@ -480,7 +499,7 @@ export function OrbitLanding({ collections }: Props) {
       return {
         sprite,
         direction,
-        phase: (index / 34) * Math.PI * 2,
+        phase: (index / 26) * Math.PI * 2,
         speed: 0.34 + (index % 7) * 0.045,
         size: 0.045 + (index % 5) * 0.012,
       };
@@ -621,7 +640,7 @@ export function OrbitLanding({ collections }: Props) {
           logoSize: 292,
           alpha: 1,
           transparentBackground: poleColor,
-          logoPadding: 18,
+          logoPadding: 24,
         });
 
         const limbShade = context.createLinearGradient(width * 0.14, 0, width * 0.86, 0);
@@ -639,11 +658,13 @@ export function OrbitLanding({ collections }: Props) {
     }
 
     function orbitPoint(config: PlanetConfig, index: number, angle: number) {
-      return new THREE.Vector3(
+      const point = new THREE.Vector3(
         Math.cos(angle) * config.orbitRadius,
         Math.sin(angle) * config.orbitHeight + Math.sin(angle * 2 + index) * 0.08,
         Math.sin(angle) * config.orbitDepth,
       );
+      point.applyEuler(new THREE.Euler(ORBIT_TILT_X, 0, ORBIT_TILT_Z));
+      return point;
     }
 
     function makeTrail(config: PlanetConfig, index: number) {
@@ -656,15 +677,30 @@ export function OrbitLanding({ collections }: Props) {
       }
 
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      const material = new THREE.LineBasicMaterial({
+      const material = new THREE.LineDashedMaterial({
         color: config.color,
         transparent: true,
-        opacity: 0.22,
+        opacity: 0.28,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
+        dashSize: 0.22,
+        gapSize: 0.16,
+        scale: 1,
       });
+      const shaderStore: OrbitTrail["shaderStore"] = { current: null };
+      material.onBeforeCompile = (shader) => {
+        shader.uniforms.dashOffset = { value: 0 };
+        shader.fragmentShader = `uniform float dashOffset;\n${shader.fragmentShader}`.replace(
+          "mod( vLineDistance, totalSize )",
+          "mod( vLineDistance + dashOffset, totalSize )",
+        );
+        shaderStore.current = shader;
+      };
       const trail = new THREE.LineLoop(geometry, material);
+      trail.computeLineDistances();
+      trail.renderOrder = -2;
       scene.add(trail);
+      orbitTrails.push({ line: trail, material, shaderStore, dashSpeed: config.orbitSpeed * 1.8 });
     }
 
     planets.forEach((config, index) => {
@@ -750,10 +786,10 @@ export function OrbitLanding({ collections }: Props) {
       };
 
       setTransitionOverlay({ name: config.name, accent: config.accent, phase: "approach" });
-      scheduleTransitionStep(1050, () => {
+      scheduleTransitionStep(TRANSITION_APPROACH_SECONDS * 1000, () => {
         setTransitionOverlay({ name: config.name, accent: config.accent, phase: "hold" });
       });
-      scheduleTransitionStep(4050, () => {
+      scheduleTransitionStep(TRANSITION_EXPLODE_SECONDS * 1000, () => {
         setTransitionOverlay({ name: config.name, accent: config.accent, phase: "explode" });
       });
     }
@@ -766,8 +802,8 @@ export function OrbitLanding({ collections }: Props) {
       const height = Math.max(360, Math.floor(rect.height));
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
-      camera.fov = camera.aspect < 0.72 ? 45 : 36;
-      camera.position.set(0, camera.aspect < 0.72 ? 1.4 : 1.15, camera.aspect < 0.72 ? 16.2 : 10.2);
+      camera.fov = camera.aspect < 0.72 ? 47 : 38;
+      camera.position.set(0, camera.aspect < 0.72 ? 1.45 : 1.15, camera.aspect < 0.72 ? 18.4 : 12.9);
       camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
     }
@@ -840,27 +876,32 @@ export function OrbitLanding({ collections }: Props) {
       const transitionElapsed = transition ? time - transition.startTime : 0;
 
       sunGroup.rotation.y = Math.PI * 0.5 + time * 0.28;
-      sunGroup.rotation.x = Math.sin(time * 0.14) * 0.018;
+      sunGroup.rotation.x = ORBIT_TILT_X * 0.42 + Math.sin(time * 0.14) * 0.018;
+      sunGroup.rotation.z = ORBIT_TILT_Z;
       const glowPulse = 1 + Math.sin(time * 1.4) * 0.035;
       sunGlow.scale.set(3.0 * glowPulse, 3.0 * glowPulse, 1);
 
       sunParticles.forEach((particle) => {
         const progress = (time * particle.speed + particle.phase) % 1;
-        const distance = 1.1 + progress * 1.18;
+        const distance = 1.08 + progress * 0.59;
         particle.sprite.position.copy(particle.direction).multiplyScalar(distance);
-        particle.sprite.material.opacity = (1 - progress) * 0.58;
-        particle.sprite.scale.setScalar(particle.size * (0.78 + progress * 1.7));
+        particle.sprite.material.opacity = (1 - progress) * 0.46;
+        particle.sprite.scale.setScalar(particle.size * (0.72 + progress * 1.05));
+      });
+
+      orbitTrails.forEach((trail) => {
+        if (trail.shaderStore.current) trail.shaderStore.current.uniforms.dashOffset.value = -time * trail.dashSpeed;
       });
 
       if (transition && !transition.runtime) {
-        const approachProgress = THREE.MathUtils.clamp(transitionElapsed / 1.05, 0, 1);
+        const approachProgress = THREE.MathUtils.clamp(transitionElapsed / TRANSITION_APPROACH_SECONDS, 0, 1);
         const easedApproach = easeInOutCubic(approachProgress);
         const targetPosition = new THREE.Vector3(0, -0.04, 2.1);
         transition.group.position.copy(transition.fromPosition).lerp(targetPosition, easedApproach);
         transition.group.scale.setScalar(THREE.MathUtils.lerp(transition.fromScale, transition.targetScale, easedApproach));
         transition.sphere.rotation.y += transition.config.spinSpeed * 0.075;
 
-        if (transitionElapsed >= 4.05 && !transition.hasExploded) {
+        if (transitionElapsed >= TRANSITION_EXPLODE_SECONDS && !transition.hasExploded) {
           transition.hasExploded = true;
           transition.particles = createExplosionParticles(transition.config, transition.group.position);
           transition.group.visible = false;
@@ -868,7 +909,7 @@ export function OrbitLanding({ collections }: Props) {
         }
 
         if (transition.hasExploded) {
-          const explosionProgress = THREE.MathUtils.clamp((transitionElapsed - 4.05) / 0.82, 0, 1);
+          const explosionProgress = THREE.MathUtils.clamp((transitionElapsed - TRANSITION_EXPLODE_SECONDS) / TRANSITION_EXPLOSION_SECONDS, 0, 1);
           const easedExplosion = easeOutCubic(explosionProgress);
           transition.particles.forEach((particle) => {
             particle.sprite.position.copy(transition.group.position).addScaledVector(particle.direction, particle.speed * easedExplosion);
@@ -877,7 +918,7 @@ export function OrbitLanding({ collections }: Props) {
           });
         }
 
-        if (transitionElapsed >= 4.88 && !transition.hasNavigated) {
+        if (transitionElapsed >= TRANSITION_NAV_SECONDS && !transition.hasNavigated) {
           transition.hasNavigated = true;
           window.location.assign(transition.route);
         }
@@ -899,9 +940,15 @@ export function OrbitLanding({ collections }: Props) {
         const isTransitioningOtherPlanet = Boolean(transition && !isTransitionPlanet);
         const closeness = THREE.MathUtils.clamp((z + config.orbitDepth) / (config.orbitDepth * 2), 0, 1);
         const scale = (0.86 + closeness * 0.34) * (isActive ? 1.14 : 1);
+        const nearestNeighbor = positions.reduce((nearest, other, otherIndex) => {
+          if (otherIndex === index) return nearest;
+          const distance = Math.hypot(other.x - x, other.y - y);
+          return Math.min(nearest, distance);
+        }, Number.POSITIVE_INFINITY);
+        const overlapFade = THREE.MathUtils.smoothstep(nearestNeighbor, 0.78, 1.28);
 
         if (isTransitionPlanet && transition) {
-          const approachProgress = THREE.MathUtils.clamp(transitionElapsed / 1.05, 0, 1);
+          const approachProgress = THREE.MathUtils.clamp(transitionElapsed / TRANSITION_APPROACH_SECONDS, 0, 1);
           const easedApproach = easeInOutCubic(approachProgress);
           const targetPosition = new THREE.Vector3(0, -0.04, 2.1);
           group.position.copy(transition.fromPosition).lerp(targetPosition, easedApproach);
@@ -911,14 +958,14 @@ export function OrbitLanding({ collections }: Props) {
           sphere.material.emissiveIntensity = 0.62;
           atmosphere.material.opacity = transition.hasExploded ? 0 : 0.58;
 
-          if (transitionElapsed >= 4.05 && !transition.hasExploded) {
+          if (transitionElapsed >= TRANSITION_EXPLODE_SECONDS && !transition.hasExploded) {
             transition.hasExploded = true;
             transition.particles = createExplosionParticles(config, group.position);
             group.visible = false;
           }
 
           if (transition.hasExploded) {
-            const explosionProgress = THREE.MathUtils.clamp((transitionElapsed - 4.05) / 0.82, 0, 1);
+            const explosionProgress = THREE.MathUtils.clamp((transitionElapsed - TRANSITION_EXPLODE_SECONDS) / TRANSITION_EXPLOSION_SECONDS, 0, 1);
             const easedExplosion = easeOutCubic(explosionProgress);
             transition.particles.forEach((particle) => {
               particle.sprite.position.copy(group.position).addScaledVector(particle.direction, particle.speed * easedExplosion);
@@ -927,7 +974,7 @@ export function OrbitLanding({ collections }: Props) {
             });
           }
 
-          if (transitionElapsed >= 4.88 && !transition.hasNavigated) {
+          if (transitionElapsed >= TRANSITION_NAV_SECONDS && !transition.hasNavigated) {
             transition.hasNavigated = true;
             window.location.assign(transition.route);
           }
@@ -935,10 +982,12 @@ export function OrbitLanding({ collections }: Props) {
           group.visible = true;
           group.position.set(x, y, z);
           group.scale.setScalar(isTransitioningOtherPlanet ? scale * 0.92 : scale);
+          group.renderOrder = Math.round(closeness * 20);
           sphere.rotation.y += (isActive ? config.spinSpeed * 0.15 : config.spinSpeed) * 0.016;
-          sphere.rotation.x = Math.sin(time * 0.18 + index) * 0.08;
+          sphere.rotation.x = ORBIT_TILT_X * 0.18 + Math.sin(time * 0.18 + index) * 0.08;
+          sphere.rotation.z = ORBIT_TILT_Z * 0.65;
           sphere.material.emissiveIntensity = isActive ? 0.5 : 0.3 + closeness * 0.12;
-          atmosphere.material.opacity = isTransitioningOtherPlanet ? 0.08 : isActive ? 0.46 : 0.2 + closeness * 0.16;
+          atmosphere.material.opacity = (isTransitioningOtherPlanet ? 0.08 : isActive ? 0.46 : 0.2 + closeness * 0.16) * overlapFade;
         }
 
         projected.copy(group.position).project(camera);
@@ -1031,6 +1080,7 @@ export function OrbitLanding({ collections }: Props) {
 
       <div className="solarSystemStage" ref={stageRef}>
         <div className="solarSystemBackdrop" aria-hidden="true" />
+        <div className="solarSunTrajectory" aria-hidden="true" />
         <canvas className="solarSystemCanvas" ref={canvasRef} aria-label="Interactive 3D MCV collection solar system" />
         {isLoading && <span className="solarSystemLoading">Loading orbit</span>}
         {center && (

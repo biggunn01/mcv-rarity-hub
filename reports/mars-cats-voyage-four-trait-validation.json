@@ -1,6 +1,6 @@
 {
   "collection": "mars-cats-voyage",
-  "generatedAt": "2026-05-29T02:19:23.159Z",
+  "generatedAt": "2026-05-29T03:21:22.939Z",
   "scoringFormula": {
     "name": "Trait-count scarcity boosted inverse frequency",
     "explanation": "Each trait weight is collection supply divided by that trait occurrence count. Trait Count is measured by occurrence rarity and applied as a scarcity boost to the token's average trait weight. This collection uses a 0.33 exponent on Trait Count rarity, so structurally scarce low-trait-count tokens rank higher while individual trait rarity still orders tokens inside that group.",
