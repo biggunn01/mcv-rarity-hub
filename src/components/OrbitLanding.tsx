@@ -295,11 +295,12 @@ export function OrbitLanding({ collections }: Props) {
         centerU?: number;
         transparentBackground?: { r: number; g: number; b: number };
         logoPadding?: number;
+        removeDarkBackground?: boolean;
       },
     ) {
       const y = height * 0.5 - options.logoSize / 2;
       const source = options.transparentBackground
-        ? makeLogoForegroundCanvas(image, options.logoSize, options.transparentBackground, options.logoPadding ?? 0)
+        ? makeLogoForegroundCanvas(image, options.logoSize, options.transparentBackground, options.logoPadding ?? 0, options.removeDarkBackground)
         : image;
       const drawWrappedLogo = (drawX: number) => {
         context.drawImage(source, drawX, y, options.logoSize, options.logoSize);
@@ -325,6 +326,7 @@ export function OrbitLanding({ collections }: Props) {
       size: number,
       backgroundColor: { r: number; g: number; b: number },
       padding: number,
+      removeDarkBackground = false,
     ) {
       const sourceCanvas = document.createElement("canvas");
       sourceCanvas.width = size;
@@ -344,11 +346,19 @@ export function OrbitLanding({ collections }: Props) {
         const greenDelta = data[pixel + 1] - backgroundColor.g;
         const blueDelta = data[pixel + 2] - backgroundColor.b;
         const distance = Math.sqrt(redDelta * redDelta + greenDelta * greenDelta + blueDelta * blueDelta);
+        const brightness = (data[pixel] + data[pixel + 1] + data[pixel + 2]) / 3;
+        const saturation = Math.max(data[pixel], data[pixel + 1], data[pixel + 2]) - Math.min(data[pixel], data[pixel + 1], data[pixel + 2]);
 
         if (distance <= 44) {
           data[pixel + 3] = 0;
         } else if (distance < 112) {
           data[pixel + 3] = Math.round(data[pixel + 3] * ((distance - 44) / 68));
+        }
+
+        if (removeDarkBackground && brightness < 54 && saturation < 34) {
+          data[pixel + 3] = 0;
+        } else if (removeDarkBackground && brightness < 86 && saturation < 34) {
+          data[pixel + 3] = Math.round(data[pixel + 3] * ((brightness - 54) / 32));
         }
       }
 
@@ -678,6 +688,7 @@ export function OrbitLanding({ collections }: Props) {
           alpha: 1,
           transparentBackground: logoBackgroundColor,
           logoPadding: isBattlePawss ? 18 : 24,
+          removeDarkBackground: isBattlePawss,
         });
 
         const limbShade = context.createLinearGradient(width * 0.14, 0, width * 0.86, 0);
