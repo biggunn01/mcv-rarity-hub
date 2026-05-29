@@ -44,7 +44,7 @@ const collectionThemeMap: Record<string, { accent: string; accentRgb: string; wa
   "mars-cats-in-spacesuits": { accent: "#72d8ff", accentRgb: "114, 216, 255", warm: "#ffffff" },
   "mars-cats-snipers": { accent: "#8dff9f", accentRgb: "141, 255, 159", warm: "#ffdc6c" },
   metazoku: { accent: "#c8ff2f", accentRgb: "200, 255, 47", warm: "#ffe65d" },
-  "battle-pawss": { accent: "#51b8ff", accentRgb: "81, 184, 255", warm: "#51e1d6" },
+  "battle-pawss": { accent: "#1ef9d8", accentRgb: "30, 249, 216", warm: "#f0fdef" },
   "cream-cats": { accent: "#f4cf7a", accentRgb: "244, 207, 122", warm: "#ffffff" },
 };
 

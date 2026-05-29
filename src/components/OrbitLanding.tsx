@@ -21,7 +21,7 @@ const planetThemeMap: Record<string, { color: number; accent: string; accentRgb:
   "mars-cats-in-spacesuits": { color: 0x9bdcff, accent: "#9bdcff", accentRgb: "155, 220, 255" },
   "mars-cats-snipers": { color: 0x8dff9f, accent: "#8dff9f", accentRgb: "141, 255, 159" },
   metazoku: { color: 0xc8ff2f, accent: "#c8ff2f", accentRgb: "200, 255, 47" },
-  "battle-pawss": { color: 0x51b8ff, accent: "#51b8ff", accentRgb: "81, 184, 255" },
+  "battle-pawss": { color: 0x1ef9d8, accent: "#1ef9d8", accentRgb: "30, 249, 216" },
   "cream-cats": { color: 0xf4cf7a, accent: "#f4cf7a", accentRgb: "244, 207, 122" },
 };
 
