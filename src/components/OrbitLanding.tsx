@@ -356,6 +356,29 @@ export function OrbitLanding({ collections }: Props) {
       return sourceCanvas;
     }
 
+    function sealHorizontalTextureSeam(context: CanvasRenderingContext2D, width: number, height: number, stripWidth = 14) {
+      const leftStrip = context.getImageData(0, 0, stripWidth, height);
+      const rightStrip = context.getImageData(width - stripWidth, 0, stripWidth, height);
+      const { data: leftData } = leftStrip;
+      const { data: rightData } = rightStrip;
+
+      for (let y = 0; y < height; y += 1) {
+        for (let x = 0; x < stripWidth; x += 1) {
+          const leftOffset = (y * stripWidth + x) * 4;
+          const rightOffset = (y * stripWidth + (stripWidth - 1 - x)) * 4;
+
+          for (let channel = 0; channel < 4; channel += 1) {
+            const blended = Math.round((leftData[leftOffset + channel] + rightData[rightOffset + channel]) * 0.5);
+            leftData[leftOffset + channel] = blended;
+            rightData[rightOffset + channel] = blended;
+          }
+        }
+      }
+
+      context.putImageData(leftStrip, 0, 0);
+      context.putImageData(rightStrip, width - stripWidth, 0);
+    }
+
     function makeSunGlowTexture() {
       const size = 512;
       const canvasTexture = document.createElement("canvas");
@@ -451,6 +474,7 @@ export function OrbitLanding({ collections }: Props) {
         limbShade.addColorStop(1, "rgba(0, 0, 0, 0.34)");
         context.fillStyle = limbShade;
         context.fillRect(0, 0, width, height);
+        sealHorizontalTextureSeam(context, width, height);
         texture.needsUpdate = true;
         setIsLoading(false);
       };
@@ -660,6 +684,7 @@ export function OrbitLanding({ collections }: Props) {
         limbShade.addColorStop(1, "rgba(0, 0, 0, 0.16)");
         context.fillStyle = limbShade;
         context.fillRect(0, 0, width, height);
+        sealHorizontalTextureSeam(context, width, height);
         texture.needsUpdate = true;
       };
       logoImage.src = config.logo;
