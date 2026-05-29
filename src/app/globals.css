@@ -634,23 +634,23 @@ select {
   z-index: 1;
   top: calc(50% + 12px);
   left: max(-12vw, -120px);
-  width: calc(25% + 60px);
-  height: 3px;
+  width: calc(50% + 120px);
+  height: 2px;
   border-radius: 999px;
   background:
     repeating-linear-gradient(
       270deg,
-      rgba(255, 226, 84, 0) 0 8px,
-      rgba(255, 226, 84, 0.95) 8px 24px,
-      rgba(255, 167, 34, 0.72) 24px 31px,
-      rgba(255, 226, 84, 0) 31px 43px
+      rgba(255, 226, 84, 0) 0 4px,
+      rgba(255, 226, 84, 0.82) 4px 13px,
+      rgba(255, 167, 34, 0.5) 13px 17px,
+      rgba(255, 226, 84, 0) 17px 24px
     );
-  background-size: 86px 100%;
+  background-size: 48px 100%;
   box-shadow:
-    0 0 14px rgba(255, 221, 77, 0.54),
-    0 0 34px rgba(255, 162, 38, 0.22);
-  filter: drop-shadow(0 0 8px rgba(255, 226, 84, 0.42));
-  opacity: 0.86;
+    0 0 10px rgba(255, 221, 77, 0.34),
+    0 0 22px rgba(255, 162, 38, 0.14);
+  filter: drop-shadow(0 0 5px rgba(255, 226, 84, 0.28));
+  opacity: 0.68;
   pointer-events: none;
   transform: rotate(-7deg);
   transform-origin: right center;
@@ -659,10 +659,10 @@ select {
 
 .solarSunTrajectory::after {
   position: absolute;
-  right: -10px;
+  right: -8px;
   top: 50%;
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 247, 178, 0.95), rgba(255, 188, 54, 0.36) 42%, transparent 70%);
   content: "";
@@ -992,7 +992,7 @@ select {
 
 @keyframes solarTrajectorySweep {
   from {
-    background-position: 86px 0;
+    background-position: 48px 0;
   }
 
   to {

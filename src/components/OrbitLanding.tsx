@@ -112,7 +112,7 @@ const orbitPresets = [
   { orbitRadius: 6.82, orbitHeight: 2.16, orbitDepth: 3.44, phase: 4.45, orbitSpeed: 0.078, radius: 0.38, spinSpeed: 0.15 },
 ];
 
-const ORBIT_TILT_X = -0.34;
+const ORBIT_TILT_X = -0.69;
 const ORBIT_TILT_Z = -0.1;
 const ORBIT_VARIANCE = [
   { x: -0.05, y: -0.07, z: -0.02 },
