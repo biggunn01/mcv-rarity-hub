@@ -738,11 +738,11 @@ export function OrbitLanding({ collections }: Props) {
         const logoBackgroundColor = isBattlePawss ? estimateLogoBackgroundColor(logoImage, 0xffffff) : poleColor;
         paintBase(baseColor, poleColor);
         paintEquatorLogoBand(context, logoImage, width, height, {
-          tileWidth: width / 4,
-          logoSize: isBattlePawss ? 336 : 292,
+          tileWidth: isBattlePawss ? width / 3 : width / 4,
+          logoSize: isBattlePawss ? 224 : 292,
           alpha: 1,
           transparentBackground: isBattlePawss ? undefined : logoBackgroundColor,
-          logoPadding: isBattlePawss ? 18 : 24,
+          logoPadding: isBattlePawss ? 10 : 24,
           cropToVisibleContent: isBattlePawss,
         });
 
