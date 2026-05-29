@@ -296,13 +296,15 @@ export function OrbitLanding({ collections }: Props) {
         transparentBackground?: { r: number; g: number; b: number };
         logoPadding?: number;
         removeDarkBackground?: boolean;
-        backing?: boolean;
+        cropToVisibleContent?: boolean;
       },
     ) {
       const y = height * 0.5 - options.logoSize / 2;
-      const source = options.transparentBackground
-        ? makeLogoForegroundCanvas(image, options.logoSize, options.transparentBackground, options.logoPadding ?? 0, options.removeDarkBackground)
-        : image;
+      const source = options.cropToVisibleContent
+        ? makeCroppedLogoCanvas(image, options.logoSize, options.logoPadding ?? 0)
+        : options.transparentBackground
+          ? makeLogoForegroundCanvas(image, options.logoSize, options.transparentBackground, options.logoPadding ?? 0, options.removeDarkBackground)
+          : image;
       const drawWrappedLogo = (drawX: number) => {
         context.drawImage(source, drawX, y, options.logoSize, options.logoSize);
         if (drawX < 0) context.drawImage(source, drawX + width, y, options.logoSize, options.logoSize);
@@ -317,32 +319,6 @@ export function OrbitLanding({ collections }: Props) {
         : -options.tileWidth;
       for (let x = firstX; x < width + options.tileWidth; x += options.tileWidth) {
         const drawX = x + (options.tileWidth - options.logoSize) / 2;
-        if (options.backing) {
-          const centerY = y + options.logoSize * 0.52;
-          const gradient = context.createRadialGradient(
-            drawX + options.logoSize * 0.5,
-            centerY,
-            options.logoSize * 0.12,
-            drawX + options.logoSize * 0.5,
-            centerY,
-            options.logoSize * 0.48,
-          );
-          gradient.addColorStop(0, "rgba(236, 255, 248, 0.96)");
-          gradient.addColorStop(0.58, "rgba(85, 240, 218, 0.72)");
-          gradient.addColorStop(1, "rgba(85, 240, 218, 0)");
-          context.fillStyle = gradient;
-          context.beginPath();
-          context.ellipse(
-            drawX + options.logoSize * 0.5,
-            centerY,
-            options.logoSize * 0.45,
-            options.logoSize * 0.36,
-            0,
-            0,
-            Math.PI * 2,
-          );
-          context.fill();
-        }
         drawWrappedLogo(drawX);
       }
       context.restore();
@@ -391,6 +367,58 @@ export function OrbitLanding({ collections }: Props) {
 
       sourceContext.putImageData(imageData, 0, 0);
       return sourceCanvas;
+    }
+
+    function makeCroppedLogoCanvas(image: HTMLImageElement, size: number, padding: number) {
+      const scanCanvas = document.createElement("canvas");
+      scanCanvas.width = image.naturalWidth || image.width;
+      scanCanvas.height = image.naturalHeight || image.height;
+      const scanContext = scanCanvas.getContext("2d", { willReadFrequently: true });
+      if (!scanContext) return image;
+
+      scanContext.drawImage(image, 0, 0, scanCanvas.width, scanCanvas.height);
+      const { data } = scanContext.getImageData(0, 0, scanCanvas.width, scanCanvas.height);
+      let minX = scanCanvas.width;
+      let minY = scanCanvas.height;
+      let maxX = 0;
+      let maxY = 0;
+
+      for (let y = 0; y < scanCanvas.height; y += 1) {
+        for (let x = 0; x < scanCanvas.width; x += 1) {
+          const offset = (y * scanCanvas.width + x) * 4;
+          const alpha = data[offset + 3];
+          const r = data[offset];
+          const g = data[offset + 1];
+          const b = data[offset + 2];
+          const brightness = (r + g + b) / 3;
+          const saturation = Math.max(r, g, b) - Math.min(r, g, b);
+          if (alpha < 16 || (brightness < 46 && saturation < 38)) continue;
+          minX = Math.min(minX, x);
+          minY = Math.min(minY, y);
+          maxX = Math.max(maxX, x);
+          maxY = Math.max(maxY, y);
+        }
+      }
+
+      if (minX >= maxX || minY >= maxY) return image;
+
+      const sourceWidth = maxX - minX + 1;
+      const sourceHeight = maxY - minY + 1;
+      const cropSize = Math.max(sourceWidth, sourceHeight);
+      const sourceX = Math.max(0, minX - (cropSize - sourceWidth) / 2);
+      const sourceY = Math.max(0, minY - (cropSize - sourceHeight) / 2);
+      const clampedCropSize = Math.min(cropSize, scanCanvas.width - sourceX, scanCanvas.height - sourceY);
+
+      const outputCanvas = document.createElement("canvas");
+      outputCanvas.width = size;
+      outputCanvas.height = size;
+      const outputContext = outputCanvas.getContext("2d");
+      if (!outputContext) return image;
+      const drawSize = size - padding * 2;
+      outputContext.imageSmoothingEnabled = true;
+      outputContext.imageSmoothingQuality = "high";
+      outputContext.drawImage(image, sourceX, sourceY, clampedCropSize, clampedCropSize, padding, padding, drawSize, drawSize);
+      return outputCanvas;
     }
 
     function sealHorizontalTextureSeam(context: CanvasRenderingContext2D, width: number, height: number, stripWidth = 14) {
@@ -713,10 +741,9 @@ export function OrbitLanding({ collections }: Props) {
           tileWidth: width / 4,
           logoSize: isBattlePawss ? 336 : 292,
           alpha: 1,
-          transparentBackground: logoBackgroundColor,
+          transparentBackground: isBattlePawss ? undefined : logoBackgroundColor,
           logoPadding: isBattlePawss ? 18 : 24,
-          removeDarkBackground: isBattlePawss,
-          backing: isBattlePawss,
+          cropToVisibleContent: isBattlePawss,
         });
 
         const limbShade = context.createLinearGradient(width * 0.14, 0, width * 0.86, 0);
