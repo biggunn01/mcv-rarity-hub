@@ -661,7 +661,7 @@ export function OrbitLanding({ collections }: Props) {
       const point = new THREE.Vector3(
         Math.cos(angle) * config.orbitRadius,
         Math.sin(angle) * config.orbitHeight + Math.sin(angle * 2 + index) * 0.08,
-        Math.sin(angle) * config.orbitDepth,
+        -Math.sin(angle) * config.orbitDepth,
       );
       point.applyEuler(new THREE.Euler(ORBIT_TILT_X, 0, ORBIT_TILT_Z));
       return point;
