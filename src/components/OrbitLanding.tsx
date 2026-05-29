@@ -104,16 +104,24 @@ type LandingTransition = {
 };
 
 const orbitPresets = [
-  { orbitRadius: 3.15, orbitHeight: 0.72, orbitDepth: 1.34, phase: 2.55, orbitSpeed: 0.18, radius: 0.33, spinSpeed: 0.28 },
-  { orbitRadius: 4.05, orbitHeight: 0.94, orbitDepth: 1.72, phase: 5.05, orbitSpeed: 0.145, radius: 0.3, spinSpeed: 0.24 },
-  { orbitRadius: 4.95, orbitHeight: 1.16, orbitDepth: 2.04, phase: 3.35, orbitSpeed: 0.12, radius: 0.32, spinSpeed: 0.22 },
-  { orbitRadius: 5.85, orbitHeight: 1.38, orbitDepth: 2.38, phase: 0.2, orbitSpeed: 0.1, radius: 0.36, spinSpeed: 0.2 },
-  { orbitRadius: 4.55, orbitHeight: 1.72, orbitDepth: 2.62, phase: 1.35, orbitSpeed: 0.088, radius: 0.31, spinSpeed: 0.17 },
-  { orbitRadius: 6.35, orbitHeight: 1.92, orbitDepth: 3.02, phase: 4.45, orbitSpeed: 0.078, radius: 0.33, spinSpeed: 0.15 },
+  { orbitRadius: 3.38, orbitHeight: 0.82, orbitDepth: 1.56, phase: 2.55, orbitSpeed: 0.18, radius: 0.38, spinSpeed: 0.28 },
+  { orbitRadius: 4.36, orbitHeight: 1.02, orbitDepth: 1.98, phase: 5.05, orbitSpeed: 0.145, radius: 0.35, spinSpeed: 0.24 },
+  { orbitRadius: 5.32, orbitHeight: 1.34, orbitDepth: 2.36, phase: 3.35, orbitSpeed: 0.12, radius: 0.37, spinSpeed: 0.22 },
+  { orbitRadius: 6.28, orbitHeight: 1.52, orbitDepth: 2.74, phase: 0.2, orbitSpeed: 0.1, radius: 0.41, spinSpeed: 0.2 },
+  { orbitRadius: 4.92, orbitHeight: 1.92, orbitDepth: 2.98, phase: 1.35, orbitSpeed: 0.088, radius: 0.36, spinSpeed: 0.17 },
+  { orbitRadius: 6.82, orbitHeight: 2.16, orbitDepth: 3.44, phase: 4.45, orbitSpeed: 0.078, radius: 0.38, spinSpeed: 0.15 },
 ];
 
 const ORBIT_TILT_X = -0.34;
 const ORBIT_TILT_Z = -0.1;
+const ORBIT_VARIANCE = [
+  { x: -0.05, y: -0.07, z: -0.02 },
+  { x: -0.12, y: 0.03, z: 0.08 },
+  { x: 0.02, y: -0.04, z: -0.11 },
+  { x: -0.18, y: 0.05, z: 0.13 },
+  { x: 0.08, y: -0.08, z: -0.16 },
+  { x: -0.24, y: 0.02, z: 0.19 },
+];
 const TRANSITION_APPROACH_SECONDS = 0.53;
 const TRANSITION_EXPLODE_SECONDS = 2.03;
 const TRANSITION_NAV_SECONDS = 2.44;
@@ -168,8 +176,8 @@ export function OrbitLanding({ collections }: Props) {
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x03050d, 0.035);
 
-    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 80);
-    camera.position.set(0, 1.15, 12.9);
+    const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 80);
+    camera.position.set(0, 1.15, 14.1);
     camera.lookAt(0, 0, 0);
 
     const runtimePlanets: PlanetRuntime[] = [];
@@ -663,7 +671,8 @@ export function OrbitLanding({ collections }: Props) {
         Math.sin(angle) * config.orbitHeight + Math.sin(angle * 2 + index) * 0.08,
         -Math.sin(angle) * config.orbitDepth,
       );
-      point.applyEuler(new THREE.Euler(ORBIT_TILT_X, 0, ORBIT_TILT_Z));
+      const variance = ORBIT_VARIANCE[index % ORBIT_VARIANCE.length];
+      point.applyEuler(new THREE.Euler(ORBIT_TILT_X + variance.x, variance.y, ORBIT_TILT_Z + variance.z));
       return point;
     }
 
@@ -683,8 +692,8 @@ export function OrbitLanding({ collections }: Props) {
         opacity: 0.28,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
-        dashSize: 0.22,
-        gapSize: 0.16,
+        dashSize: 0.11,
+        gapSize: 0.08,
         scale: 1,
       });
       const shaderStore: OrbitTrail["shaderStore"] = { current: null };
@@ -802,8 +811,8 @@ export function OrbitLanding({ collections }: Props) {
       const height = Math.max(360, Math.floor(rect.height));
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
-      camera.fov = camera.aspect < 0.72 ? 47 : 38;
-      camera.position.set(0, camera.aspect < 0.72 ? 1.45 : 1.15, camera.aspect < 0.72 ? 18.4 : 12.9);
+      camera.fov = camera.aspect < 0.72 ? 48 : 39;
+      camera.position.set(0, camera.aspect < 0.72 ? 1.45 : 1.15, camera.aspect < 0.72 ? 20.2 : 14.1);
       camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
     }
@@ -1083,16 +1092,6 @@ export function OrbitLanding({ collections }: Props) {
         <div className="solarSunTrajectory" aria-hidden="true" />
         <canvas className="solarSystemCanvas" ref={canvasRef} aria-label="Interactive 3D MCV collection solar system" />
         {isLoading && <span className="solarSystemLoading">Loading orbit</span>}
-        {center && (
-          <button
-            className="solarSunLabel"
-            type="button"
-            onClick={() => navigate(`/collections/${center.collection.slug}`)}
-            style={{ "--label-accent": planetThemeMap["mars-cats-voyage"].accent } as CSSProperties}
-          >
-            {center.collection.name}
-          </button>
-        )}
         <div className="solarPlanetLabels" aria-hidden="true">
           {planets.map((planet) => (
             <button
@@ -1123,6 +1122,15 @@ export function OrbitLanding({ collections }: Props) {
           ))}
         </div>
         <nav className="solarSystemFallback" aria-label="Collection links">
+          {center && (
+            <button
+              type="button"
+              onClick={() => navigate(`/collections/${center.collection.slug}`)}
+              style={{ "--planet-link-accent": planetThemeMap["mars-cats-voyage"].accent } as CSSProperties}
+            >
+              {center.collection.name}
+            </button>
+          )}
           {planets.map((planet) => (
             <button
               key={planet.slug}

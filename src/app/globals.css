@@ -103,39 +103,39 @@ select {
 .starField::before,
 .starField::after {
   position: absolute;
-  inset: 0;
+  inset: -8% -24%;
   content: "";
   background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1px, transparent 1.3px),
-    radial-gradient(circle, rgba(176, 221, 255, 0.72) 0 1.2px, transparent 1.55px),
-    radial-gradient(circle, rgba(255, 223, 172, 0.5) 0 0.9px, transparent 1.25px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.92) 0 0.7px, transparent 1px),
+    radial-gradient(circle, rgba(176, 221, 255, 0.74) 0 1.35px, transparent 1.8px),
+    radial-gradient(circle, rgba(255, 223, 172, 0.6) 0 1.9px, transparent 2.35px),
+    radial-gradient(circle, rgba(205, 255, 239, 0.45) 0 0.55px, transparent 0.9px),
     radial-gradient(ellipse at 22% 28%, rgba(97, 162, 139, 0.34), transparent 28%),
     radial-gradient(ellipse at 72% 26%, rgba(138, 61, 150, 0.32), transparent 30%),
     radial-gradient(ellipse at 78% 72%, rgba(63, 103, 175, 0.3), transparent 34%),
     radial-gradient(ellipse at 34% 78%, rgba(217, 99, 69, 0.2), transparent 26%);
-  background-position: 0 0, 96px 44px, 42px 130px, 0 0, 0 0, 0 0, 0 0;
-  background-size: 142px 142px, 226px 226px, 314px 314px, auto, auto, auto, auto;
+  background-position: 0 0, 96px 44px, 42px 130px, 170px 86px, 0 0, 0 0, 0 0, 0 0;
+  background-size: 118px 126px, 218px 174px, 356px 302px, 164px 236px, auto, auto, auto, auto;
   opacity: 0.7;
+  will-change: background-position;
 }
 
 .starField::before {
-  transform: scale(1.35);
-  opacity: 0.28;
-  animation: starDrift 18s linear infinite;
+  opacity: 0.34;
+  animation: starDrift 16s linear infinite;
   filter: blur(0.4px);
 }
 
 .starField::after {
-  opacity: 0.22;
-  animation: starDriftReverse 25.5s linear infinite;
+  opacity: 0.2;
+  animation: starDriftReverse 27s linear infinite;
   filter: blur(1.1px);
 }
 
 .starField {
   background-color: transparent;
   mix-blend-mode: screen;
-  animation: starTunnel 13.5s linear infinite;
-  will-change: transform;
+  animation: starTunnel 22s linear infinite;
 }
 
 .nebula {
@@ -634,18 +634,18 @@ select {
   z-index: 1;
   top: calc(50% + 12px);
   left: max(-12vw, -120px);
-  width: calc(50% + 120px);
+  width: calc(25% + 60px);
   height: 3px;
   border-radius: 999px;
   background:
     repeating-linear-gradient(
       270deg,
-      rgba(255, 226, 84, 0) 0 16px,
-      rgba(255, 226, 84, 0.95) 16px 48px,
-      rgba(255, 167, 34, 0.72) 48px 62px,
-      rgba(255, 226, 84, 0) 62px 86px
+      rgba(255, 226, 84, 0) 0 8px,
+      rgba(255, 226, 84, 0.95) 8px 24px,
+      rgba(255, 167, 34, 0.72) 24px 31px,
+      rgba(255, 226, 84, 0) 31px 43px
     );
-  background-size: 172px 100%;
+  background-size: 86px 100%;
   box-shadow:
     0 0 14px rgba(255, 221, 77, 0.54),
     0 0 34px rgba(255, 162, 38, 0.22);
@@ -833,10 +833,10 @@ select {
   max-width: calc(100vw - 40px);
   flex-wrap: nowrap;
   justify-content: center;
-  gap: 9px;
+  gap: 7px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
-  padding: 9px;
+  padding: 8px;
   background:
     linear-gradient(90deg, rgba(5, 8, 17, 0.58), rgba(13, 18, 31, 0.78), rgba(5, 8, 17, 0.58)),
     radial-gradient(circle at 50% 0%, rgba(255, 185, 88, 0.16), transparent 64%);
@@ -852,14 +852,14 @@ select {
   flex: 0 0 auto;
   border-color: color-mix(in srgb, var(--planet-link-accent) 42%, rgba(255, 255, 255, 0.18));
   border-radius: 999px;
-  padding: 0 13px;
+  padding: 0 11px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
     rgba(2, 4, 10, 0.48);
   box-shadow: 0 0 18px color-mix(in srgb, var(--planet-link-accent) 20%, transparent);
   color: rgba(255, 255, 255, 0.86);
   cursor: pointer;
-  font-size: clamp(0.64rem, 0.82vw, 0.76rem);
+  font-size: clamp(0.6rem, 0.76vw, 0.72rem);
   backdrop-filter: blur(10px);
   white-space: nowrap;
 }
@@ -992,7 +992,7 @@ select {
 
 @keyframes solarTrajectorySweep {
   from {
-    background-position: 172px 0;
+    background-position: 86px 0;
   }
 
   to {
@@ -1025,15 +1025,27 @@ select {
 
 @keyframes starTunnel {
   0% {
-    transform: translate3d(0, 0, 0) scale(1);
+    background-position:
+      0 0,
+      96px 44px,
+      42px 130px,
+      170px 86px,
+      0 0,
+      0 0,
+      0 0,
+      0 0;
   }
 
-  50% {
-    transform: translate3d(-1.2%, 1.2%, 0) scale(1.045);
-  }
-
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
+  to {
+    background-position:
+      -236px 0,
+      -340px 44px,
+      -670px 130px,
+      -158px 86px,
+      -120px 0,
+      -86px 0,
+      -74px 0,
+      -96px 0;
   }
 }
 
@@ -1096,13 +1108,29 @@ select {
 
 @keyframes starDrift {
   to {
-    transform: translate3d(-86px, 86px, 0) scale(1.35);
+    background-position:
+      -354px 0,
+      -558px 44px,
+      -1026px 130px,
+      -322px 86px,
+      -180px 0,
+      -140px 0,
+      -110px 0,
+      -128px 0;
   }
 }
 
 @keyframes starDriftReverse {
   to {
-    transform: translate3d(132px, -132px, 0);
+    background-position:
+      -142px 0,
+      -224px 44px,
+      -416px 130px,
+      -210px 86px,
+      -70px 0,
+      -52px 0,
+      -48px 0,
+      -64px 0;
   }
 }
 
