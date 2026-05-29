@@ -76,44 +76,6 @@
     "source": "opensea:listings:collection-all"
   },
   {
-    "tokenId": "338",
-    "canonicalTokenId": "338",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/338",
-    "orderHash": "0xbb225aeef0dc24f229599a259cb77b425a61a1dac698739d4caf79fc239f3cbd",
-    "status": "ACTIVE",
-    "price": {
-      "value": "10937999659999800000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 10.938,
-      "display": "10.938 APE"
-    },
-    "seller": "0xbb78a151673fac1a0a2162abc7bee3a39b3767b5",
-    "createdAt": 1779254597,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "341",
-    "canonicalTokenId": "341",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/341",
-    "orderHash": "0xe155c8da8814ee3a6ec1820dc0099f76978d08126ac56947d5699d8e0cd9b6ad",
-    "status": "ACTIVE",
-    "price": {
-      "value": "10937999659999800000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 10.938,
-      "display": "10.938 APE"
-    },
-    "seller": "0xbb78a151673fac1a0a2162abc7bee3a39b3767b5",
-    "createdAt": 1779254599,
-    "source": "opensea:listings:collection-all"
-  },
-  {
     "tokenId": "356",
     "canonicalTokenId": "356",
     "chain": "ApeChain",
@@ -187,44 +149,6 @@
     },
     "seller": "0x5118e729847382c3f25dfedd0d6fbd57cb48a471",
     "createdAt": 1778176589,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "684",
-    "canonicalTokenId": "684",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/684",
-    "orderHash": "0x2a0cabfc0f521867d256c18031437a048ab1b3ba5554488f5b8883412b223b1c",
-    "status": "ACTIVE",
-    "price": {
-      "value": "14000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 14,
-      "display": "14 APE"
-    },
-    "seller": "0x6e29bc23d1c9895d4250c4f8822dea4eb328899c",
-    "createdAt": 1776779142,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "695",
-    "canonicalTokenId": "695",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/695",
-    "orderHash": "0xacbd8f407d94fc5b0de27690ecab9317241eb86d08f5ed30179641e1ac9b823b",
-    "status": "ACTIVE",
-    "price": {
-      "value": "12000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 12,
-      "display": "12 APE"
-    },
-    "seller": "0x540113d48d46bdf743c5c80af997245ff05acb13",
-    "createdAt": 1779003477,
     "source": "opensea:listings:collection-all"
   },
   {
@@ -304,25 +228,6 @@
     "source": "opensea:listings:collection-all"
   },
   {
-    "tokenId": "1061",
-    "canonicalTokenId": "1061",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/1061",
-    "orderHash": "0xa055ee4e0bca1b666b0f96fdf228d123b65a4af3ca79d97ebccfb09d07e4a7e0",
-    "status": "ACTIVE",
-    "price": {
-      "value": "12000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 12,
-      "display": "12 APE"
-    },
-    "seller": "0x540113d48d46bdf743c5c80af997245ff05acb13",
-    "createdAt": 1779003477,
-    "source": "opensea:listings:collection-all"
-  },
-  {
     "tokenId": "1121",
     "canonicalTokenId": "1121",
     "chain": "ApeChain",
@@ -358,25 +263,6 @@
     },
     "seller": "0x5118e729847382c3f25dfedd0d6fbd57cb48a471",
     "createdAt": 1778176669,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "1216",
-    "canonicalTokenId": "1216",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/1216",
-    "orderHash": "0x25a537645064424aac2be42177bf93efb224262f882073140a1e753a06aa9758",
-    "status": "ACTIVE",
-    "price": {
-      "value": "12000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 12,
-      "display": "12 APE"
-    },
-    "seller": "0x540113d48d46bdf743c5c80af997245ff05acb13",
-    "createdAt": 1779003477,
     "source": "opensea:listings:collection-all"
   },
   {
@@ -418,25 +304,6 @@
     "source": "opensea:listings:collection-all"
   },
   {
-    "tokenId": "1457",
-    "canonicalTokenId": "1457",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/1457",
-    "orderHash": "0x4f68595a27434c7f007b473c22fa547f7569fc3ad475b129825305d13cbc2179",
-    "status": "ACTIVE",
-    "price": {
-      "value": "11000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 11,
-      "display": "11 APE"
-    },
-    "seller": "0xc3efd0186fa41e2c4c39c68fd2e38c6ed72acafc",
-    "createdAt": 1778566450,
-    "source": "opensea:listings:collection-all"
-  },
-  {
     "tokenId": "1459",
     "canonicalTokenId": "1459",
     "chain": "ApeChain",
@@ -453,25 +320,6 @@
     },
     "seller": "0xbeee0fcc18a1af5cccf235990518c0b9443d784b",
     "createdAt": 1777663893,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "1724",
-    "canonicalTokenId": "1724",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/1724",
-    "orderHash": "0xa64e72dd71fb0310258ec9d0eba1d8922e82be4d9a045f4f7eacd257f54f1c25",
-    "status": "ACTIVE",
-    "price": {
-      "value": "12901999199990000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 12.901999,
-      "display": "12.902 APE"
-    },
-    "seller": "0xc98ad6cd999ce3cb0b3bee9f28455357527c61ce",
-    "createdAt": 1777369837,
     "source": "opensea:listings:collection-all"
   },
   {
@@ -513,25 +361,6 @@
     "source": "opensea:listings:collection-all"
   },
   {
-    "tokenId": "1903",
-    "canonicalTokenId": "1903",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/1903",
-    "orderHash": "0x91a4d810d08e33f9c700a1ea801339984ba3e23cf4469ea01c9795331bdafbe7",
-    "status": "ACTIVE",
-    "price": {
-      "value": "25999999900000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 26,
-      "display": "26 APE"
-    },
-    "seller": "0x23218d27ba3455012be35a4911bdf5f164aafa97",
-    "createdAt": 1773575803,
-    "source": "opensea:listings:collection-all"
-  },
-  {
     "tokenId": "1905",
     "canonicalTokenId": "1905",
     "chain": "ApeChain",
@@ -567,25 +396,6 @@
     },
     "seller": "0xc98ad6cd999ce3cb0b3bee9f28455357527c61ce",
     "createdAt": 1774691406,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "2007",
-    "canonicalTokenId": "2007",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/2007",
-    "orderHash": "0x0ae18d3d44d39168edf81159504f7bd76c5e82efcfe938b1cc8e279f5cf592ae",
-    "status": "ACTIVE",
-    "price": {
-      "value": "20995999999000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 20.996,
-      "display": "20.996 APE"
-    },
-    "seller": "0x23218d27ba3455012be35a4911bdf5f164aafa97",
-    "createdAt": 1774688679,
     "source": "opensea:listings:collection-all"
   },
   {
@@ -627,101 +437,6 @@
     "source": "opensea:listings:collection-all"
   },
   {
-    "tokenId": "2203",
-    "canonicalTokenId": "2203",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/2203",
-    "orderHash": "0x05b418cdbae53104d9dc5009039fa76e3dd043447b49d70162bc8a391349fed1",
-    "status": "ACTIVE",
-    "price": {
-      "value": "24985399944900000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 24.9854,
-      "display": "24.985 APE"
-    },
-    "seller": "0x23218d27ba3455012be35a4911bdf5f164aafa97",
-    "createdAt": 1776068863,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "2204",
-    "canonicalTokenId": "2204",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/2204",
-    "orderHash": "0x4784add87840a02aa06c8826506916255dc2ff0bedf16ee8863cf2e4b08a903b",
-    "status": "ACTIVE",
-    "price": {
-      "value": "140999999900000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 141,
-      "display": "141 APE"
-    },
-    "seller": "0x23218d27ba3455012be35a4911bdf5f164aafa97",
-    "createdAt": 1773575803,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "2326",
-    "canonicalTokenId": "2326",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/2326",
-    "orderHash": "0x6744db3d664bf58c3289bb02632b5fcf2dbf27ade8ac9d96bbde4dc6f4007b0c",
-    "status": "ACTIVE",
-    "price": {
-      "value": "14985399944900000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 14.9854,
-      "display": "14.985 APE"
-    },
-    "seller": "0x23218d27ba3455012be35a4911bdf5f164aafa97",
-    "createdAt": 1776068863,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "2327",
-    "canonicalTokenId": "2327",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/2327",
-    "orderHash": "0x3d7730c85eeb057db1b249b2bf68b2b354446e039820568a6d901b60091deea8",
-    "status": "ACTIVE",
-    "price": {
-      "value": "10937999659999900000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 10.938,
-      "display": "10.938 APE"
-    },
-    "seller": "0x59969e4f029617226f968e7e3edae48670f9bd6c",
-    "createdAt": 1779168561,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "2361",
-    "canonicalTokenId": "2361",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/2361",
-    "orderHash": "0x28099d80c04afb702ec933c8ad1b47a570e71f571bf7a0e7e2695d12227df11a",
-    "status": "ACTIVE",
-    "price": {
-      "value": "10937999659999800000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 10.938,
-      "display": "10.938 APE"
-    },
-    "seller": "0xbb78a151673fac1a0a2162abc7bee3a39b3767b5",
-    "createdAt": 1779254591,
-    "source": "opensea:listings:collection-all"
-  },
-  {
     "tokenId": "2423",
     "canonicalTokenId": "2423",
     "chain": "ApeChain",
@@ -738,25 +453,6 @@
     },
     "seller": "0xe6da4a4930e896c7e1ff590779b4046d7587b802",
     "createdAt": 1777213572,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "2685",
-    "canonicalTokenId": "2685",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/2685",
-    "orderHash": "0xfb18a0ba5da6d2e25d4c781fc5f5a6f963a351d821a04637dcf8e4144038ef73",
-    "status": "ACTIVE",
-    "price": {
-      "value": "10937999659999800000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 10.938,
-      "display": "10.938 APE"
-    },
-    "seller": "0xbb78a151673fac1a0a2162abc7bee3a39b3767b5",
-    "createdAt": 1779254593,
     "source": "opensea:listings:collection-all"
   },
   {
@@ -836,63 +532,6 @@
     "source": "opensea:listings:collection-all"
   },
   {
-    "tokenId": "3228",
-    "canonicalTokenId": "3228",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/3228",
-    "orderHash": "0x9e875037a3b2d605a7da16ef2f80d5981b175f669f471689424f6120c75617a7",
-    "status": "ACTIVE",
-    "price": {
-      "value": "10937999659999900000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 10.938,
-      "display": "10.938 APE"
-    },
-    "seller": "0x59969e4f029617226f968e7e3edae48670f9bd6c",
-    "createdAt": 1779168561,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "3230",
-    "canonicalTokenId": "3230",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/3230",
-    "orderHash": "0xc1c017041446d82a978e8711ba387906ddba4d9b05738f68e68df8d0aeb2bda0",
-    "status": "ACTIVE",
-    "price": {
-      "value": "10937999659999900000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 10.938,
-      "display": "10.938 APE"
-    },
-    "seller": "0x59969e4f029617226f968e7e3edae48670f9bd6c",
-    "createdAt": 1779168561,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "3290",
-    "canonicalTokenId": "3290",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/3290",
-    "orderHash": "0x516ec4121c9cf5a5f497be7ee11f0a1589f46699081036f15081d3d241210f87",
-    "status": "ACTIVE",
-    "price": {
-      "value": "10937999659999800000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 10.938,
-      "display": "10.938 APE"
-    },
-    "seller": "0xbb78a151673fac1a0a2162abc7bee3a39b3767b5",
-    "createdAt": 1779254595,
-    "source": "opensea:listings:collection-all"
-  },
-  {
     "tokenId": "3490",
     "canonicalTokenId": "3490",
     "chain": "ApeChain",
@@ -909,82 +548,6 @@
     },
     "seller": "0x77ccba9fddf2ed0825167636292d2dcd64d208fc",
     "createdAt": 1776985343,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "3516",
-    "canonicalTokenId": "3516",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/3516",
-    "orderHash": "0x36a6bf0f53abc12681d9a401b09f4f0a849afb6808d6f418e62a60faa2c38149",
-    "status": "ACTIVE",
-    "price": {
-      "value": "12815998567990000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 12.815999,
-      "display": "12.816 APE"
-    },
-    "seller": "0xff2072dedb5685907df1121cc481cb4e413e05f1",
-    "createdAt": 1777940716,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "3518",
-    "canonicalTokenId": "3518",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/3518",
-    "orderHash": "0x8ce1e6f18ce2ded1b977a9c8e0c68ec2470376c367efebf73aaf893639ae72eb",
-    "status": "ACTIVE",
-    "price": {
-      "value": "22000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 22,
-      "display": "22 APE"
-    },
-    "seller": "0x29cb02180d8d689918ce2c50a3357798d6fd9283",
-    "createdAt": 1771733275,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "3521",
-    "canonicalTokenId": "3521",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/3521",
-    "orderHash": "0x72bca22a67d3eb227230610ad2ea2ef30d9ec9514db0163828fa97b0ea94b333",
-    "status": "ACTIVE",
-    "price": {
-      "value": "22000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 22,
-      "display": "22 APE"
-    },
-    "seller": "0x29cb02180d8d689918ce2c50a3357798d6fd9283",
-    "createdAt": 1771733275,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "3959",
-    "canonicalTokenId": "3959",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/3959",
-    "orderHash": "0xfb23fe71ed9ee4c721020cd25bf204d04beee22290da092b0676474e85c35f42",
-    "status": "ACTIVE",
-    "price": {
-      "value": "12908999530000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 12.909,
-      "display": "12.909 APE"
-    },
-    "seller": "0x1e2f7ac77218a91ab75fbcf575104ad2e224aee7",
-    "createdAt": 1777082798,
     "source": "opensea:listings:collection-all"
   },
   {
@@ -1121,44 +684,6 @@
     "source": "opensea:listings:collection-all"
   },
   {
-    "tokenId": "4490",
-    "canonicalTokenId": "4490",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/4490",
-    "orderHash": "0x08715f083fc6ea88a44113032a224694fc97b68b0799b67d3e14b90a8e05ec6b",
-    "status": "ACTIVE",
-    "price": {
-      "value": "40000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 40,
-      "display": "40 APE"
-    },
-    "seller": "0xf28eceedb8a7931604d2c090a407793d4bde73fd",
-    "createdAt": 1772036979,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "4507",
-    "canonicalTokenId": "4507",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/4507",
-    "orderHash": "0xd9ae943812f9bc7765c7d1cf9063c305f5272e3bd951c53e982ec5b7c5587466",
-    "status": "ACTIVE",
-    "price": {
-      "value": "12000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 12,
-      "display": "12 APE"
-    },
-    "seller": "0x540113d48d46bdf743c5c80af997245ff05acb13",
-    "createdAt": 1779003477,
-    "source": "opensea:listings:collection-all"
-  },
-  {
     "tokenId": "4592",
     "canonicalTokenId": "4592",
     "chain": "ApeChain",
@@ -1175,44 +700,6 @@
     },
     "seller": "0x81ffb2500aac87eb3e7a3e15d793dd834ff7d62b",
     "createdAt": 1776943312,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "4593",
-    "canonicalTokenId": "4593",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/4593",
-    "orderHash": "0xb7d87fae8b7b0268fe4496e3d29b35bd5c61fa19d44219c3ef8cf91dac78022f",
-    "status": "ACTIVE",
-    "price": {
-      "value": "14951899862900000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 14.9519,
-      "display": "14.952 APE"
-    },
-    "seller": "0x23218d27ba3455012be35a4911bdf5f164aafa97",
-    "createdAt": 1776493073,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "4594",
-    "canonicalTokenId": "4594",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/4594",
-    "orderHash": "0x3e1549735422c3f10671aa9408bdf316f9088cda9d564965962264b7d149489c",
-    "status": "ACTIVE",
-    "price": {
-      "value": "12957999970000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 12.958,
-      "display": "12.958 APE"
-    },
-    "seller": "0x23218d27ba3455012be35a4911bdf5f164aafa97",
-    "createdAt": 1776930388,
     "source": "opensea:listings:collection-all"
   },
   {
@@ -1330,25 +817,6 @@
     "source": "opensea:listings:collection-all"
   },
   {
-    "tokenId": "4614",
-    "canonicalTokenId": "4614",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/4614",
-    "orderHash": "0x6f13821d73af92b6d703b036deb4cee189bcb14cecd988a3ee061466c5000bad",
-    "status": "ACTIVE",
-    "price": {
-      "value": "18957999970000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 18.958,
-      "display": "18.958 APE"
-    },
-    "seller": "0x23218d27ba3455012be35a4911bdf5f164aafa97",
-    "createdAt": 1776930388,
-    "source": "opensea:listings:collection-all"
-  },
-  {
     "tokenId": "4857",
     "canonicalTokenId": "4857",
     "chain": "ApeChain",
@@ -1387,44 +855,6 @@
     "source": "opensea:listings:collection-all"
   },
   {
-    "tokenId": "5004",
-    "canonicalTokenId": "5004",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/5004",
-    "orderHash": "0xc6fe6c58179eb72bd3427e5c6dc1cf152b518ea9b4d92132f1dab975b92ce2ae",
-    "status": "ACTIVE",
-    "price": {
-      "value": "22000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 22,
-      "display": "22 APE"
-    },
-    "seller": "0x29cb02180d8d689918ce2c50a3357798d6fd9283",
-    "createdAt": 1771733275,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "5006",
-    "canonicalTokenId": "5006",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/5006",
-    "orderHash": "0xcfd438bc26f130ccbae07340b086fc254a59880671001025eb5cf703ff9d610b",
-    "status": "ACTIVE",
-    "price": {
-      "value": "22000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 22,
-      "display": "22 APE"
-    },
-    "seller": "0x29cb02180d8d689918ce2c50a3357798d6fd9283",
-    "createdAt": 1771733275,
-    "source": "opensea:listings:collection-all"
-  },
-  {
     "tokenId": "5167",
     "canonicalTokenId": "5167",
     "chain": "ApeChain",
@@ -1460,25 +890,6 @@
     },
     "seller": "0x7252711316e83a5c30d54b77b581c2e88ad15539",
     "createdAt": 1773452663,
-    "source": "opensea:listings:collection-all"
-  },
-  {
-    "tokenId": "5427",
-    "canonicalTokenId": "5427",
-    "chain": "ApeChain",
-    "contractAddress": "0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1",
-    "marketplaceUrl": "https://opensea.io/item/ape_chain/0x3e22ba4e9f3bbc02c8346b5287e6f9f4299087e1/5427",
-    "orderHash": "0xee8deac08aa84fb98963a0f3d3600cfff7029c91358363df782c601818a9313c",
-    "status": "ACTIVE",
-    "price": {
-      "value": "12000000000000000000",
-      "decimals": 18,
-      "currency": "APE",
-      "native": 12,
-      "display": "12 APE"
-    },
-    "seller": "0x540113d48d46bdf743c5c80af997245ff05acb13",
-    "createdAt": 1779003477,
     "source": "opensea:listings:collection-all"
   },
   {

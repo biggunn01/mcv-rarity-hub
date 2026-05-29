@@ -52,7 +52,7 @@ select {
 
 .landingShell {
   min-height: 100vh;
-  padding: 16px;
+  padding: 0;
   background:
     radial-gradient(ellipse at 18% 16%, rgba(87, 141, 126, 0.2), transparent 28%),
     radial-gradient(ellipse at 78% 24%, rgba(96, 48, 118, 0.24), transparent 30%),
@@ -96,7 +96,7 @@ select {
 }
 
 .landingShell .orbitHero {
-  min-height: calc(100vh - 32px);
+  min-height: 100vh;
 }
 
 .starField,
@@ -260,7 +260,6 @@ select {
 
 .centerLogo::before {
   background:
-    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.7), transparent 0 10%, rgba(255, 239, 180, 0.28) 11%, transparent 31%),
     radial-gradient(circle at 68% 78%, rgba(0, 0, 0, 0.64), transparent 42%),
     linear-gradient(112deg, rgba(255, 255, 255, 0.18), transparent 28%, rgba(0, 0, 0, 0.42) 72%, rgba(0, 0, 0, 0.7));
   mix-blend-mode: screen;
@@ -269,7 +268,6 @@ select {
 
 .centerLogo::after {
   background:
-    radial-gradient(circle at 25% 20%, rgba(255, 255, 255, 0.18), transparent 25%),
     radial-gradient(ellipse at 78% 72%, rgba(0, 0, 0, 0.72), transparent 42%),
     conic-gradient(from 16deg, transparent 0deg, rgba(255, 178, 70, 0.18) 42deg, transparent 92deg, rgba(255, 118, 30, 0.14) 172deg, transparent 250deg, rgba(255, 240, 190, 0.14) 316deg, transparent 360deg);
   box-shadow:
@@ -456,7 +454,6 @@ select {
 .orbitLogo::before,
 .landingPlanetShell::before {
   background:
-    radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.5), transparent 0 12%, rgba(255, 255, 255, 0.18) 13%, transparent 32%),
     radial-gradient(circle at 66% 76%, rgba(0, 0, 0, 0.56), transparent 42%);
   mix-blend-mode: screen;
   opacity: 0.72;
@@ -587,6 +584,250 @@ select {
   display: block;
   object-fit: cover;
   animation: landingTextureTurn 3450ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.threeOrbitHero {
+  min-height: 100vh;
+  grid-template-rows: auto minmax(560px, 1fr);
+  border: 0;
+  border-radius: 0;
+  padding: clamp(20px, 4vw, 44px);
+  box-shadow: none;
+}
+
+.threeOrbitCopy {
+  z-index: 5;
+  pointer-events: none;
+}
+
+.threeOrbitCopy .eyebrow,
+.threeOrbitCopy h1,
+.threeOrbitCopy .lede {
+  text-shadow: 0 0 28px rgba(0, 0, 0, 0.72);
+}
+
+.solarSystemStage {
+  position: relative;
+  z-index: 3;
+  width: min(1180px, 100%);
+  min-height: min(730px, calc(100vh - 230px));
+  place-self: stretch center;
+  overflow: visible;
+  isolation: isolate;
+}
+
+.solarSystemBackdrop {
+  position: absolute;
+  inset: -16%;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 146, 46, 0.2), transparent 18%),
+    radial-gradient(ellipse at 30% 52%, rgba(117, 230, 255, 0.1), transparent 32%),
+    radial-gradient(ellipse at 72% 54%, rgba(200, 255, 47, 0.09), transparent 28%);
+  filter: saturate(1.18);
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 0 56%, transparent 76%);
+  pointer-events: none;
+}
+
+.solarSystemCanvas {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: manipulation;
+}
+
+.solarSystemStage[data-transitioning="true"] .solarSystemFallback,
+.solarSystemStage[data-transitioning="true"] .solarSunLabel,
+.solarSystemStage[data-transitioning="true"] .solarPlanetLabel {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.solarSystemLoading {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 8px 13px;
+  background: rgba(2, 4, 10, 0.62);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.78rem;
+  font-weight: 900;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(10px);
+}
+
+.solarSunLabel,
+.solarPlanetLabel,
+.solarSystemFallback button {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: white;
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.solarSunLabel {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 50%;
+  max-width: min(280px, 48vw);
+  border-color: rgba(255, 188, 88, 0.42);
+  border-radius: 999px;
+  padding: 7px 13px;
+  background: rgba(2, 4, 10, 0.48);
+  box-shadow:
+    0 0 24px rgba(255, 126, 36, 0.24),
+    inset 0 0 20px rgba(255, 171, 66, 0.08);
+  font-size: clamp(0.74rem, 1.1vw, 0.92rem);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transform: translate(-50%, 118px);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+}
+
+.solarPlanetLabels {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  pointer-events: none;
+}
+
+.solarPlanetLabel {
+  position: absolute;
+  left: var(--label-x, 50%);
+  top: var(--label-y, 50%);
+  border-color: rgba(var(--label-rgb, 255, 255, 255), 0.34);
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: rgba(2, 4, 10, 0.66);
+  box-shadow:
+    0 0 22px rgba(var(--label-rgb, 255, 255, 255), 0.2),
+    inset 0 0 18px rgba(var(--label-rgb, 255, 255, 255), 0.08);
+  font-size: clamp(0.7rem, 1vw, 0.92rem);
+  opacity: var(--label-opacity, 0);
+  text-shadow: 0 0 16px rgba(var(--label-rgb, 255, 255, 255), 0.46);
+  transform: translate(-50%, calc(-100% - 18px)) scale(var(--label-depth, 0.84));
+  transition: opacity 120ms ease, transform 120ms ease;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.solarPlanetLabel::before {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 12px);
+  width: clamp(64px, 8vw, 112px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  content: "";
+  transform: translate(-50%, -50%);
+}
+
+.solarPlanetLabel:hover,
+.solarPlanetLabel:focus-visible {
+  opacity: 1;
+}
+
+.solarActiveReadout {
+  position: absolute;
+  z-index: 4;
+  left: var(--active-x);
+  top: var(--active-y);
+  display: none;
+  color: var(--active-accent);
+  font-size: 0;
+  pointer-events: none;
+}
+
+.solarTransitionName {
+  position: absolute;
+  z-index: 16;
+  left: 50%;
+  top: calc(50% + clamp(116px, 16vh, 168px));
+  max-width: min(720px, calc(100vw - 32px));
+  color: white;
+  font-size: clamp(1.45rem, 4.2vw, 3.8rem);
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.96;
+  opacity: 0;
+  pointer-events: none;
+  text-align: center;
+  text-shadow:
+    0 0 16px rgba(255, 255, 255, 0.28),
+    0 0 36px color-mix(in srgb, var(--transition-accent) 52%, transparent),
+    0 0 80px color-mix(in srgb, var(--transition-accent) 28%, transparent);
+  transform: translate(-50%, 16px) scale(0.92);
+}
+
+.solarTransitionName--hold {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+  transition: opacity 360ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.solarTransitionName--explode {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translate(-50%, -10px) scale(1.18);
+  transition: opacity 240ms ease, filter 240ms ease, transform 240ms ease;
+}
+
+.solarSystemFallback {
+  position: fixed;
+  z-index: 40;
+  right: auto;
+  bottom: clamp(14px, 2vw, 26px);
+  left: 50%;
+  display: flex;
+  width: max-content;
+  max-width: calc(100vw - 40px);
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  padding: 9px;
+  background:
+    linear-gradient(90deg, rgba(5, 8, 17, 0.58), rgba(13, 18, 31, 0.78), rgba(5, 8, 17, 0.58)),
+    radial-gradient(circle at 50% 0%, rgba(255, 185, 88, 0.16), transparent 64%);
+  box-shadow:
+    0 18px 46px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  transform: translateX(-50%);
+  backdrop-filter: blur(18px);
+}
+
+.solarSystemFallback button {
+  min-height: 36px;
+  flex: 0 0 auto;
+  border-color: color-mix(in srgb, var(--planet-link-accent) 42%, rgba(255, 255, 255, 0.18));
+  border-radius: 999px;
+  padding: 0 13px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    rgba(2, 4, 10, 0.48);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--planet-link-accent) 20%, transparent);
+  color: rgba(255, 255, 255, 0.86);
+  cursor: pointer;
+  font-size: clamp(0.64rem, 0.82vw, 0.76rem);
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+
+.solarSystemFallback button:hover,
+.solarSunLabel:hover {
+  border-color: var(--planet-link-accent, var(--label-accent, #ffb15d));
+  color: white;
 }
 
 .landingTitle {
@@ -1877,6 +2118,17 @@ td a {
   transform: translate3d(0, -50%, 0) scale(1);
 }
 
+@media (hover: none), (pointer: coarse) {
+  .tokenThumb span::after {
+    display: none;
+  }
+
+  .tokenThumb:hover span,
+  .tokenThumb:focus-visible span {
+    transform: none;
+  }
+}
+
 .traitGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2119,11 +2371,61 @@ td a {
     padding: 0;
   }
 
+  .threeOrbitHero {
+    grid-template-rows: auto minmax(520px, 1fr);
+    padding: 18px 14px 22px;
+  }
+
   .orbitHero {
     min-height: 100vh;
     gap: 14px;
     border-radius: 0;
     padding: 26px 18px 34px;
+  }
+
+  .orbitHero.threeOrbitHero {
+    padding: 18px 14px 22px;
+  }
+
+  .solarSystemStage {
+    min-height: 560px;
+    margin-top: -8px;
+  }
+
+  .solarSunLabel {
+    max-width: 220px;
+    transform: translate(-50%, 92px);
+  }
+
+  .solarSystemFallback {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: auto;
+    max-width: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+    backdrop-filter: none;
+  }
+
+  .solarSystemFallback button {
+    min-height: 30px;
+    padding: 0 9px;
+    font-size: 0.66rem;
+  }
+
+  .solarPlanetLabel {
+    max-width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .orbitStage {
@@ -2226,12 +2528,12 @@ td a {
 
 .marketCollectionHeader {
   display: flex;
-  min-height: 176px;
+  min-height: 148px;
   align-items: center;
   justify-content: space-between;
-  gap: 28px;
+  gap: 24px;
   border-bottom: 1px solid var(--collection-line);
-  padding: 34px 56px;
+  padding: 26px 48px;
   background:
     radial-gradient(circle at 12% 10%, rgba(var(--collection-accent-rgb), 0.12), transparent 28%),
     rgba(10, 11, 17, 0.58);
@@ -2241,7 +2543,7 @@ td a {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 28px;
+  gap: 24px;
 }
 
 .marketCollectionTitle .collectionHeaderLogo {
@@ -2257,14 +2559,14 @@ td a {
 .marketTokenTitle h1 {
   margin: 0;
   max-width: none;
-  font-size: clamp(2.1rem, 4vw, 3.2rem);
+  font-size: clamp(2rem, 3.6vw, 3rem);
   line-height: 1;
 }
 
 .marketSubtitle {
-  margin: 12px 0 0;
+  margin: 9px 0 0;
   color: rgba(255, 255, 255, 0.42);
-  font-size: clamp(1rem, 1.7vw, 1.45rem);
+  font-size: clamp(0.9rem, 1.45vw, 1.22rem);
   font-weight: 900;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -2273,21 +2575,21 @@ td a {
 .marketHeaderActions {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 18px;
 }
 
 .rankedBadge,
 .marketBackLink {
   display: inline-flex;
-  min-height: 58px;
+  min-height: 46px;
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(var(--collection-accent-rgb), 0.36);
   border-radius: 999px;
-  padding: 0 28px;
+  padding: 0 22px;
   background: rgba(var(--collection-accent-rgb), 0.12);
   color: var(--collection-accent);
-  font-size: 1.08rem;
+  font-size: 0.98rem;
   font-weight: 900;
 }
 
@@ -2301,7 +2603,7 @@ td a {
 }
 
 .marketBackLink {
-  min-width: 154px;
+  min-width: 132px;
   border-color: rgba(255, 255, 255, 0.12);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.045);
@@ -2315,9 +2617,9 @@ td a {
 }
 
 .marketStats div {
-  min-height: 164px;
+  min-height: 116px;
   border-right: 1px solid var(--collection-line);
-  padding: 36px 48px;
+  padding: 24px 40px;
 }
 
 .marketStats div:last-child {
@@ -2328,17 +2630,17 @@ td a {
 .marketControlGroup span,
 .marketTraitHeader span {
   display: block;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   color: rgba(255, 255, 255, 0.4);
-  font-size: 0.92rem;
-  font-weight: 900;
+  font-size: 0.78rem;
+  font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .marketStats strong {
   color: #fff;
-  font-size: clamp(1.6rem, 2.5vw, 2.5rem);
+  font-size: clamp(1.45rem, 2.1vw, 2.15rem);
 }
 
 .marketStats div:nth-child(2) strong {
@@ -2352,13 +2654,13 @@ td a {
 
 .marketCollectionGrid {
   display: grid;
-  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-columns: 276px minmax(0, 1fr);
   min-height: 720px;
 }
 
 .marketFilterRail {
   border-right: 1px solid var(--collection-line);
-  padding: 34px;
+  padding: 22px;
   background: rgba(8, 9, 16, 0.58);
 }
 
@@ -2367,35 +2669,44 @@ td a {
 }
 
 .marketFilterRail form {
-  gap: 30px;
+  gap: 16px;
   margin: 0;
 }
 
 .marketFilterRail .topFilterActions {
-  gap: 12px;
-  padding-bottom: 20px;
+  gap: 10px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--collection-line);
 }
 
-.statusSegment {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.statusSegment,
+.chainSegment {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
 }
 
-.statusSegment a {
+.chainSegment {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.statusSegment a,
+.chainSegment a {
   display: inline-flex;
-  min-height: 32px;
+  min-height: 28px;
   align-items: center;
+  justify-content: center;
   border: 1px solid var(--collection-line);
-  border-radius: 7px;
-  padding: 0 12px;
+  border-radius: 6px;
+  padding: 0 8px;
   color: rgba(255, 255, 255, 0.66);
-  font-size: 0.9rem;
-  font-weight: 800;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.statusSegment a.isActive {
+.statusSegment a.isActive,
+.chainSegment a.isActive {
   border-color: rgba(var(--collection-accent-rgb), 0.48);
   background: rgba(var(--collection-accent-rgb), 0.12);
   color: var(--collection-accent);
@@ -2403,17 +2714,17 @@ td a {
 
 .rangeFilterGroup {
   border-bottom: 1px solid var(--collection-line);
-  padding-bottom: 22px;
+  padding-bottom: 12px;
 }
 
 .rangeFilterGroup summary {
   display: flex;
-  min-height: 34px;
+  min-height: 30px;
   cursor: pointer;
   align-items: center;
   justify-content: space-between;
   color: rgba(255, 255, 255, 0.82);
-  font-weight: 850;
+  font-weight: 650;
 }
 
 .rangeFilterGroup summary::after {
@@ -2429,45 +2740,45 @@ td a {
 
 .rangeCurrency {
   display: flex;
-  min-height: 34px;
+  min-height: 30px;
   align-items: center;
   justify-content: space-between;
-  margin: 8px 0 12px;
+  margin: 6px 0 10px;
   border: 1px solid var(--collection-line);
   border-radius: 7px;
   padding: 0 12px;
   color: rgba(255, 255, 255, 0.72);
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .rangeInputs {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .rangeInputs span {
   color: rgba(255, 255, 255, 0.74);
-  font-weight: 900;
+  font-weight: 650;
 }
 
 .rangeFilterGroup input {
   width: 100%;
-  min-height: 34px;
+  min-height: 30px;
 }
 
 .rangeFilterGroup button {
   width: 100%;
-  min-height: 36px;
-  margin-top: 12px;
+  min-height: 32px;
+  margin-top: 10px;
   border-color: var(--collection-line);
   border-radius: 7px;
   background: rgba(255, 255, 255, 0.035);
   color: rgba(255, 255, 255, 0.56);
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .marketFilterRail .traitParent {
@@ -2482,6 +2793,7 @@ td a {
   background: transparent;
   box-shadow: none;
   color: rgba(255, 255, 255, 0.42);
+  font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
@@ -2499,8 +2811,8 @@ td a {
 .marketFilterRail .nestedTraitGroups {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 8px;
-  padding: 18px 0 0;
+  gap: 4px;
+  padding: 12px 0 0;
   background: transparent;
 }
 
@@ -2510,13 +2822,24 @@ td a {
 }
 
 .marketFilterRail .traitCategory:not(.traitParent) > summary {
-  min-height: 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  min-height: 34px;
   border: 0;
-  border-radius: 10px;
-  padding: 0 20px;
+  border-radius: 8px;
+  padding: 0 10px;
   background: transparent;
   box-shadow: none;
   color: rgba(255, 255, 255, 0.64);
+  font-weight: 650;
+}
+
+.marketFilterRail .traitCategory:not(.traitParent) > summary span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .marketFilterRail .traitCategory:not(.traitParent)[open] > summary,
@@ -2529,11 +2852,11 @@ td a {
   position: static;
   display: none;
   width: auto;
-  max-height: 260px;
-  margin: 6px 0 12px;
+  max-height: 220px;
+  margin: 4px 0 8px;
   border: 1px solid var(--collection-line);
-  border-radius: 12px;
-  padding: 10px 12px;
+  border-radius: 10px;
+  padding: 6px 8px;
   background: rgba(255, 255, 255, 0.035);
   box-shadow: none;
   backdrop-filter: none;
@@ -2544,14 +2867,15 @@ td a {
 }
 
 .marketFilterRail .traitOptionGrid label {
-  min-height: 32px;
+  min-height: 28px;
   border: 0;
   color: rgba(255, 255, 255, 0.74);
+  font-weight: 500;
 }
 
 .marketFilterRail .filterActions {
   display: grid;
-  gap: 16px;
+  gap: 10px;
 }
 
 .marketFilterRail .listedToggle {
@@ -2566,12 +2890,13 @@ td a {
 
 .marketFilterRail .filterActions a {
   display: inline-flex;
-  min-height: 52px;
+  min-height: 40px;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--collection-line);
-  border-radius: 12px;
+  border-radius: 9px;
   color: rgba(255, 255, 255, 0.48);
+  font-weight: 700;
 }
 
 .marketTableWrap {
@@ -2586,30 +2911,30 @@ td a {
   min-width: 0;
   margin: 0;
   border-top: 1px solid var(--collection-line);
-  padding: 28px 40px;
+  padding: 20px 24px;
 }
 
 .marketRankTable {
-  min-width: 820px;
+  min-width: 760px;
 }
 
 .marketRankTable th {
   display: table-cell;
-  height: 100px;
-  padding: 0 24px;
+  height: 68px;
+  padding: 0 22px;
   background: rgba(8, 9, 16, 0.74);
   color: rgba(255, 255, 255, 0.42);
-  font-size: 0.92rem;
+  font-size: 0.82rem;
   font-weight: 900;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .marketRankTable td {
-  height: 150px;
-  padding: 18px 24px;
+  height: 120px;
+  padding: 14px 22px;
   background: rgba(14, 18, 15, 0.62);
-  font-size: 1.08rem;
+  font-size: 0.98rem;
 }
 
 .marketRankTable tbody tr:nth-child(n + 5) td {
@@ -2637,6 +2962,18 @@ td a {
   font-weight: 850;
 }
 
+.scorePill {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  border: 1px solid rgba(var(--collection-accent-rgb), 0.42);
+  border-radius: 7px;
+  padding: 0 16px;
+  background: rgba(var(--collection-accent-rgb), 0.12);
+  color: var(--collection-accent);
+  font-weight: 950;
+}
+
 .marketRankTable .tokenThumb {
   width: 92px;
   border-radius: 0;
@@ -2649,28 +2986,30 @@ td a {
 
 .tokenName {
   color: white;
-  font-size: 1.24rem;
+  font-size: 1.1rem;
+  font-weight: 800;
   line-height: 1.15;
 }
 
 .tokenChain {
-  margin-top: 8px;
+  margin-top: 5px;
   color: rgba(255, 255, 255, 0.34);
-  font-size: 0.98rem;
+  font-size: 0.88rem;
+  font-weight: 650;
 }
 
 .traitCountPill,
 .listingPill,
 .chainIcon {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 36px;
   align-items: center;
-  border: 1px solid rgba(var(--collection-accent-rgb), 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 7px;
-  padding: 0 16px;
-  background: rgba(var(--collection-accent-rgb), 0.1);
-  color: var(--collection-accent);
-  font-weight: 900;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(255, 255, 255, 0.68);
+  font-weight: 700;
 }
 
 .listingPill {
@@ -2690,9 +3029,11 @@ td a {
 }
 
 .keyTraitsCell {
-  max-width: 180px;
+  min-width: 220px;
+  max-width: 320px;
   color: rgba(255, 255, 255, 0.62);
   line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .marketTokenTop {
@@ -2911,10 +3252,65 @@ td a {
   color: rgba(255, 255, 255, 0.42);
 }
 
+@media (max-width: 1180px) {
+  .marketCollectionHeader {
+    min-height: auto;
+    padding: 22px 28px;
+  }
+
+  .marketCollectionTitle {
+    gap: 18px;
+  }
+
+  .marketCollectionTitle .collectionHeaderLogo {
+    width: 76px;
+  }
+
+  .marketCollectionTitle h1,
+  .marketTokenTitle h1 {
+    font-size: clamp(1.65rem, 4vw, 2.55rem);
+  }
+
+  .marketHeaderActions {
+    gap: 12px;
+  }
+
+  .rankedBadge,
+  .marketBackLink {
+    min-height: 40px;
+    padding: 0 16px;
+    font-size: 0.88rem;
+  }
+
+  .marketStats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .marketStats div {
+    min-height: 92px;
+    padding: 18px 20px;
+  }
+
+  .marketCollectionGrid {
+    grid-template-columns: 238px minmax(0, 1fr);
+  }
+
+  .marketFilterRail {
+    padding: 18px;
+  }
+
+  .marketRankTable {
+    min-width: 680px;
+  }
+
+  .marketRankTable th,
+  .marketRankTable td {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+}
+
 @media (max-width: 980px) {
-  .marketCollectionHeader,
-  .marketHeaderActions,
-  .marketCollectionTitle,
   .marketTraitHeader {
     align-items: flex-start;
     flex-direction: column;
@@ -2928,12 +3324,25 @@ td a {
     padding-left: 20px;
   }
 
-  .marketStats,
   .marketCollectionGrid,
-  .marketTokenLayout,
-  .marketTokenStats,
-  .tokenTraitCards {
+  .marketTokenLayout {
     grid-template-columns: 1fr;
+  }
+
+  .marketTokenLayout {
+    min-height: auto;
+  }
+
+  .marketTokenStats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .tokenTraitCards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .marketStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .marketStats div,
@@ -2942,9 +3351,47 @@ td a {
     border-bottom: 1px solid var(--collection-line);
   }
 
+  .marketStats div:nth-child(odd) {
+    border-right: 1px solid var(--collection-line);
+  }
+
+  .marketStats div:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
   .marketFilterRail {
     border-right: 0;
     border-bottom: 1px solid var(--collection-line);
+  }
+
+  .marketFilterRail form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .marketFilterRail .marketControlGroup,
+  .marketFilterRail .topFilterActions,
+  .marketFilterRail .traitValueFilters,
+  .marketFilterRail .activeFilters {
+    grid-column: 1 / -1;
+  }
+
+  .marketFilterRail .topFilterActions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .marketFilterRail .topFilterActions > a {
+    grid-column: 1 / -1;
+  }
+
+  .marketFilterRail .nestedTraitGroups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px 8px;
+  }
+
+  .marketFilterRail .traitCategory:not(.traitParent) > summary {
+    min-height: 30px;
+    padding: 0 8px;
   }
 
   .marketRankTable th,
@@ -2956,5 +3403,406 @@ td a {
   .marketTokenLayout .tokenSidePanel {
     padding-right: 20px;
     padding-left: 20px;
+  }
+
+  .marketTokenLayout .tokenImage {
+    padding: 24px;
+  }
+
+  .marketTokenLayout .tokenImage img {
+    width: min(100%, 560px);
+    max-height: min(52vh, 560px);
+  }
+
+  .marketTokenFacts {
+    padding: 14px;
+  }
+
+  .marketTokenStats div {
+    padding: 0 12px 14px;
+  }
+}
+
+@media (max-width: 700px) {
+  .marketplaceShell {
+    padding-bottom: 34px;
+  }
+
+  .marketCollectionHeader {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .marketCollectionTitle {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+
+  .marketCollectionTitle .collectionHeaderLogo {
+    width: 58px;
+    border-radius: 10px;
+  }
+
+  .marketCollectionTitle h1 {
+    font-size: clamp(1.28rem, 7.2vw, 1.78rem);
+    line-height: 0.98;
+  }
+
+  .marketSubtitle {
+    margin-top: 5px;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+  }
+
+  .marketHeaderActions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .rankedBadge,
+  .marketBackLink {
+    min-height: 34px;
+    border-radius: 9px;
+    padding: 0 10px;
+    font-size: 0.76rem;
+  }
+
+  .rankedBadge {
+    width: 100%;
+  }
+
+  .rankedBadge span {
+    width: 8px;
+    margin-right: 8px;
+  }
+
+  .marketBackLink {
+    min-width: 0;
+    width: auto;
+  }
+
+  .marketStats div {
+    min-height: 70px;
+    padding: 12px 14px;
+  }
+
+  .marketStats span,
+  .marketControlGroup span,
+  .marketTraitHeader span {
+    margin-bottom: 6px;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+  }
+
+  .marketStats strong {
+    font-size: clamp(1.05rem, 6vw, 1.45rem);
+  }
+
+  .tokenThumb span::after {
+    display: none;
+  }
+
+  .tokenThumb:hover span,
+  .tokenThumb:focus-visible span {
+    transform: none;
+  }
+
+  .marketTokenTop {
+    padding-top: 14px;
+    padding-bottom: 10px;
+  }
+
+  .marketTokenLayout .tokenImage {
+    padding: 14px;
+  }
+
+  .marketTokenLayout .tokenImage img {
+    width: 100%;
+    max-height: min(58vh, 420px);
+  }
+
+  .marketTokenLayout .tokenSidePanel {
+    gap: 14px;
+    padding: 18px 14px 24px;
+  }
+
+  .marketTokenTitle h1 {
+    font-size: clamp(1.65rem, 9vw, 2.25rem);
+  }
+
+  .marketTokenMeta {
+    gap: 7px 9px;
+    margin-top: 10px;
+    font-size: 0.78rem;
+  }
+
+  .marketTokenMeta span:not(:first-of-type) {
+    padding-left: 9px;
+  }
+
+  .marketTokenStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .marketTokenStats div {
+    padding: 0 10px 12px;
+  }
+
+  .marketTokenStats dt {
+    font-size: 0.68rem;
+  }
+
+  .marketTokenStats dd {
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+
+  .marketTokenFacts .links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .marketTraitSection {
+    padding-top: 22px;
+  }
+
+  .tokenTraitCards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .tokenTraitCard {
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .tokenTraitCard strong {
+    min-height: 0;
+  }
+
+  .marketFilterRail {
+    padding: 14px;
+  }
+
+  .marketFilterRail form,
+  .marketFilterRail .topFilterActions {
+    gap: 10px;
+  }
+
+  .marketFilterRail form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .marketFilterRail .topFilterActions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .statusSegment,
+  .chainSegment {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .statusSegment a,
+  .chainSegment a {
+    min-height: 30px;
+    padding: 0 5px;
+    font-size: 0.62rem;
+  }
+
+  .rangeInputs {
+    gap: 6px;
+  }
+
+  .rangeFilterGroup,
+  .marketFilterRail .traitParent {
+    min-width: 0;
+  }
+
+  .marketFilterRail .traitParent .nestedTraitGroups > .traitCategory > .traitOptionGrid {
+    max-height: 180px;
+  }
+
+  .marketFilterRail .nestedTraitGroups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px 6px;
+  }
+
+  .marketFilterRail .traitCategory:not(.traitParent) > summary {
+    min-height: 30px;
+    padding: 0 6px;
+    font-size: 0.78rem;
+  }
+
+  .marketFilterRail .traitCategory:not(.traitParent) > summary small {
+    font-size: 0.68rem;
+  }
+
+  .marketTableWrap {
+    overflow: visible;
+    background: transparent;
+  }
+
+  .marketTableWrap .tableMeta {
+    gap: 6px;
+    padding: 14px;
+    font-size: 0.78rem;
+  }
+
+  .marketRankTable,
+  .marketRankTable thead,
+  .marketRankTable tbody,
+  .marketRankTable tr,
+  .marketRankTable th,
+  .marketRankTable td {
+    display: block;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .marketRankTable {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    padding: 0 12px 4px;
+  }
+
+  .marketRankTable thead {
+    display: none;
+  }
+
+  .marketRankTable tr {
+    display: grid;
+    grid-template-columns: clamp(92px, 29vw, 112px) repeat(3, minmax(0, 1fr));
+    gap: 8px 10px;
+    border: 1px solid var(--collection-line);
+    border-radius: 12px;
+    padding: 12px;
+    background: rgba(14, 18, 15, 0.62);
+  }
+
+  .marketRankTable td {
+    height: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 0.88rem;
+  }
+
+  .marketRankTable tbody tr:nth-child(n + 5) td {
+    background: transparent;
+  }
+
+  .marketRankTable td:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 2;
+    align-self: start;
+  }
+
+  .marketRankTable td:nth-child(2) {
+    grid-column: 1;
+    grid-row: 1 / span 5;
+    align-self: start;
+  }
+
+  .marketRankTable td:nth-child(3) {
+    grid-column: 2 / -1;
+    grid-row: 1;
+  }
+
+  .marketRankTable td:nth-child(4) {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .marketRankTable td:nth-child(5) {
+    grid-column: 3;
+    min-width: 0;
+  }
+
+  .marketRankTable td:nth-child(6) {
+    grid-column: 4;
+    min-width: 0;
+  }
+
+  .marketRankTable td:nth-child(7) {
+    grid-column: 1 / -1;
+    margin-top: 2px;
+  }
+
+  .marketRankTable td:nth-child(4)::before,
+  .marketRankTable td:nth-child(5)::before,
+  .marketRankTable td:nth-child(6)::before,
+  .marketRankTable td:nth-child(7)::before {
+    display: block;
+    margin-bottom: 4px;
+    color: rgba(255, 255, 255, 0.38);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .marketRankTable td:nth-child(4)::before {
+    content: "Score";
+  }
+
+  .marketRankTable td:nth-child(5)::before {
+    content: "Traits";
+  }
+
+  .marketRankTable td:nth-child(6)::before {
+    content: "Listing";
+  }
+
+  .marketRankTable td:nth-child(7)::before {
+    content: "Key traits";
+  }
+
+  .rankCell {
+    display: inline-flex;
+    width: fit-content;
+    min-height: 26px;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0 8px;
+    background: rgba(2, 4, 8, 0.72);
+    font-size: 0.86rem;
+    line-height: 1;
+  }
+
+  .marketRankTable .tokenThumb {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .tokenName {
+    font-size: 1.02rem;
+  }
+
+  .tokenChain {
+    font-size: 0.72rem;
+  }
+
+  .scorePill,
+  .traitCountPill,
+  .listingPill {
+    min-height: 30px;
+    width: 100%;
+    justify-content: center;
+    padding: 0 6px;
+    font-size: clamp(0.66rem, 2.6vw, 0.78rem);
+  }
+
+  .keyTraitsCell {
+    min-width: 0;
+    max-width: none;
+    font-size: 0.78rem;
   }
 }

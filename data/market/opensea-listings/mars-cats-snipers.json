@@ -1,24 +1,5 @@
 [
   {
-    "tokenId": "3",
-    "canonicalTokenId": "3",
-    "chain": "Base",
-    "contractAddress": "0x97b8158554154748bb7f80efe1a1ea002f898db8",
-    "marketplaceUrl": "https://opensea.io/item/base/0x97b8158554154748bb7f80efe1a1ea002f898db8/3",
-    "orderHash": "0x8e51f26d1832bbb6a1d79994b8fffdf41e76df10f627e5b810e2bff1d180a2a2",
-    "status": "ACTIVE",
-    "price": {
-      "value": "35000000000000000",
-      "decimals": 18,
-      "currency": "ETH",
-      "native": 0.035,
-      "display": "0.035 ETH"
-    },
-    "seller": "0x8f5794eb6b97afb43737bcf105e35a7f042da59b",
-    "createdAt": 1777150015,
-    "source": "opensea:listings:collection-all"
-  },
-  {
     "tokenId": "12",
     "canonicalTokenId": "12",
     "chain": "Base",

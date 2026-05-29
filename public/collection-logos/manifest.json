@@ -29,16 +29,16 @@
   },
   {
     "slug": "metazoku",
-    "source": "https://i2c.seadn.io/ethereum/f4a0f2725f8b45a0ac563139d2c9c060/96897ca2fc2e2cd3dd0286267d11a5/0096897ca2fc2e2cd3dd0286267d11a5.png",
-    "file": "/collection-logos/metazoku.avif",
-    "bytes": 2560,
-    "contentType": "image/avif"
+    "source": "Discord upload 1509395242283958325",
+    "file": "/collection-logos/metazoku-official.png",
+    "bytes": 88869,
+    "contentType": "image/png"
   },
   {
     "slug": "battle-pawss",
-    "source": "https://i2c.seadn.io/collection/battle-pawss-tails-of-the-fracture-voyage-to-abyssoria/image_type_logo/3108fa6a40fd8da67614c66cad14b6/f23108fa6a40fd8da67614c66cad14b6.png",
-    "file": "/collection-logos/battle-pawss.avif",
-    "bytes": 55844,
-    "contentType": "image/avif"
+    "source": "mcv-brand-bible/logos/battle-pawss/bp-logo-color.svg",
+    "file": "/collection-logos/battle-pawss-official.svg",
+    "bytes": 32048,
+    "contentType": "image/svg+xml"
   }
 ]

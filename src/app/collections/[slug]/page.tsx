@@ -16,6 +16,9 @@ type Props = {
     page?: string;
     listed?: string;
     status?: string;
+    chain?: string;
+    rankMin?: string;
+    rankMax?: string;
     rarityMin?: string;
     rarityMax?: string;
     priceMin?: string;
@@ -30,8 +33,8 @@ const collectionLogoMap: Record<string, string> = {
   "mars-alien-cats": "/collection-logos/mars-alien-cats.avif",
   "mars-cats-in-spacesuits": "/collection-logos/mars-cats-in-spacesuits.avif",
   "mars-cats-snipers": "/collection-logos/mars-cats-snipers.avif",
-  metazoku: "/collection-logos/metazoku.avif",
-  "battle-pawss": "/collection-logos/battle-pawss.avif",
+  metazoku: "/collection-logos/metazoku-official.png",
+  "battle-pawss": "/collection-logos/battle-pawss-official.svg",
   "cream-cats": "/collection-logos/cream-cats.webp",
 };
 
@@ -62,10 +65,13 @@ export default async function CollectionPage({ params, searchParams }: Props) {
   const selectedTraits = toArray(filters.trait);
   const sort = filters.sort ?? "rank-asc";
   const statusFilter = filters.status === "listed" || filters.listed === "true" ? "listed" : filters.status === "unlisted" ? "unlisted" : "all";
+  const selectedChain = typeof filters.chain === "string" ? filters.chain : "";
   const listedOnly = statusFilter === "listed";
   const unlistedOnly = statusFilter === "unlisted";
   const rarityMin = parseOptionalNumber(filters.rarityMin);
   const rarityMax = parseOptionalNumber(filters.rarityMax);
+  const rankMin = parseOptionalNumber(filters.rankMin);
+  const rankMax = parseOptionalNumber(filters.rankMax);
   const priceMin = parseOptionalNumber(filters.priceMin);
   const priceMax = parseOptionalNumber(filters.priceMax);
   const currentPage = Math.max(1, Number(filters.page ?? 1) || 1);
@@ -88,12 +94,15 @@ export default async function CollectionPage({ params, searchParams }: Props) {
       statusFilter === "all" ||
       (listedOnly && Boolean(token.listing)) ||
       (unlistedOnly && !token.listing);
+    const matchesChain = !selectedChain || token.chain === selectedChain;
     const matchesRarityMin = rarityMin === null || token.rarityScore >= rarityMin;
     const matchesRarityMax = rarityMax === null || token.rarityScore <= rarityMax;
+    const matchesRankMin = rankMin === null || token.rank >= rankMin;
+    const matchesRankMax = rankMax === null || token.rank <= rankMax;
     const listingPrice = token.listing?.price.native ?? null;
     const matchesPriceMin = priceMin === null || (listingPrice !== null && listingPrice >= priceMin);
     const matchesPriceMax = priceMax === null || (listingPrice !== null && listingPrice <= priceMax);
-    return matchesQuery && matchesTraitCount && matchesTraits && matchesStatus && matchesRarityMin && matchesRarityMax && matchesPriceMin && matchesPriceMax;
+    return matchesQuery && matchesTraitCount && matchesTraits && matchesStatus && matchesChain && matchesRarityMin && matchesRarityMax && matchesRankMin && matchesRankMax && matchesPriceMin && matchesPriceMax;
   });
   filteredTokens.sort((a, b) => {
     if (sort.startsWith("category:")) {
@@ -134,6 +143,9 @@ export default async function CollectionPage({ params, searchParams }: Props) {
     const params = new URLSearchParams();
     if (filters.q) params.set("q", filters.q);
     if (statusFilter !== "all") params.set("status", statusFilter);
+    if (selectedChain) params.set("chain", selectedChain);
+    if (filters.rankMin) params.set("rankMin", filters.rankMin);
+    if (filters.rankMax) params.set("rankMax", filters.rankMax);
     if (filters.rarityMin) params.set("rarityMin", filters.rarityMin);
     if (filters.rarityMax) params.set("rarityMax", filters.rarityMax);
     if (filters.priceMin) params.set("priceMin", filters.priceMin);
@@ -150,6 +162,9 @@ export default async function CollectionPage({ params, searchParams }: Props) {
     const params = new URLSearchParams();
     if (filters.q) params.set("q", filters.q);
     if (statusFilter !== "all") params.set("status", statusFilter);
+    if (selectedChain) params.set("chain", selectedChain);
+    if (filters.rankMin) params.set("rankMin", filters.rankMin);
+    if (filters.rankMax) params.set("rankMax", filters.rankMax);
     if (filters.rarityMin) params.set("rarityMin", filters.rarityMin);
     if (filters.rarityMax) params.set("rarityMax", filters.rarityMax);
     if (filters.priceMin) params.set("priceMin", filters.priceMin);
@@ -193,11 +208,26 @@ export default async function CollectionPage({ params, searchParams }: Props) {
           },
         ]
       : []),
+    ...(selectedChain
+      ? [
+          {
+            key: "chain",
+            label: selectedChain,
+            href: filterHref({ chain: "" }),
+          },
+        ]
+      : []),
+    ...(filters.rankMin
+      ? [{ key: "rankMin", label: `Rank >= ${filters.rankMin}`, href: filterHref({ clearField: "rankMin" }) }]
+      : []),
+    ...(filters.rankMax
+      ? [{ key: "rankMax", label: `Rank <= ${filters.rankMax}`, href: filterHref({ clearField: "rankMax" }) }]
+      : []),
     ...(filters.rarityMin
-      ? [{ key: "rarityMin", label: `Rarity >= ${filters.rarityMin}`, href: filterHref({ clearField: "rarityMin" }) }]
+      ? [{ key: "rarityMin", label: `Score >= ${filters.rarityMin}`, href: filterHref({ clearField: "rarityMin" }) }]
       : []),
     ...(filters.rarityMax
-      ? [{ key: "rarityMax", label: `Rarity <= ${filters.rarityMax}`, href: filterHref({ clearField: "rarityMax" }) }]
+      ? [{ key: "rarityMax", label: `Score <= ${filters.rarityMax}`, href: filterHref({ clearField: "rarityMax" }) }]
       : []),
     ...(filters.priceMin
       ? [{ key: "priceMin", label: `Price >= ${filters.priceMin}`, href: filterHref({ clearField: "priceMin" }) }]
@@ -208,6 +238,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
   ];
   const collectionLogo = collectionLogoMap[data.collection.slug];
   const collectionTheme = collectionThemeMap[data.collection.slug] ?? { accent: "#8adce8", accentRgb: "138, 220, 232", warm: "#ff8b63" };
+  const chainOptions = [...new Set(data.tokens.map((token) => token.chain))].sort((a, b) => a.localeCompare(b));
   const listedTokens = data.tokens.filter((token) => token.listing);
   const floorListing = listedTokens.reduce<(typeof listedTokens)[number] | null>((floor, token) => {
     if (!token.listing) return floor;
@@ -215,14 +246,23 @@ export default async function CollectionPage({ params, searchParams }: Props) {
     return token.listing.price.native < floor.listing.price.native ? token : floor;
   }, null);
   const floorText = floorListing?.listing?.price.display ?? "Needed";
+  const topListedToken = listedTokens.reduce<(typeof listedTokens)[number] | null>(
+    (best, token) => (!best || token.rank < best.rank ? token : best),
+    null,
+  );
+  const topListedText = topListedToken ? `#${topListedToken.rank.toLocaleString()}` : "Needed";
   const listedText = listedTokens.length > 0
     ? `${listedTokens.length.toLocaleString()} (${Math.round((listedTokens.length / data.tokens.length) * 100)}%)`
     : "Needed";
+  const visibleTraitCategories = data.categories.filter((category) => category.traitType.toLowerCase() !== "trait count");
   const filterStateKey = JSON.stringify({
     q: filters.q ?? "",
     traitCounts: toArray(filters.traitCount),
     selectedTraits,
     statusFilter,
+    selectedChain,
+    rankMin: filters.rankMin ?? "",
+    rankMax: filters.rankMax ?? "",
     rarityMin: filters.rarityMin ?? "",
     rarityMax: filters.rarityMax ?? "",
     priceMin: filters.priceMin ?? "",
@@ -230,11 +270,15 @@ export default async function CollectionPage({ params, searchParams }: Props) {
     sort,
   });
 
-  function filterHref(options: { removeTraitCount?: string; removeTrait?: string; status?: string; clearField?: string } = {}) {
+  function filterHref(options: { removeTraitCount?: string; removeTrait?: string; status?: string; chain?: string; clearField?: string } = {}) {
     const params = new URLSearchParams();
     if (filters.q) params.set("q", filters.q);
     const nextStatus = options.status ?? statusFilter;
+    const nextChain = options.chain ?? selectedChain;
     if (nextStatus !== "all") params.set("status", nextStatus);
+    if (nextChain) params.set("chain", nextChain);
+    if (filters.rankMin && options.clearField !== "rankMin") params.set("rankMin", filters.rankMin);
+    if (filters.rankMax && options.clearField !== "rankMax") params.set("rankMax", filters.rankMax);
     if (filters.rarityMin && options.clearField !== "rarityMin") params.set("rarityMin", filters.rarityMin);
     if (filters.rarityMax && options.clearField !== "rarityMax") params.set("rarityMax", filters.rarityMax);
     if (filters.priceMin && options.clearField !== "priceMin") params.set("priceMin", filters.priceMin);
@@ -286,8 +330,8 @@ export default async function CollectionPage({ params, searchParams }: Props) {
           <strong>{data.collection.actualTokenCount.toLocaleString()}</strong>
         </div>
         <div>
-          <span>Top Offer</span>
-          <strong>N/A</strong>
+          <span>Top Listed</span>
+          <strong>{topListedText}</strong>
         </div>
         <div>
           <span>Floor</span>
@@ -320,14 +364,22 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                 <Link className={statusFilter === "listed" ? "isActive" : ""} href={filterHref({ status: "listed" })}>Listed</Link>
                 <Link className={statusFilter === "unlisted" ? "isActive" : ""} href={filterHref({ status: "unlisted" })}>Not Listed</Link>
               </div>
+              <div className="chainSegment" aria-label="Chain filter">
+                <Link className={!selectedChain ? "isActive" : ""} href={filterHref({ chain: "" })}>All Chains</Link>
+                {chainOptions.map((chain) => (
+                  <Link className={selectedChain === chain ? "isActive" : ""} href={filterHref({ chain })} key={chain}>
+                    {chainLabel(chain)}
+                  </Link>
+                ))}
+              </div>
               <Link href={`/collections/${slug}`}>Clear all</Link>
             </div>
             <details className="rangeFilterGroup" open>
-              <summary>Rarity</summary>
+              <summary>Rank</summary>
               <div className="rangeInputs">
-                <input inputMode="decimal" name="rarityMin" placeholder="Min" defaultValue={filters.rarityMin ?? ""} />
+                <input inputMode="numeric" name="rankMin" placeholder="Min" defaultValue={filters.rankMin ?? ""} />
                 <span>to</span>
-                <input inputMode="decimal" name="rarityMax" placeholder="Max" defaultValue={filters.rarityMax ?? ""} />
+                <input inputMode="numeric" name="rankMax" placeholder="Max" defaultValue={filters.rankMax ?? ""} />
               </div>
               <button type="submit">Apply</button>
             </details>
@@ -345,7 +397,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
               <details className="traitCategory traitParent" open>
                 <summary>
                   <span>Traits</span>
-                  <small>{hasTraitFilters ? "Filtered" : `${data.categories.length} groups`}</small>
+                  <small>{hasTraitFilters ? "Filtered" : `${visibleTraitCategories.length} groups`}</small>
                 </summary>
                 <div className="nestedTraitGroups">
                   <details className="traitCategory">
@@ -365,7 +417,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                     </div>
                   </details>
 
-                  {data.categories.map((category) => {
+                  {visibleTraitCategories.map((category) => {
                     const isFiltered = selectedTraits.some((traitValue) => traitValue.startsWith(`${category.traitType}:`));
                     return (
                       <details className="traitCategory" key={category.traitType}>
@@ -417,7 +469,6 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                 <th><ClientSortLink href={sortHref(sort === "token-asc" ? "token-desc" : "token-asc")}>Token</ClientSortLink></th>
                 <th><ClientSortLink href={sortHref(sort === "score-desc" ? "score-asc" : "score-desc")}>Score</ClientSortLink></th>
                 <th><ClientSortLink href={sortHref(sort === "trait-count-desc" ? "trait-count-asc" : "trait-count-desc")}>Traits</ClientSortLink></th>
-                <th><ClientSortLink href={sortHref("category:Chain:asc")}>Chain</ClientSortLink></th>
                 <th><ClientSortLink href={sortHref(sort === "listed-asc" ? "listed-desc" : "listed-asc")}>Listed</ClientSortLink></th>
                 <th>Key Traits</th>
               </tr>
@@ -444,17 +495,16 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                       <span className="tokenChain">{token.chain}</span>
                     </Link>
                   </td>
-                  <td className="scoreCell">{token.rarityScore.toFixed(2)}</td>
+                  <td className="scoreCell">
+                    <span className="scorePill" title={`Rarity score ${token.rarityScore.toFixed(2)}`}>{token.rarityScore.toFixed(2)}</span>
+                  </td>
                   <td>
                     <span className="traitCountPill" title={`${token.traitCount} scoring traits`}>{token.traitCount} traits</span>
                   </td>
                   <td>
-                    <span className="chainIcon" title={token.chain} aria-label={token.chain}>{chainIconLabel(token.chain)}</span>
-                  </td>
-                  <td>
                     <span className="listingPill">
                     {token.listing?.marketplaceUrl ? (
-                      <a href={token.listing.marketplaceUrl}>{token.listing.price.display}</a>
+                      <a href={token.listing.marketplaceUrl} target="_blank" rel="noopener noreferrer">{token.listing.price.display}</a>
                     ) : (
                       "Unlisted"
                     )}
@@ -574,7 +624,7 @@ function trimCompactNumber(value: number) {
   return Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, "");
 }
 
-function chainIconLabel(chain: string) {
+function chainLabel(chain: string) {
   const normalized = chain.toLowerCase();
   if (normalized.includes("ape")) return "APE";
   if (normalized.includes("eth")) return "ETH";
