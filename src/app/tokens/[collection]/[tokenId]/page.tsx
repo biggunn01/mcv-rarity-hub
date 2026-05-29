@@ -13,7 +13,7 @@ const collectionLogoMap: Record<string, string> = {
   "mars-cats-in-spacesuits": "/collection-logos/mars-cats-in-spacesuits.avif",
   "mars-cats-snipers": "/collection-logos/mars-cats-snipers.avif",
   metazoku: "/collection-logos/metazoku-official.png",
-  "battle-pawss": "/collection-logos/battle-pawss-official.svg",
+  "battle-pawss": "/collection-logos/battle-pawss-planet-logo.png",
   "cream-cats": "/collection-logos/cream-cats.webp",
 };
 
