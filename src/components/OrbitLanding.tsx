@@ -21,7 +21,7 @@ const planetThemeMap: Record<string, { color: number; accent: string; accentRgb:
   "mars-cats-in-spacesuits": { color: 0x9bdcff, accent: "#9bdcff", accentRgb: "155, 220, 255" },
   "mars-cats-snipers": { color: 0x8dff9f, accent: "#8dff9f", accentRgb: "141, 255, 159" },
   metazoku: { color: 0xc8ff2f, accent: "#c8ff2f", accentRgb: "200, 255, 47" },
-  "battle-pawss": { color: 0xff6a3d, accent: "#ff6a3d", accentRgb: "255, 106, 61" },
+  "battle-pawss": { color: 0x51b8ff, accent: "#51b8ff", accentRgb: "81, 184, 255" },
   "cream-cats": { color: 0xf4cf7a, accent: "#f4cf7a", accentRgb: "244, 207, 122" },
 };
 
@@ -636,6 +636,7 @@ export function OrbitLanding({ collections }: Props) {
     function makePlanetSurfaceTexture(config: PlanetConfig) {
       const width = 1024;
       const height = 512;
+      const isBattlePawss = config.slug === "battle-pawss";
       const canvasTexture = document.createElement("canvas");
       canvasTexture.width = width;
       canvasTexture.height = height;
@@ -644,17 +645,17 @@ export function OrbitLanding({ collections }: Props) {
 
       const paintBase = (baseColor = hexToRgb(config.color), poleColor = baseColor) => {
         context.clearRect(0, 0, width, height);
-        const backgroundHex = rgbToHex(poleColor);
+        const backgroundHex = rgbToHex(isBattlePawss ? { r: 3, g: 5, b: 9 } : poleColor);
         const baseGradient = context.createLinearGradient(0, 0, 0, height);
         baseGradient.addColorStop(0, backgroundHex);
         baseGradient.addColorStop(1, backgroundHex);
         context.fillStyle = baseGradient;
         context.fillRect(0, 0, width, height);
 
-        const surfaceColor = boostLogoColor(baseColor);
+        const surfaceColor = isBattlePawss ? hexToRgb(config.color) : boostLogoColor(baseColor);
         const accentGlow = context.createRadialGradient(width * 0.5, height * 0.5, 0, width * 0.5, height * 0.5, width * 0.58);
-        accentGlow.addColorStop(0, `rgba(${Math.round(surfaceColor.r)}, ${Math.round(surfaceColor.g)}, ${Math.round(surfaceColor.b)}, 0.16)`);
-        accentGlow.addColorStop(0.6, `rgba(${Math.round(surfaceColor.r)}, ${Math.round(surfaceColor.g)}, ${Math.round(surfaceColor.b)}, 0.05)`);
+        accentGlow.addColorStop(0, `rgba(${Math.round(surfaceColor.r)}, ${Math.round(surfaceColor.g)}, ${Math.round(surfaceColor.b)}, ${isBattlePawss ? 0.2 : 0.16})`);
+        accentGlow.addColorStop(0.6, `rgba(${Math.round(surfaceColor.r)}, ${Math.round(surfaceColor.g)}, ${Math.round(surfaceColor.b)}, ${isBattlePawss ? 0.08 : 0.05})`);
         accentGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
         context.fillStyle = accentGlow;
         context.fillRect(0, 0, width, height);
@@ -667,22 +668,23 @@ export function OrbitLanding({ collections }: Props) {
 
       const logoImage = new Image();
       logoImage.onload = () => {
-        const baseColor = estimateLogoBaseColor(logoImage, config.color);
-        const poleColor = estimateLogoBackgroundColor(logoImage, config.color);
+        const baseColor = isBattlePawss ? hexToRgb(0x05070b) : estimateLogoBaseColor(logoImage, config.color);
+        const poleColor = isBattlePawss ? hexToRgb(0x030509) : estimateLogoBackgroundColor(logoImage, config.color);
+        const logoBackgroundColor = isBattlePawss ? estimateLogoBackgroundColor(logoImage, 0xffffff) : poleColor;
         paintBase(baseColor, poleColor);
         paintEquatorLogoBand(context, logoImage, width, height, {
           tileWidth: width / 4,
-          logoSize: 292,
+          logoSize: isBattlePawss ? 336 : 292,
           alpha: 1,
-          transparentBackground: poleColor,
-          logoPadding: 24,
+          transparentBackground: logoBackgroundColor,
+          logoPadding: isBattlePawss ? 18 : 24,
         });
 
         const limbShade = context.createLinearGradient(width * 0.14, 0, width * 0.86, 0);
-        limbShade.addColorStop(0, "rgba(0, 0, 0, 0.12)");
+        limbShade.addColorStop(0, `rgba(0, 0, 0, ${isBattlePawss ? 0.24 : 0.12})`);
         limbShade.addColorStop(0.32, "rgba(0, 0, 0, 0)");
         limbShade.addColorStop(0.68, "rgba(0, 0, 0, 0)");
-        limbShade.addColorStop(1, "rgba(0, 0, 0, 0.16)");
+        limbShade.addColorStop(1, `rgba(0, 0, 0, ${isBattlePawss ? 0.28 : 0.16})`);
         context.fillStyle = limbShade;
         context.fillRect(0, 0, width, height);
         sealHorizontalTextureSeam(context, width, height);
