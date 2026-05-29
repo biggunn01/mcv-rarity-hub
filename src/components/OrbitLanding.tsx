@@ -112,7 +112,7 @@ const orbitPresets = [
   { orbitRadius: 6.82, orbitHeight: 2.16, orbitDepth: 3.44, phase: 4.45, orbitSpeed: 0.078, radius: 0.38, spinSpeed: 0.15 },
 ];
 
-const ORBIT_TILT_X = -0.69;
+const ORBIT_TILT_X = -0.42;
 const ORBIT_TILT_Z = -0.1;
 const ORBIT_VARIANCE = [
   { x: -0.05, y: -0.07, z: -0.02 },
@@ -176,8 +176,8 @@ export function OrbitLanding({ collections }: Props) {
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x03050d, 0.035);
 
-    const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 80);
-    camera.position.set(0, 1.15, 14.1);
+    const camera = new THREE.PerspectiveCamera(37, 1, 0.1, 80);
+    camera.position.set(0, 8.1, 9.9);
     camera.lookAt(0, 0, 0);
 
     const runtimePlanets: PlanetRuntime[] = [];
@@ -811,8 +811,8 @@ export function OrbitLanding({ collections }: Props) {
       const height = Math.max(360, Math.floor(rect.height));
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
-      camera.fov = camera.aspect < 0.72 ? 48 : 39;
-      camera.position.set(0, camera.aspect < 0.72 ? 1.45 : 1.15, camera.aspect < 0.72 ? 20.2 : 14.1);
+      camera.fov = camera.aspect < 0.72 ? 45 : 37;
+      camera.position.set(0, camera.aspect < 0.72 ? 9.8 : 8.1, camera.aspect < 0.72 ? 13.8 : 9.9);
       camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
     }

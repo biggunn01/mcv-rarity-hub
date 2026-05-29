@@ -588,7 +588,7 @@ select {
 
 .threeOrbitHero {
   min-height: 100vh;
-  grid-template-rows: auto minmax(560px, 1fr);
+  grid-template-rows: auto minmax(640px, 1fr);
   border: 0;
   border-radius: 0;
   padding: clamp(20px, 4vw, 44px);
@@ -598,6 +598,11 @@ select {
 .threeOrbitCopy {
   z-index: 5;
   pointer-events: none;
+}
+
+.threeOrbitCopy h1 {
+  max-width: min(920px, calc(100vw - 40px));
+  font-size: clamp(1.85rem, 3.25vw, 3.65rem);
 }
 
 .threeOrbitCopy .eyebrow,
@@ -610,7 +615,7 @@ select {
   position: relative;
   z-index: 3;
   width: min(1440px, 100vw);
-  min-height: min(730px, calc(100vh - 230px));
+  min-height: min(810px, calc(100vh - 170px));
   place-self: stretch center;
   overflow: visible;
   isolation: isolate;
@@ -2450,7 +2455,7 @@ td a {
   }
 
   .threeOrbitHero {
-    grid-template-rows: auto minmax(520px, 1fr);
+    grid-template-rows: auto minmax(590px, 1fr);
     padding: 18px 14px 22px;
   }
 
@@ -2465,9 +2470,13 @@ td a {
     padding: 18px 14px 22px;
   }
 
+  .threeOrbitCopy h1 {
+    font-size: clamp(1.68rem, 7.4vw, 2.1rem);
+  }
+
   .solarSystemStage {
-    min-height: 560px;
-    margin-top: -8px;
+    min-height: 610px;
+    margin-top: -18px;
   }
 
   .solarSunLabel {
