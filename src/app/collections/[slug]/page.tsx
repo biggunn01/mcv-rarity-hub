@@ -348,8 +348,14 @@ export default async function CollectionPage({ params, searchParams }: Props) {
         {isOrdinalCollection ? (
           <>
             <div>
-              <span>Type</span>
-              <strong>Bitcoin Ordinals</strong>
+              <span>Top Listed</span>
+              <strong>
+                {satflowMarket?.collectionUrl ? (
+                  <a href={satflowMarket.collectionUrl} target="_blank" rel="noopener noreferrer">{ordinalMarketplaceText}</a>
+                ) : (
+                  ordinalMarketplaceText
+                )}
+              </strong>
             </div>
             <div>
               <span>Floor</span>
@@ -358,16 +364,6 @@ export default async function CollectionPage({ params, searchParams }: Props) {
             <div>
               <span>Listed</span>
               <strong>{ordinalListedText}</strong>
-            </div>
-            <div>
-              <span>Marketplace</span>
-              <strong>
-                {satflowMarket?.collectionUrl ? (
-                  <a href={satflowMarket.collectionUrl} target="_blank" rel="noopener noreferrer">{ordinalMarketplaceText}</a>
-                ) : (
-                  ordinalMarketplaceText
-                )}
-              </strong>
             </div>
           </>
         ) : (
