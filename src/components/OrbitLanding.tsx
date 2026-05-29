@@ -492,7 +492,8 @@ export function OrbitLanding({ collections }: Props) {
       color: 0xffffff,
       fog: false,
     });
-    const sun = new THREE.Mesh(new THREE.SphereGeometry(1.05, 96, 96), sunMaterial);
+    const sunRadius = 1.3125;
+    const sun = new THREE.Mesh(new THREE.SphereGeometry(sunRadius, 96, 96), sunMaterial);
     sun.renderOrder = 2;
     sunGroup.add(sun);
 
@@ -508,7 +509,7 @@ export function OrbitLanding({ collections }: Props) {
         depthTest: false,
       }),
     );
-    sunGlow.scale.set(3.0, 3.0, 1);
+    sunGlow.scale.set(3.75, 3.75, 1);
     sunGlow.position.set(0, 0, -0.08);
     sunGlow.renderOrder = -4;
     scene.add(sunGlow);
@@ -915,11 +916,11 @@ export function OrbitLanding({ collections }: Props) {
       sunGroup.rotation.x = BODY_FACE_TILT_X + Math.sin(time * 0.14) * 0.018;
       sunGroup.rotation.z = BODY_FACE_TILT_Z;
       const glowPulse = 1 + Math.sin(time * 1.4) * 0.035;
-      sunGlow.scale.set(3.0 * glowPulse, 3.0 * glowPulse, 1);
+      sunGlow.scale.set(3.75 * glowPulse, 3.75 * glowPulse, 1);
 
       sunParticles.forEach((particle) => {
         const progress = (time * particle.speed + particle.phase) % 1;
-        const distance = 1.08 + progress * 0.59;
+        const distance = 1.34 + progress * 0.59;
         particle.sprite.position.copy(particle.direction).multiplyScalar(distance);
         particle.sprite.material.opacity = (1 - progress) * 0.46;
         particle.sprite.scale.setScalar(particle.size * (0.72 + progress * 1.05));

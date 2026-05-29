@@ -184,6 +184,7 @@ select {
 }
 
 .orbitCopy .lede {
+  width: min(720px, calc(100vw - 36px));
   max-width: 720px;
   color: rgba(247, 251, 255, 0.72);
 }
@@ -616,6 +617,7 @@ select {
   z-index: 3;
   width: min(1440px, 100vw);
   min-height: min(810px, calc(100vh - 170px));
+  margin-top: clamp(-72px, -5vw, -38px);
   place-self: stretch center;
   overflow: visible;
   isolation: isolate;
@@ -2476,7 +2478,7 @@ td a {
 
   .solarSystemStage {
     min-height: 610px;
-    margin-top: -18px;
+    margin-top: -42px;
   }
 
   .solarSunLabel {
