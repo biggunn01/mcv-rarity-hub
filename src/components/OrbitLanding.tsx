@@ -296,6 +296,7 @@ export function OrbitLanding({ collections }: Props) {
         transparentBackground?: { r: number; g: number; b: number };
         logoPadding?: number;
         removeDarkBackground?: boolean;
+        backing?: boolean;
       },
     ) {
       const y = height * 0.5 - options.logoSize / 2;
@@ -316,6 +317,32 @@ export function OrbitLanding({ collections }: Props) {
         : -options.tileWidth;
       for (let x = firstX; x < width + options.tileWidth; x += options.tileWidth) {
         const drawX = x + (options.tileWidth - options.logoSize) / 2;
+        if (options.backing) {
+          const centerY = y + options.logoSize * 0.52;
+          const gradient = context.createRadialGradient(
+            drawX + options.logoSize * 0.5,
+            centerY,
+            options.logoSize * 0.12,
+            drawX + options.logoSize * 0.5,
+            centerY,
+            options.logoSize * 0.48,
+          );
+          gradient.addColorStop(0, "rgba(236, 255, 248, 0.96)");
+          gradient.addColorStop(0.58, "rgba(85, 240, 218, 0.72)");
+          gradient.addColorStop(1, "rgba(85, 240, 218, 0)");
+          context.fillStyle = gradient;
+          context.beginPath();
+          context.ellipse(
+            drawX + options.logoSize * 0.5,
+            centerY,
+            options.logoSize * 0.45,
+            options.logoSize * 0.36,
+            0,
+            0,
+            Math.PI * 2,
+          );
+          context.fill();
+        }
         drawWrappedLogo(drawX);
       }
       context.restore();
@@ -689,6 +716,7 @@ export function OrbitLanding({ collections }: Props) {
           transparentBackground: logoBackgroundColor,
           logoPadding: isBattlePawss ? 18 : 24,
           removeDarkBackground: isBattlePawss,
+          backing: isBattlePawss,
         });
 
         const limbShade = context.createLinearGradient(width * 0.14, 0, width * 0.86, 0);
