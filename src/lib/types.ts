@@ -50,6 +50,17 @@ export type CollectionSource = {
   metadataSource: string;
   explorerBaseUrl: string;
   marketplaceBaseUrl: string;
+  satflow?: {
+    collectionUrl: string;
+    rendererBaseUrl: string;
+    marketplace?: string;
+    floorPrice?: number;
+    floorPriceUnit?: string;
+    totalListed?: number;
+    totalVolume?: number;
+    statsFetchedAt?: string;
+    statsSource?: string;
+  };
   openSea?: {
     type: "collection" | "contract";
     slug?: string;

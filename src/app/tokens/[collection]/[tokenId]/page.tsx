@@ -41,9 +41,12 @@ export default async function TokenPage({ params }: Props) {
     return chain.includes("bitcoin") || chain.includes("btc") || metadataSource.includes("ordinal");
   });
   const firstSource = data.collection.sources.find((source) => source.chain === token.chain) ?? data.collection.sources[0];
-  const marketplaceUrl = isOrdinalCollection || firstSource?.marketplaceBaseUrl?.includes("DATA_NEEDED")
-    ? null
-    : `${firstSource.marketplaceBaseUrl}${token.tokenId}`;
+  const satflowMarket = firstSource?.satflow;
+  const marketplaceUrl = isOrdinalCollection
+    ? satflowMarket?.collectionUrl ?? null
+    : firstSource?.marketplaceBaseUrl?.includes("DATA_NEEDED")
+      ? null
+      : `${firstSource.marketplaceBaseUrl}${token.tokenId}`;
   const explorerUrl = firstSource?.explorerBaseUrl?.includes("DATA_NEEDED")
     ? null
     : `${firstSource.explorerBaseUrl}${token.tokenId}`;

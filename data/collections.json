@@ -229,7 +229,14 @@
         },
         "satflow": {
           "collectionUrl": "https://www.satflow.com/ordinals/creamcats",
-          "rendererBaseUrl": "https://rendererv2.satflow.com/render"
+          "rendererBaseUrl": "https://rendererv2.satflow.com/render",
+          "marketplace": "Satflow",
+          "floorPrice": 0.001,
+          "floorPriceUnit": "BTC",
+          "totalListed": 4,
+          "totalVolume": 0.08318017,
+          "statsFetchedAt": "2026-05-29",
+          "statsSource": "Satflow collection page embedded data"
         }
       }
     ],

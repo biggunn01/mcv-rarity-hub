@@ -66,6 +66,14 @@ export default async function CollectionPage({ params, searchParams }: Props) {
     return chain.includes("bitcoin") || chain.includes("btc") || metadataSource.includes("ordinal");
   });
   const ordinalExplorerBaseUrl = data.collection.sources.find((source) => source.explorerBaseUrl)?.explorerBaseUrl ?? "";
+  const satflowMarket = data.collection.sources.find((source) => source.satflow)?.satflow ?? null;
+  const ordinalFloorText = satflowMarket?.floorPrice !== undefined
+    ? `${formatMarketNumber(satflowMarket.floorPrice)} ${satflowMarket.floorPriceUnit ?? "BTC"}`
+    : "Needed";
+  const ordinalListedText = satflowMarket?.totalListed !== undefined
+    ? `${satflowMarket.totalListed.toLocaleString()} (${Math.round((satflowMarket.totalListed / data.collection.actualTokenCount) * 100)}%)`
+    : "Needed";
+  const ordinalMarketplaceText = satflowMarket?.marketplace ?? "Satflow";
   const query = typeof filters.q === "string" ? filters.q.trim().toLowerCase() : "";
   const traitCounts = toArray(filters.traitCount).map(Number).filter(Number.isFinite);
   const selectedTraits = toArray(filters.trait);
@@ -344,12 +352,22 @@ export default async function CollectionPage({ params, searchParams }: Props) {
               <strong>Bitcoin Ordinals</strong>
             </div>
             <div>
-              <span>Market Data</span>
-              <strong>Not tracked</strong>
+              <span>Floor</span>
+              <strong>{ordinalFloorText}</strong>
             </div>
             <div>
-              <span>Artwork</span>
-              <strong>Satflow</strong>
+              <span>Listed</span>
+              <strong>{ordinalListedText}</strong>
+            </div>
+            <div>
+              <span>Marketplace</span>
+              <strong>
+                {satflowMarket?.collectionUrl ? (
+                  <a href={satflowMarket.collectionUrl} target="_blank" rel="noopener noreferrer">{ordinalMarketplaceText}</a>
+                ) : (
+                  ordinalMarketplaceText
+                )}
+              </strong>
             </div>
           </>
         ) : (
@@ -658,6 +676,12 @@ function formatRankedCount(count: number) {
   }
 
   return count.toLocaleString();
+}
+
+function formatMarketNumber(value: number) {
+  return value.toLocaleString(undefined, {
+    maximumFractionDigits: 8,
+  });
 }
 
 function trimCompactNumber(value: number) {
