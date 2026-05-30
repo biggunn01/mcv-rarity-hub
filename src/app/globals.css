@@ -606,10 +606,11 @@ select {
 }
 
 .threeOrbitCopy h1 {
-  max-width: min(760px, calc(100vw - 40px));
+  max-width: min(1280px, calc(100vw - 40px));
   margin-bottom: clamp(6px, 1vw, 10px);
   font-size: clamp(1.62rem, 2.75vw, 3.05rem);
   line-height: 0.94;
+  white-space: nowrap;
 }
 
 .threeOrbitCopy .eyebrow {
@@ -2515,6 +2516,7 @@ td a {
   .threeOrbitCopy h1 {
     margin-bottom: 6px;
     font-size: clamp(1.32rem, 6vw, 1.9rem);
+    white-space: normal;
   }
 
   .threeOrbitCopy .eyebrow {
