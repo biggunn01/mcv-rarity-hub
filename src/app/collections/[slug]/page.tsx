@@ -350,20 +350,22 @@ export default async function CollectionPage({ params, searchParams }: Props) {
             <div>
               <span>Top Listed</span>
               <strong>
-                {satflowMarket?.collectionUrl ? (
-                  <a href={satflowMarket.collectionUrl} target="_blank" rel="noopener noreferrer">{ordinalMarketplaceText}</a>
-                ) : (
-                  ordinalMarketplaceText
+                {topListedToken ? topListedText : (
+                  satflowMarket?.collectionUrl ? (
+                    <a href={satflowMarket.collectionUrl} target="_blank" rel="noopener noreferrer">{ordinalMarketplaceText}</a>
+                  ) : (
+                    ordinalMarketplaceText
+                  )
                 )}
               </strong>
             </div>
             <div>
               <span>Floor</span>
-              <strong>{ordinalFloorText}</strong>
+              <strong>{floorListing ? floorText : ordinalFloorText}</strong>
             </div>
             <div>
               <span>Listed</span>
-              <strong>{ordinalListedText}</strong>
+              <strong>{listedTokens.length > 0 ? listedText : ordinalListedText}</strong>
             </div>
           </>
         ) : (
@@ -551,14 +553,14 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                   </td>
                   <td>
                     <span className="listingPill">
-                    {isOrdinalCollection ? (
+                    {token.listing?.marketplaceUrl ? (
+                      <a href={token.listing.marketplaceUrl} target="_blank" rel="noopener noreferrer">{token.listing.price.display}</a>
+                    ) : isOrdinalCollection ? (
                       inscriptionUrl ? (
                         <a href={inscriptionUrl} target="_blank" rel="noopener noreferrer">Ordinal</a>
                       ) : (
                         "Ordinal"
                       )
-                    ) : token.listing?.marketplaceUrl ? (
-                      <a href={token.listing.marketplaceUrl} target="_blank" rel="noopener noreferrer">{token.listing.price.display}</a>
                     ) : (
                       "Unlisted"
                     )}
