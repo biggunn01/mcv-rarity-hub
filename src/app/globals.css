@@ -103,19 +103,22 @@ select {
 .starField::before,
 .starField::after {
   position: absolute;
-  inset: -8% -24%;
+  inset: -18% -26%;
   content: "";
   background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.92) 0 0.7px, transparent 1px),
-    radial-gradient(circle, rgba(176, 221, 255, 0.74) 0 1.35px, transparent 1.8px),
-    radial-gradient(circle, rgba(255, 223, 172, 0.6) 0 1.9px, transparent 2.35px),
-    radial-gradient(circle, rgba(205, 255, 239, 0.45) 0 0.55px, transparent 0.9px),
+    radial-gradient(circle at 8% 19%, rgba(255, 255, 255, 0.82) 0 0.6px, transparent 1.1px),
+    radial-gradient(circle at 27% 64%, rgba(176, 221, 255, 0.72) 0 1.1px, transparent 1.7px),
+    radial-gradient(circle at 46% 31%, rgba(255, 223, 172, 0.58) 0 1.5px, transparent 2.15px),
+    radial-gradient(circle at 71% 82%, rgba(205, 255, 239, 0.5) 0 0.7px, transparent 1.2px),
+    radial-gradient(circle at 88% 43%, rgba(255, 255, 255, 0.66) 0 0.85px, transparent 1.35px),
+    radial-gradient(circle at 18% 86%, rgba(146, 201, 255, 0.46) 0 1.8px, transparent 2.45px),
+    radial-gradient(circle at 62% 12%, rgba(255, 255, 255, 0.42) 0 0.5px, transparent 1px),
     radial-gradient(ellipse at 22% 28%, rgba(97, 162, 139, 0.34), transparent 28%),
     radial-gradient(ellipse at 72% 26%, rgba(138, 61, 150, 0.32), transparent 30%),
     radial-gradient(ellipse at 78% 72%, rgba(63, 103, 175, 0.3), transparent 34%),
     radial-gradient(ellipse at 34% 78%, rgba(217, 99, 69, 0.2), transparent 26%);
-  background-position: 0 0, 96px 44px, 42px 130px, 170px 86px, 0 0, 0 0, 0 0, 0 0;
-  background-size: 118px 126px, 218px 174px, 356px 302px, 164px 236px, auto, auto, auto, auto;
+  background-position: 0 0, 86px 31px, 41px 119px, 176px 72px, 277px 151px, 32px 231px, 388px 52px, 0 0, 0 0, 0 0, 0 0;
+  background-size: 337px 251px, 521px 377px, 769px 541px, 431px 617px, 907px 683px, 641px 467px, 1117px 809px, auto, auto, auto, auto;
   opacity: 0.7;
   will-change: background-position;
 }
@@ -588,11 +591,12 @@ select {
 }
 
 .threeOrbitHero {
+  height: 100vh;
   min-height: 100vh;
-  grid-template-rows: auto minmax(640px, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
   border: 0;
   border-radius: 0;
-  padding: clamp(20px, 4vw, 44px);
+  padding: clamp(14px, 2.4vw, 28px) clamp(18px, 3vw, 36px) clamp(10px, 1.8vw, 22px);
   box-shadow: none;
 }
 
@@ -603,7 +607,22 @@ select {
 
 .threeOrbitCopy h1 {
   max-width: min(920px, calc(100vw - 40px));
-  font-size: clamp(1.85rem, 3.25vw, 3.65rem);
+  margin-bottom: clamp(6px, 1vw, 10px);
+  font-size: clamp(1.62rem, 2.75vw, 3.05rem);
+  line-height: 0.94;
+}
+
+.threeOrbitCopy .eyebrow {
+  margin-bottom: 6px;
+  font-size: clamp(0.66rem, 0.9vw, 0.76rem);
+}
+
+.threeOrbitCopy .lede {
+  width: min(660px, calc(100vw - 36px));
+  max-width: 660px;
+  margin-bottom: 0;
+  font-size: clamp(0.9rem, 1.18vw, 1rem);
+  line-height: 1.38;
 }
 
 .threeOrbitCopy .eyebrow,
@@ -616,8 +635,9 @@ select {
   position: relative;
   z-index: 3;
   width: min(1440px, 100vw);
-  min-height: min(810px, calc(100vh - 170px));
-  margin-top: clamp(-72px, -5vw, -38px);
+  height: min(810px, calc(100vh - 112px));
+  min-height: 0;
+  margin-top: clamp(-82px, -5vw, -42px);
   place-self: stretch center;
   overflow: visible;
   isolation: isolate;
@@ -736,10 +756,16 @@ select {
   text-overflow: ellipsis;
   white-space: nowrap;
   opacity: var(--label-opacity, 0);
-  transform: translate(-50%, 118px);
-  transition: opacity 120ms ease, transform 120ms ease;
+  transform: translate(-50%, -124px);
+  transition: transform 120ms ease;
   backdrop-filter: blur(12px);
   cursor: pointer;
+}
+
+.solarSystemStage[data-active-planet="mars-cats-voyage"] .solarSunLabel,
+.solarSunLabel:hover,
+.solarSunLabel:focus-visible {
+  opacity: 1 !important;
 }
 
 .solarPlanetLabels {
@@ -1036,9 +1062,12 @@ select {
   0% {
     background-position:
       0 0,
-      96px 44px,
-      42px 130px,
-      170px 86px,
+      86px 31px,
+      41px 119px,
+      176px 72px,
+      277px 151px,
+      32px 231px,
+      388px 52px,
       0 0,
       0 0,
       0 0,
@@ -1047,14 +1076,17 @@ select {
 
   to {
     background-position:
-      -236px 0,
-      -340px 44px,
-      -670px 130px,
-      -158px 86px,
-      -120px 0,
-      -86px 0,
-      -74px 0,
-      -96px 0;
+      -284px 35px,
+      -472px 100px,
+      -835px 226px,
+      -226px 121px,
+      -393px 233px,
+      -486px 294px,
+      -684px 183px,
+      -120px 15px,
+      -86px 10px,
+      -74px 9px,
+      -96px 12px;
   }
 }
 
@@ -1118,28 +1150,34 @@ select {
 @keyframes starDrift {
   to {
     background-position:
-      -354px 0,
-      -558px 44px,
-      -1026px 130px,
-      -322px 86px,
-      -180px 0,
-      -140px 0,
-      -110px 0,
-      -128px 0;
+      -354px 43px,
+      -558px 109px,
+      -1026px 250px,
+      -322px 104px,
+      -512px 248px,
+      -760px 327px,
+      -910px 210px,
+      -180px 22px,
+      -140px 17px,
+      -110px 13px,
+      -128px 16px;
   }
 }
 
 @keyframes starDriftReverse {
   to {
     background-position:
-      -142px 0,
-      -224px 44px,
-      -416px 130px,
-      -210px 86px,
-      -70px 0,
-      -52px 0,
-      -48px 0,
-      -64px 0;
+      -142px 17px,
+      -224px 71px,
+      -416px 181px,
+      -210px 111px,
+      -286px 185px,
+      -334px 276px,
+      -466px 109px,
+      -70px 9px,
+      -52px 6px,
+      -48px 6px,
+      -64px 8px;
   }
 }
 
@@ -2459,33 +2497,45 @@ td a {
   }
 
   .threeOrbitHero {
-    grid-template-rows: auto minmax(590px, 1fr);
-    padding: 18px 14px 22px;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 12px;
   }
 
   .orbitHero {
     min-height: 100vh;
-    gap: 14px;
+    gap: 0;
     border-radius: 0;
-    padding: 26px 18px 34px;
+    padding: 18px 14px;
   }
 
   .orbitHero.threeOrbitHero {
-    padding: 18px 14px 22px;
+    padding: 12px;
   }
 
   .threeOrbitCopy h1 {
-    font-size: clamp(1.68rem, 7.4vw, 2.1rem);
+    margin-bottom: 6px;
+    font-size: clamp(1.32rem, 6vw, 1.9rem);
+  }
+
+  .threeOrbitCopy .eyebrow {
+    margin-bottom: 4px;
+    font-size: 0.62rem;
+  }
+
+  .threeOrbitCopy .lede {
+    font-size: 0.82rem;
+    line-height: 1.3;
   }
 
   .solarSystemStage {
-    min-height: 610px;
-    margin-top: -42px;
+    height: calc(100vh - 96px);
+    min-height: 0;
+    margin-top: -34px;
   }
 
   .solarSunLabel {
     max-width: 220px;
-    transform: translate(-50%, 92px);
+    transform: translate(-50%, -104px);
   }
 
   .solarSystemFallback {
