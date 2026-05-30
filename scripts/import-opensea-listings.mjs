@@ -17,9 +17,10 @@ if (slugArg && targets.length === 0) {
 for (const collection of targets) {
   const listings = [];
   const openSeaSources = (collection.sources ?? []).filter((source) => source.openSea?.slug);
+  const satflowSources = (collection.sources ?? []).filter((source) => source.satflow?.collectionUrl);
 
-  if (openSeaSources.length === 0) {
-    console.warn(`${collection.slug}: no OpenSea collection slug configured, skipping listings`);
+  if (openSeaSources.length === 0 && satflowSources.length === 0) {
+    console.warn(`${collection.slug}: no marketplace listing source configured, skipping listings`);
     continue;
   }
 
@@ -28,10 +29,15 @@ for (const collection of targets) {
     listings.push(...sourceListings);
   }
 
+  for (const source of satflowSources) {
+    const sourceListings = await fetchSatflowListings(collection, source);
+    listings.push(...sourceListings);
+  }
+
   const bestByCanonicalToken = new Map();
   for (const listing of listings) {
     const current = bestByCanonicalToken.get(listing.canonicalTokenId);
-    if (!current || listing.priceNative < current.priceNative) {
+    if (!current || listing.price.native < current.price.native) {
       bestByCanonicalToken.set(listing.canonicalTokenId, listing);
     }
   }
@@ -44,7 +50,7 @@ for (const collection of targets) {
   );
 
   writeJson(path.join(root, "data", "market", "opensea-listings", `${collection.slug}.json`), output);
-  console.log(`${collection.slug}: wrote ${output.length} active OpenSea listing records`);
+  console.log(`${collection.slug}: wrote ${output.length} active marketplace listing records`);
 }
 
 async function fetchCollectionListings(collection, source) {
@@ -77,6 +83,76 @@ async function fetchCollectionListings(collection, source) {
   } while (cursor);
 
   return listings;
+}
+
+async function fetchSatflowListings(collection, source) {
+  const slug = satflowCollectionSlug(source.satflow.collectionUrl);
+  if (!slug) {
+    console.warn(`${collection.slug}: could not derive Satflow collection slug, skipping listings`);
+    return [];
+  }
+
+  const orders = await fetchSatflowOrderbook(slug);
+  const listings = orders.map((order) => normalizeSatflowListing(source, order)).filter(Boolean);
+  console.log(`${collection.slug} ${source.chain}: wrote ${listings.length} active Satflow listing records`);
+  return listings;
+}
+
+function fetchSatflowOrderbook(slug) {
+  return new Promise((resolve, reject) => {
+    const orders = [];
+    let initRequested = false;
+    const requestId = `mcv-rarity-${slug}-${Date.now()}`;
+    const socket = new WebSocket("wss://backend.satflow.com/");
+    const timeout = setTimeout(() => {
+      closeSocket(socket);
+      reject(new Error(`Satflow orderbook timeout for ${slug}`));
+    }, 20000);
+
+    socket.addEventListener("open", () => {
+      socket.send(JSON.stringify({
+        action: "filter-orders",
+        data: {
+          "filter-orders": {
+            orderType: ["ask"],
+            inscriptionType: ["collectionItem"],
+            collectionSlug: [slug],
+            attributes: {},
+            cursors: {},
+            price: { min: null, max: null },
+            sort: { key: "price", direction: "asc" },
+          },
+        },
+      }));
+    });
+
+    socket.addEventListener("message", (event) => {
+      const message = parseSocketMessage(event.data);
+      if (!message) return;
+
+      if (Array.isArray(message.orders)) {
+        orders.push(...message.orders);
+      }
+
+      if (message["filter-orders"] && !initRequested) {
+        initRequested = true;
+        socket.send(JSON.stringify({ action: "init", data: { requestId } }));
+        socket.send(JSON.stringify({ action: "want", data: { want: ["orders"] } }));
+      }
+
+      if (message.init?.requestId === requestId && String(message.init.message ?? "").includes("complete")) {
+        clearTimeout(timeout);
+        closeSocket(socket);
+        resolve(orders);
+      }
+    });
+
+    socket.addEventListener("error", () => {
+      clearTimeout(timeout);
+      closeSocket(socket);
+      reject(new Error(`Satflow orderbook socket error for ${slug}`));
+    });
+  });
 }
 
 function buildListingsUrl(collectionSlug, cursor) {
@@ -118,6 +194,59 @@ function normalizeListing(source, listing) {
   };
 }
 
+function normalizeSatflowListing(source, order) {
+  if (order.orderType !== "ask") return null;
+  const tokenId = order.inscription?.id;
+  const priceSats = Number(order.price);
+  if (!tokenId || !Number.isFinite(priceSats)) return null;
+
+  const priceBtc = priceSats / 100000000;
+  return {
+    tokenId,
+    canonicalTokenId: tokenId,
+    chain: source.chain,
+    contractAddress: source.contractAddress,
+    marketplaceUrl: `https://www.satflow.com/ordinal/${tokenId}`,
+    orderHash: order._id ?? null,
+    status: "ACTIVE",
+    price: {
+      value: String(priceSats),
+      decimals: 8,
+      currency: "BTC",
+      native: round(priceBtc),
+      display: `${formatBtcPrice(priceBtc)} BTC`,
+    },
+    seller: order.seller ?? null,
+    createdAt: order.firstSeen ?? null,
+    source: "satflow:orderbook:collection",
+  };
+}
+
+function satflowCollectionSlug(collectionUrl) {
+  try {
+    const parts = new URL(collectionUrl).pathname.split("/").filter(Boolean);
+    return parts.at(-1) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function parseSocketMessage(data) {
+  try {
+    return JSON.parse(String(data));
+  } catch {
+    return null;
+  }
+}
+
+function closeSocket(socket) {
+  try {
+    socket.close();
+  } catch {
+    // Nothing to do; the importer is already resolving or rejecting.
+  }
+}
+
 async function fetchWithRetry(url, init) {
   let lastResponse = null;
   for (let attempt = 0; attempt < 7; attempt += 1) {
@@ -133,6 +262,10 @@ async function fetchWithRetry(url, init) {
 
 function formatPrice(value) {
   return value >= 1 ? value.toFixed(3).replace(/0+$/, "").replace(/\.$/, "") : value.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
+}
+
+function formatBtcPrice(value) {
+  return value.toFixed(8).replace(/0+$/, "").replace(/\.$/, "");
 }
 
 function round(value) {
