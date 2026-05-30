@@ -735,7 +735,9 @@ select {
   font-size: clamp(0.74rem, 1.1vw, 0.92rem);
   text-overflow: ellipsis;
   white-space: nowrap;
+  opacity: var(--label-opacity, 0);
   transform: translate(-50%, 118px);
+  transition: opacity 120ms ease, transform 120ms ease;
   backdrop-filter: blur(12px);
   cursor: pointer;
 }

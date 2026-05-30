@@ -998,6 +998,13 @@ export function OrbitLanding({ collections }: Props) {
         if (trail.shaderStore.current) trail.shaderStore.current.uniforms.dashOffset.value = -time * trail.dashSpeed;
       });
 
+      const centerLabel = labelsRef.current[centerTransitionConfig.slug];
+      if (centerLabel) {
+        centerLabel.style.setProperty("--label-opacity", transition ? "0" : activeSlug === centerTransitionConfig.slug ? "1" : "0");
+        centerLabel.style.setProperty("--label-accent", centerTransitionConfig.accent);
+        centerLabel.style.setProperty("--label-rgb", planetThemeMap["mars-cats-voyage"].accentRgb);
+      }
+
       if (transition && !transition.runtime) {
         const approachProgress = THREE.MathUtils.clamp(transitionElapsed / TRANSITION_APPROACH_SECONDS, 0, 1);
         const easedApproach = easeInOutCubic(approachProgress);
@@ -1189,6 +1196,32 @@ export function OrbitLanding({ collections }: Props) {
         <div className="solarSunTrajectory" aria-hidden="true" />
         <canvas className="solarSystemCanvas" ref={canvasRef} aria-label="Interactive 3D MCV collection solar system" />
         {isLoading && <span className="solarSystemLoading">Loading orbit</span>}
+        {center && (
+          <button
+            className="solarSunLabel"
+            ref={(node) => {
+              labelsRef.current[center.collection.slug] = node;
+            }}
+            style={
+              {
+                "--label-accent": planetThemeMap["mars-cats-voyage"].accent,
+                "--label-rgb": planetThemeMap["mars-cats-voyage"].accentRgb,
+              } as CSSProperties
+            }
+            type="button"
+            tabIndex={-1}
+            onPointerEnter={() => {
+              activeRef.current = center.collection.slug;
+            }}
+            onPointerLeave={() => {
+              if (activeRef.current === center.collection.slug) activeRef.current = null;
+            }}
+            onPointerDown={(event) => labelPointerDown(event, `/collections/${center.collection.slug}`)}
+            onClick={() => navigate(`/collections/${center.collection.slug}`)}
+          >
+            {center.collection.name}
+          </button>
+        )}
         <div className="solarPlanetLabels" aria-hidden="true">
           {planets.map((planet) => (
             <button
