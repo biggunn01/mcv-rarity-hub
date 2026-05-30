@@ -606,7 +606,7 @@ select {
 }
 
 .threeOrbitCopy h1 {
-  max-width: min(920px, calc(100vw - 40px));
+  max-width: min(760px, calc(100vw - 40px));
   margin-bottom: clamp(6px, 1vw, 10px);
   font-size: clamp(1.62rem, 2.75vw, 3.05rem);
   line-height: 0.94;
@@ -634,10 +634,10 @@ select {
 .solarSystemStage {
   position: relative;
   z-index: 3;
-  width: min(1440px, 100vw);
-  height: min(810px, calc(100vh - 112px));
+  width: min(1310px, 100vw);
+  height: min(690px, calc(100vh - 156px));
   min-height: 0;
-  margin-top: clamp(-82px, -5vw, -42px);
+  margin-top: clamp(-62px, -4.2vw, -36px);
   place-self: stretch center;
   overflow: visible;
   isolation: isolate;
