@@ -2664,11 +2664,76 @@ td a {
   }
 }
 
+@media (min-width: 701px) and (max-width: 860px) and (min-height: 640px) {
+  .orbitHero.threeOrbitHero {
+    grid-template-rows: auto minmax(520px, 1fr);
+    height: auto;
+    min-height: 100svh;
+    padding: clamp(22px, 3.5svh, 34px) 28px clamp(26px, 4svh, 42px);
+  }
+
+  .threeOrbitCopy {
+    width: min(690px, calc(100vw - 56px));
+    padding-top: clamp(4px, 2svh, 18px);
+  }
+
+  .threeOrbitCopy h1 {
+    max-width: 690px;
+    margin-bottom: 8px;
+    font-size: clamp(2rem, 4.4vw, 2.75rem);
+    line-height: 0.98;
+  }
+
+  .threeOrbitCopy .eyebrow {
+    font-size: 0.7rem;
+  }
+
+  .threeOrbitCopy .lede {
+    width: min(640px, calc(100vw - 70px));
+    max-width: 640px;
+    font-size: 0.88rem;
+    line-height: 1.34;
+  }
+
+  .solarSystemStage {
+    width: min(940px, calc(100vw - 34px));
+    height: min(640px, calc(100svh - 215px));
+    min-height: 520px;
+    align-self: center;
+    justify-self: center;
+    margin-top: clamp(8px, 2svh, 26px);
+  }
+
+  .solarSunLabel {
+    transform: translate(-50%, -118px);
+  }
+
+  .solarSystemFallback {
+    right: 16px;
+    bottom: clamp(16px, 2.5svh, 28px);
+    left: 16px;
+    gap: 8px;
+  }
+
+  .solarSystemFallback button {
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 0.67rem;
+  }
+}
+
 @media (orientation: landscape) and (max-height: 520px) {
+  .landingShell {
+    min-height: 100svh;
+  }
+
   .threeOrbitHero {
     width: 100%;
+    grid-template-rows: auto minmax(460px, 1fr);
+    height: auto;
+    min-height: 720px;
     justify-items: center;
-    padding: 10px 16px;
+    padding: 18px 28px 34px;
   }
 
   .threeOrbitCopy {
@@ -2688,17 +2753,17 @@ td a {
   }
 
   .solarSystemStage {
-    width: min(1040px, calc(100vw - 32px));
-    height: calc(100svh - 116px);
+    width: min(1160px, calc(100vw - 56px));
+    height: 500px;
     justify-self: center;
-    margin-top: -66px;
+    margin-top: -18px;
   }
 
   .solarSystemFallback {
     position: absolute;
-    right: 14px;
-    bottom: -92px;
-    left: 14px;
+    right: 18px;
+    bottom: 22px;
+    left: 18px;
     width: auto;
     max-width: none;
     flex-wrap: wrap;
