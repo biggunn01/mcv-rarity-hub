@@ -2541,11 +2541,12 @@ td a {
     height: calc(100svh - 96px);
     justify-self: center;
     min-height: 0;
-    margin-top: -70px;
+    margin-top: -98px;
   }
 
+  .solarSunTrajectory,
   .solarSunTrajectory::after {
-    content: none;
+    display: none;
   }
 
   .solarSunLabel {
@@ -2556,7 +2557,7 @@ td a {
   .solarSystemFallback {
     position: absolute;
     right: 10px;
-    bottom: max(24px, calc(env(safe-area-inset-bottom) + 20px));
+    bottom: max(-42px, calc(env(safe-area-inset-bottom) - 42px));
     left: 10px;
     width: auto;
     max-width: none;
@@ -2690,13 +2691,13 @@ td a {
     width: min(1040px, calc(100vw - 32px));
     height: calc(100svh - 116px);
     justify-self: center;
-    margin-top: -42px;
+    margin-top: -66px;
   }
 
   .solarSystemFallback {
     position: absolute;
     right: 14px;
-    bottom: -24px;
+    bottom: -92px;
     left: 14px;
     width: auto;
     max-width: none;
@@ -2716,6 +2717,10 @@ td a {
     min-height: 28px;
     padding: 0 9px;
     font-size: clamp(0.58rem, 1.65vw, 0.7rem);
+  }
+
+  .solarSunTrajectory {
+    display: none;
   }
 }
 
