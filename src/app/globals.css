@@ -2545,7 +2545,7 @@ td a {
   .solarSystemFallback {
     position: absolute;
     right: 10px;
-    bottom: max(46px, calc(env(safe-area-inset-bottom) + 40px));
+    bottom: max(24px, calc(env(safe-area-inset-bottom) + 20px));
     left: 10px;
     width: auto;
     max-width: none;
@@ -2649,6 +2649,50 @@ td a {
 
   .tokenStats {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) and (orientation: landscape) {
+  .threeOrbitHero {
+    width: 100%;
+    justify-items: center;
+    padding: 10px 16px;
+  }
+
+  .threeOrbitCopy {
+    width: min(1040px, calc(100vw - 32px));
+    justify-self: center;
+  }
+
+  .threeOrbitCopy h1 {
+    max-width: min(1040px, calc(100vw - 32px));
+    font-size: clamp(1.35rem, 4.3vw, 2.25rem);
+    white-space: nowrap;
+  }
+
+  .threeOrbitCopy .lede {
+    width: min(880px, calc(100vw - 40px));
+    max-width: 880px;
+  }
+
+  .solarSystemStage {
+    width: min(1040px, calc(100vw - 32px));
+    height: calc(100svh - 116px);
+    justify-self: center;
+    margin-top: -42px;
+  }
+
+  .solarSystemFallback {
+    right: 14px;
+    bottom: -48px;
+    left: 14px;
+    gap: 6px;
+  }
+
+  .solarSystemFallback button {
+    min-height: 28px;
+    padding: 0 9px;
+    font-size: clamp(0.58rem, 1.65vw, 0.7rem);
   }
 }
 
