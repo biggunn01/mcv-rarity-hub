@@ -2515,6 +2515,11 @@ td a {
     padding: 12px;
   }
 
+  .threeOrbitCopy {
+    width: calc(100vw - 24px);
+    justify-self: center;
+  }
+
   .threeOrbitCopy h1 {
     margin-bottom: 6px;
     font-size: clamp(1.32rem, 6vw, 1.9rem);
@@ -2532,9 +2537,15 @@ td a {
   }
 
   .solarSystemStage {
+    width: calc(100vw - 24px);
     height: calc(100svh - 96px);
+    justify-self: center;
     min-height: 0;
     margin-top: -70px;
+  }
+
+  .solarSunTrajectory::after {
+    content: none;
   }
 
   .solarSunLabel {
@@ -2652,7 +2663,7 @@ td a {
   }
 }
 
-@media (max-width: 860px) and (orientation: landscape) {
+@media (orientation: landscape) and (max-height: 520px) {
   .threeOrbitHero {
     width: 100%;
     justify-items: center;
@@ -2683,10 +2694,22 @@ td a {
   }
 
   .solarSystemFallback {
+    position: absolute;
     right: 14px;
-    bottom: -48px;
+    bottom: -24px;
     left: 14px;
+    width: auto;
+    max-width: none;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 6px;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+    backdrop-filter: none;
   }
 
   .solarSystemFallback button {
