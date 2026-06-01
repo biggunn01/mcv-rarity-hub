@@ -2765,6 +2765,10 @@ td a {
     white-space: normal;
   }
 
+  .threeOrbitCopy .mobileTitleBreak {
+    display: block;
+  }
+
   .threeOrbitCopy .eyebrow {
     font-size: 0.74rem;
   }
@@ -2782,7 +2786,7 @@ td a {
     min-height: 640px;
     align-self: center;
     justify-self: center;
-    margin-top: clamp(14px, 2svh, 26px);
+    margin-top: clamp(-78px, -7svh, -56px);
   }
 
   .solarSystemFallback {
@@ -2799,8 +2803,8 @@ td a {
 
   .solarSystemFallback button {
     min-height: 40px;
-    flex: 1 1 170px;
-    max-width: 230px;
+    flex: 1 1 286px;
+    max-width: 320px;
     padding: 0 13px;
     font-size: 0.78rem;
   }
