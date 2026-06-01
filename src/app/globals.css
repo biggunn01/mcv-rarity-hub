@@ -2672,7 +2672,7 @@ td a {
   }
 }
 
-@media (min-width: 701px) and (max-width: 860px) and (min-height: 640px) {
+@media (min-width: 701px) and (max-width: 1180px) and (min-height: 640px) and (orientation: portrait) {
   .orbitHero.threeOrbitHero {
     grid-template-rows: auto minmax(0, 1fr) auto;
     height: auto;
@@ -2691,6 +2691,7 @@ td a {
     margin-bottom: 8px;
     font-size: clamp(2.35rem, 5.35vw, 3.15rem);
     line-height: 0.94;
+    white-space: normal;
   }
 
   .threeOrbitCopy .eyebrow {
