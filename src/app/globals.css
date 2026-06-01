@@ -2745,6 +2745,67 @@ td a {
   }
 }
 
+@media (min-width: 861px) and (max-width: 1400px) and (min-height: 700px) and (orientation: landscape) {
+  .orbitHero.threeOrbitHero {
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: clamp(18px, 2.2svh, 28px) 28px clamp(14px, 1.8svh, 22px);
+  }
+
+  .threeOrbitCopy {
+    width: min(1080px, calc(100vw - 56px));
+    justify-self: center;
+    padding-top: 0;
+  }
+
+  .threeOrbitCopy h1 {
+    max-width: 1080px;
+    margin-bottom: 8px;
+    font-size: clamp(2.35rem, 3.75vw, 3.15rem);
+    line-height: 0.94;
+    white-space: normal;
+  }
+
+  .threeOrbitCopy .eyebrow {
+    font-size: 0.74rem;
+  }
+
+  .threeOrbitCopy .lede {
+    width: min(760px, calc(100vw - 70px));
+    max-width: 760px;
+    font-size: 0.96rem;
+    line-height: 1.34;
+  }
+
+  .solarSystemStage {
+    width: min(1280px, calc(100vw - 40px));
+    height: min(720px, calc(100svh - 230px));
+    min-height: 640px;
+    align-self: center;
+    justify-self: center;
+    margin-top: clamp(14px, 2svh, 26px);
+  }
+
+  .solarSystemFallback {
+    right: 28px;
+    bottom: clamp(18px, 2.2svh, 26px);
+    left: 28px;
+    width: auto;
+    max-width: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    transform: none;
+  }
+
+  .solarSystemFallback button {
+    min-height: 40px;
+    flex: 1 1 170px;
+    max-width: 230px;
+    padding: 0 13px;
+    font-size: 0.78rem;
+  }
+}
+
 @media (orientation: landscape) and (max-height: 520px) {
   .landingShell {
     min-height: 100svh;
