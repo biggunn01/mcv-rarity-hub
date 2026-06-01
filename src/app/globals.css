@@ -2678,39 +2678,39 @@ td a {
     height: auto;
     min-height: 100svh;
     justify-items: center;
-    padding: clamp(28px, 4svh, 42px) 28px clamp(22px, 3.2svh, 34px);
+    padding: clamp(18px, 2.8svh, 28px) 28px clamp(22px, 3.2svh, 34px);
   }
 
   .threeOrbitCopy {
-    width: min(690px, calc(100vw - 56px));
-    padding-top: clamp(4px, 2svh, 18px);
+    width: min(720px, calc(100vw - 56px));
+    padding-top: clamp(0px, 1svh, 10px);
   }
 
   .threeOrbitCopy h1 {
-    max-width: 690px;
+    max-width: 720px;
     margin-bottom: 8px;
-    font-size: clamp(2rem, 4.4vw, 2.75rem);
-    line-height: 0.98;
+    font-size: clamp(2.35rem, 5.35vw, 3.15rem);
+    line-height: 0.94;
   }
 
   .threeOrbitCopy .eyebrow {
-    font-size: 0.7rem;
+    font-size: 0.74rem;
   }
 
   .threeOrbitCopy .lede {
-    width: min(640px, calc(100vw - 70px));
-    max-width: 640px;
-    font-size: 0.88rem;
+    width: min(675px, calc(100vw - 70px));
+    max-width: 675px;
+    font-size: 0.96rem;
     line-height: 1.34;
   }
 
   .solarSystemStage {
     width: min(980px, calc(100vw - 22px));
-    height: min(700px, calc(100svh - 245px));
-    min-height: min(600px, calc(100svh - 245px));
+    height: min(710px, calc(100svh - 228px));
+    min-height: min(610px, calc(100svh - 228px));
     align-self: center;
     justify-self: center;
-    margin-top: clamp(-18px, -1.4svh, -8px);
+    margin-top: clamp(-8px, -0.8svh, -2px);
   }
 
   .solarSunLabel {
@@ -2725,20 +2725,22 @@ td a {
     max-width: none;
     flex-wrap: wrap;
     gap: 10px;
-    border: 0;
-    border-radius: 0;
-    padding: 0;
-    background: transparent;
-    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 10px;
+    background:
+      linear-gradient(180deg, rgba(3, 5, 12, 0.2), rgba(3, 5, 12, 0.48)),
+      radial-gradient(circle at 50% 0%, rgba(138, 220, 232, 0.12), transparent 68%);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
     transform: none;
-    backdrop-filter: none;
+    backdrop-filter: blur(10px);
   }
 
   .solarSystemFallback button {
-    min-height: 42px;
+    min-height: 44px;
     flex: 1 1 190px;
     padding: 0 15px;
-    font-size: 0.8rem;
+    font-size: 0.84rem;
   }
 }
 
