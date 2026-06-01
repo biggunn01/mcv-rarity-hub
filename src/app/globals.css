@@ -2786,7 +2786,7 @@ td a {
     min-height: 640px;
     align-self: center;
     justify-self: center;
-    margin-top: clamp(-78px, -7svh, -56px);
+    margin-top: clamp(-170px, -15svh, -130px);
   }
 
   .solarSystemFallback {
