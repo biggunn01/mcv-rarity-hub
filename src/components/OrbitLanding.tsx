@@ -1185,7 +1185,10 @@ export function OrbitLanding({ collections }: Props) {
 
       <div className="orbitCopy threeOrbitCopy">
         <p className="eyebrow">Mars Cats Voyage Rarity Hub</p>
-        <h1>Choose a collection. Drop into the rarity table.</h1>
+        <h1>
+          <span>Choose a collection.</span>{" "}
+          <span className="mobileTitleBreak">Drop into the rarity table.</span>
+        </h1>
         <p className="lede">
           Real imported rarity data for the MCV ecosystem, ranked across traits, trait counts, listings, and collection-specific scoring rules.
         </p>

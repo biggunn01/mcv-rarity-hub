@@ -613,6 +613,10 @@ select {
   white-space: nowrap;
 }
 
+.mobileTitleBreak {
+  display: inline;
+}
+
 .threeOrbitCopy .eyebrow {
   margin-bottom: 6px;
   font-size: clamp(0.66rem, 0.9vw, 0.76rem);
@@ -2526,6 +2530,10 @@ td a {
     white-space: normal;
   }
 
+  .mobileTitleBreak {
+    display: block;
+  }
+
   .threeOrbitCopy .eyebrow {
     margin-bottom: 4px;
     font-size: 0.62rem;
@@ -2666,10 +2674,11 @@ td a {
 
 @media (min-width: 701px) and (max-width: 860px) and (min-height: 640px) {
   .orbitHero.threeOrbitHero {
-    grid-template-rows: auto minmax(520px, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
     height: auto;
     min-height: 100svh;
-    padding: clamp(22px, 3.5svh, 34px) 28px clamp(26px, 4svh, 42px);
+    justify-items: center;
+    padding: clamp(28px, 4svh, 42px) 28px clamp(22px, 3.2svh, 34px);
   }
 
   .threeOrbitCopy {
@@ -2696,12 +2705,12 @@ td a {
   }
 
   .solarSystemStage {
-    width: min(940px, calc(100vw - 34px));
-    height: min(640px, calc(100svh - 215px));
-    min-height: 520px;
+    width: min(980px, calc(100vw - 22px));
+    height: min(700px, calc(100svh - 245px));
+    min-height: min(600px, calc(100svh - 245px));
     align-self: center;
     justify-self: center;
-    margin-top: clamp(8px, 2svh, 26px);
+    margin-top: clamp(-18px, -1.4svh, -8px);
   }
 
   .solarSunLabel {
@@ -2709,16 +2718,27 @@ td a {
   }
 
   .solarSystemFallback {
-    right: 16px;
-    bottom: clamp(16px, 2.5svh, 28px);
-    left: 16px;
-    gap: 8px;
+    right: 24px;
+    bottom: clamp(18px, 2.6svh, 30px);
+    left: 24px;
+    width: auto;
+    max-width: none;
+    flex-wrap: wrap;
+    gap: 10px;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+    backdrop-filter: none;
   }
 
   .solarSystemFallback button {
-    min-height: 32px;
-    padding: 0 10px;
-    font-size: 0.67rem;
+    min-height: 42px;
+    flex: 1 1 190px;
+    padding: 0 15px;
+    font-size: 0.8rem;
   }
 }
 
