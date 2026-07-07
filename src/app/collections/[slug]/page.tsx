@@ -320,6 +320,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
       } as CSSProperties}
     >
       <section className="marketCollectionHeader">
+        <span className="heroGhostTitle" aria-hidden="true">{data.collection.name}</span>
         <div className="marketCollectionTitle">
           {collectionLogo && (
             <div className="collectionHeaderLogo" aria-hidden="true">
@@ -523,12 +524,16 @@ export default async function CollectionPage({ params, searchParams }: Props) {
               </tr>
             </thead>
             <tbody>
-              {tokens.map((token) => {
+              {tokens.map((token, rowIndex) => {
                 const isOneOfOneTier = data.collection.slug === "metazoku" && token.rank <= 4;
                 const inscriptionUrl = ordinalExplorerBaseUrl ? `${ordinalExplorerBaseUrl}${token.canonicalTokenId}` : "";
                 const podiumClass = token.rank === 1 ? "podiumGold" : token.rank === 2 ? "podiumSilver" : token.rank === 3 ? "podiumBronze" : "";
                 return (
-                <tr className={`${isOneOfOneTier ? "oneOfOneTier" : ""} ${podiumClass}`.trim() || undefined} key={token.canonicalTokenId}>
+                <tr
+                  className={`${isOneOfOneTier ? "oneOfOneTier" : ""} ${podiumClass}`.trim() || undefined}
+                  style={{ "--row-i": rowIndex } as CSSProperties}
+                  key={token.canonicalTokenId}
+                >
                   <td className={`rankCell ${isOneOfOneTier ? "isOneOfOne" : ""} ${podiumClass}`}>
                     {podiumClass ? <span className="podiumRank">#{token.rank}</span> : <>#{token.rank}</>}
                   </td>

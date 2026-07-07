@@ -1177,8 +1177,16 @@ export function OrbitLanding({ collections }: Props) {
     navigate(route);
   }
 
+  function heroParallax(event: ReactPointerEvent<HTMLElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const px = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+    const py = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+    event.currentTarget.style.setProperty("--px", px.toFixed(3));
+    event.currentTarget.style.setProperty("--py", py.toFixed(3));
+  }
+
   return (
-    <section className="orbitHero threeOrbitHero" aria-label="MCV rarity collection selector">
+    <section className="orbitHero threeOrbitHero" aria-label="MCV rarity collection selector" onPointerMove={heroParallax}>
       <div className="starField" aria-hidden="true" />
       <div className="nebula nebulaOne" aria-hidden="true" />
       <div className="nebula nebulaTwo" aria-hidden="true" />
@@ -1201,6 +1209,11 @@ export function OrbitLanding({ collections }: Props) {
 
       <div className="solarSystemStage" ref={stageRef}>
         <div className="solarSystemBackdrop" aria-hidden="true" />
+        <span className="shootingStar" aria-hidden="true" />
+        <div className="hudFrame" aria-hidden="true">
+          <span className="hudTag hudTagTopLeft">Orbital selector — live</span>
+          <span className="hudTag hudTagTopRight">Select a world · click to drop in</span>
+        </div>
         <div className="solarSunTrajectory" aria-hidden="true" />
         <canvas className="solarSystemCanvas" ref={canvasRef} aria-label="Interactive 3D MCV collection solar system" />
         {isLoading && <span className="solarSystemLoading">Loading orbit</span>}
