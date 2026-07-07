@@ -6000,3 +6000,87 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
   min-height: 320px;
   aspect-ratio: auto;
 }
+
+/* ----- Judge fixes (post-critique) ----- */
+
+/* 1: landing H1 dominates; eyebrow legible */
+.threeOrbitCopy h1 {
+  font-size: clamp(2.3rem, 4.3vw, 3.9rem);
+  line-height: 1.02;
+  white-space: normal;
+}
+
+.threeOrbitCopy .eyebrow {
+  color: rgba(233, 196, 166, 0.75);
+}
+
+/* 2: dock reads as a deliberate shelf; planets sink behind a fade */
+.solarSystemStage::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  height: 110px;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(5, 5, 10, 0.82), transparent);
+}
+
+/* 3: podium tint reads intentional; unlisted chips fall silent */
+.marketRankTable tr.podiumGold td {
+  background: rgba(58, 48, 22, 0.4);
+}
+
+.marketRankTable tr.podiumBronze td {
+  background: rgba(52, 38, 26, 0.4);
+}
+
+.marketRankTable tr.podiumGold td:first-child {
+  box-shadow: inset 3px 0 0 #d9a441;
+}
+
+.marketRankTable tr.podiumSilver td:first-child {
+  box-shadow: inset 3px 0 0 #aeb6c4;
+}
+
+.marketRankTable tr.podiumBronze td:first-child {
+  box-shadow: inset 3px 0 0 #c47a4a;
+}
+
+.listingPill:not(:has(a)) {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* 4: stat tile — numeral carries the volume */
+.hallStatCard {
+  align-items: flex-start;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 110%, rgba(255, 154, 50, 0.22), transparent 70%),
+    linear-gradient(180deg, rgba(12, 13, 20, 0.9), rgba(6, 7, 12, 0.94));
+}
+
+.hallStatNumber {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+}
+
+/* 5: mobile integrity */
+@media (max-width: 640px) {
+  .collectionShell .heroGhostTitle {
+    display: none;
+  }
+
+  .orbitHero {
+    height: auto;
+    min-height: 100svh;
+    padding-bottom: 2rem;
+  }
+
+  .orbitStatLine {
+    letter-spacing: 0.12em;
+  }
+}
