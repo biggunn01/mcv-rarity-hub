@@ -320,6 +320,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
       } as CSSProperties}
     >
       <section className="marketCollectionHeader">
+        <span className="collectionHeroBackdrop" aria-hidden="true" />
         <span className="heroGhostTitle" aria-hidden="true">{data.collection.name}</span>
         <div className="marketCollectionTitle">
           {collectionLogo && (
