@@ -164,8 +164,12 @@ export default async function TokenPage({ params }: Props) {
           <span>{token.attributes.length} traits</span>
         </div>
         <div className="tokenTraitCards">
-          {token.attributes.map((trait) => (
-            <article className={`tokenTraitCard ${getTraitRarityClass(trait.percentage)}`} key={`${trait.traitType}-${trait.value}`}>
+          {token.attributes.map((trait, cardIndex) => (
+            <article
+              className={`tokenTraitCard ${getTraitRarityClass(trait.percentage)}`}
+              style={{ "--card-i": cardIndex } as CSSProperties}
+              key={`${trait.traitType}-${trait.value}`}
+            >
               <span>{trait.traitType}</span>
               <strong>{trait.value}</strong>
               <div>
