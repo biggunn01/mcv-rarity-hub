@@ -4088,3 +4088,436 @@ td a {
     font-size: 0.78rem;
   }
 }
+
+/* ==========================================================================
+   Refinement pass — type voices + telemetry layer
+   Display: Unbounded (--font-display) for identity moments only.
+   Data: IBM Plex Mono (--font-data) for every rank, score, price, label.
+   ========================================================================== */
+
+body {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----- Focus visibility ----- */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--collection-accent, #8adce8);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ----- Display voice: identity moments ----- */
+
+.orbitCopy h1,
+.threeOrbitCopy h1 {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.5rem, 2.6vw, 2.7rem);
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: 0.005em;
+}
+
+.orbitCopy .eyebrow,
+.threeOrbitCopy .eyebrow {
+  font-family: var(--font-data), monospace;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+}
+
+.marketCollectionTitle h1 {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.45rem, 2.5vw, 2.15rem);
+  font-weight: 600;
+  line-height: 1.08;
+}
+
+.marketTokenTitle h1 {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.6rem, 2.6vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.landingTitle {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.7rem, 5.4vw, 4.6rem);
+}
+
+.marketSubtitle {
+  font-family: var(--font-data), monospace;
+  font-size: clamp(0.72rem, 1vw, 0.86rem);
+  font-weight: 500;
+  letter-spacing: 0.34em;
+}
+
+/* ----- Telemetry voice: labels ----- */
+
+.marketStats span,
+.marketControlGroup span,
+.marketTraitHeader span,
+.marketTokenStats dt,
+.tokenTraitCard > span,
+.marketFilterRail .traitParent > summary {
+  font-family: var(--font-data), monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+}
+
+.marketRankTable th {
+  font-family: var(--font-data), monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+}
+
+/* ----- Telemetry voice: values ----- */
+
+.marketStats strong {
+  font-family: var(--font-data), monospace;
+  font-size: clamp(1.3rem, 1.9vw, 1.85rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.rankCell,
+.scorePill,
+.traitCountPill,
+.listingPill,
+.chainIcon,
+.tokenChain,
+.marketTokenStats dd,
+.tableMeta,
+.pagination,
+.rankedBadge,
+.tokenTraitCard div span,
+.marketTokenMeta span:last-of-type {
+  font-family: var(--font-data), monospace;
+}
+
+.rankCell {
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+
+.scorePill {
+  font-weight: 600;
+}
+
+.traitCountPill,
+.listingPill,
+.chainIcon {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.rankedBadge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.tokenChain {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.marketTokenStats dd {
+  font-weight: 600;
+}
+
+.tableMeta,
+.pagination {
+  font-size: 0.82rem;
+}
+
+.marketFilterRail input {
+  font-family: var(--font-data), monospace;
+  font-size: 0.88rem;
+}
+
+/* ----- Collection table: quieter rows, podium ranks ----- */
+
+.marketRankTable td {
+  height: 96px;
+  padding: 12px 22px;
+}
+
+.marketRankTable .tokenThumb {
+  width: 72px;
+  border-radius: 10px;
+}
+
+.marketRankTable .tokenThumb span {
+  border-radius: inherit;
+}
+
+.marketRankTable tbody tr td {
+  transition: background 140ms ease;
+}
+
+.podiumRank {
+  display: inline-flex;
+  min-width: 58px;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  border-radius: 999px;
+  padding: 0 12px;
+}
+
+.podiumGold .podiumRank {
+  border-color: rgba(255, 210, 75, 0.55);
+  background: linear-gradient(160deg, rgba(255, 210, 75, 0.22), rgba(255, 154, 48, 0.08));
+  color: #ffd24b;
+  text-shadow: 0 0 14px rgba(255, 210, 75, 0.35);
+}
+
+.podiumSilver .podiumRank {
+  border-color: rgba(207, 214, 228, 0.45);
+  background: linear-gradient(160deg, rgba(207, 214, 228, 0.16), rgba(207, 214, 228, 0.04));
+  color: #dbe2ef;
+}
+
+.podiumBronze .podiumRank {
+  border-color: rgba(216, 146, 90, 0.5);
+  background: linear-gradient(160deg, rgba(216, 146, 90, 0.18), rgba(216, 146, 90, 0.05));
+  color: #e2a06b;
+}
+
+/* ----- Stat strip: instrument readout ----- */
+
+.marketStats div {
+  min-height: 104px;
+  padding: 22px 40px;
+}
+
+.marketStats span {
+  margin-bottom: 12px;
+}
+
+/* ----- Token page: rank as hero ----- */
+
+.marketRankHero {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+  margin: 2px 0 4px;
+}
+
+.marketRankHero strong {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  color: var(--collection-accent);
+  font-size: clamp(2.3rem, 4.4vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 0 34px rgba(var(--collection-accent-rgb), 0.3);
+}
+
+.percentileChip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(var(--collection-accent-rgb), 0.4);
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: rgba(var(--collection-accent-rgb), 0.1);
+  color: var(--collection-accent);
+  font-family: var(--font-data), monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.rarityMeter {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  margin: 14px 0 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.rarityMeter span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--meter-fill, 50%);
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(var(--collection-accent-rgb), 0.35), var(--collection-accent));
+  box-shadow: 0 0 12px rgba(var(--collection-accent-rgb), 0.4);
+}
+
+.rarityMeterCaption {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 2px;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-data), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.marketTokenStats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* ----- Trait cards: tier label chip ----- */
+
+.tokenTraitCard small {
+  font-family: var(--font-data), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ----- Landing chips + fallback nav ----- */
+
+.solarPlanetLabel,
+.solarSunLabel {
+  font-weight: 800;
+}
+
+.solarActiveReadout {
+  font-family: var(--font-data), monospace;
+  letter-spacing: 0.18em;
+}
+
+/* ----- Responsive guards for new elements ----- */
+
+@media (max-width: 980px) {
+  .marketRankHero strong {
+    font-size: clamp(2rem, 7vw, 2.8rem);
+  }
+
+  .marketTokenStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .marketTokenStats div {
+    padding: 0 12px 14px;
+  }
+}
+
+@media (max-width: 700px) {
+  .marketStats div {
+    min-height: auto;
+    padding: 16px 20px;
+  }
+}
+
+.marketTokenFacts .marketTokenStats {
+  margin-top: 20px;
+}
+
+.traitCountPill,
+.listingPill,
+.chainIcon,
+.scorePill,
+.podiumRank {
+  white-space: nowrap;
+}
+
+/* ----- Collection-accent-aware interactions ----- */
+
+.collectionShell tbody tr:hover td {
+  background: rgba(var(--collection-accent-rgb, 138, 220, 232), 0.06);
+}
+
+.marketRankTable tbody tr:hover .tokenName {
+  color: var(--collection-accent);
+}
+
+.collectionShell .tokenThumb {
+  border-color: rgba(var(--collection-accent-rgb, 138, 220, 232), 0.22);
+}
+
+.collectionShell .tokenThumb:hover {
+  border-color: rgba(var(--collection-accent-rgb, 138, 220, 232), 0.48);
+}
+
+.marketTokenFacts .links a {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.045);
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.marketTokenFacts .links a:hover {
+  border-color: rgba(var(--collection-accent-rgb), 0.5);
+  background: rgba(var(--collection-accent-rgb), 0.1);
+  color: var(--collection-accent);
+}
+
+/* ----- Token page: rarest traits block ----- */
+
+.rarestTraits {
+  border: 1px solid var(--collection-line);
+  border-radius: 8px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.rarestTraits h2 {
+  margin: 0 0 14px;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-data), monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.rarestTraits ol {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rarestTraits li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rarestTraits li strong {
+  display: block;
+  color: white;
+  font-size: 0.95rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.rarestTraits li small {
+  display: block;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.42);
+  font-family: var(--font-data), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.rarestTraits li span {
+  color: var(--collection-accent);
+  font-family: var(--font-data), monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
