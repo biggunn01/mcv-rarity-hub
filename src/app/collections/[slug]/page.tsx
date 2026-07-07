@@ -528,7 +528,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                 const inscriptionUrl = ordinalExplorerBaseUrl ? `${ordinalExplorerBaseUrl}${token.canonicalTokenId}` : "";
                 const podiumClass = token.rank === 1 ? "podiumGold" : token.rank === 2 ? "podiumSilver" : token.rank === 3 ? "podiumBronze" : "";
                 return (
-                <tr className={isOneOfOneTier ? "oneOfOneTier" : undefined} key={token.canonicalTokenId}>
+                <tr className={`${isOneOfOneTier ? "oneOfOneTier" : ""} ${podiumClass}`.trim() || undefined} key={token.canonicalTokenId}>
                   <td className={`rankCell ${isOneOfOneTier ? "isOneOfOne" : ""} ${podiumClass}`}>
                     {podiumClass ? <span className="podiumRank">#{token.rank}</span> : <>#{token.rank}</>}
                   </td>

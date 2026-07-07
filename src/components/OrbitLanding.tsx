@@ -1192,6 +1192,11 @@ export function OrbitLanding({ collections }: Props) {
         <p className="lede">
           Real imported rarity data for the MCV ecosystem, ranked across traits, trait counts, listings, and collection-specific scoring rules.
         </p>
+        <p className="orbitStatLine">
+          <span>{collections.length} collections</span>
+          <span>{collections.reduce((sum, entry) => sum + entry.collection.actualTokenCount, 0).toLocaleString()} tokens ranked</span>
+          <span>3 chains</span>
+        </p>
       </div>
 
       <div className="solarSystemStage" ref={stageRef}>
