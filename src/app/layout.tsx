@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mars Cats Voyage Rarity Hub",
-  description: "Official rarity hub foundation for the Mars Cats Voyage ecosystem.",
+  title: "Mars Cats Ventures Rarity Hub",
+  description: "Official rarity hub foundation for the Mars Cats Ventures ecosystem.",
 };
 
 export default function RootLayout({
