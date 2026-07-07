@@ -56,6 +56,13 @@ export default async function TokenPage({ params }: Props) {
   const listingText = isOrdinalCollection ? "Bitcoin Ordinal" : token.listing?.price.display ?? "Not listed";
   const collectionLogo = collectionLogoMap[data.collection.slug];
   const collectionTheme = collectionThemeMap[data.collection.slug] ?? { accent: "#8adce8", accentRgb: "138, 220, 232", warm: "#ff8b63" };
+  const rankedTotal = data.collection.actualTokenCount;
+  const percentileLabel = formatPercentile(token.rank, rankedTotal);
+  const meterFill = rankedTotal > 1 ? Math.max(2, (1 - (token.rank - 1) / (rankedTotal - 1)) * 100) : 100;
+  const rarestTraits = token.attributes
+    .filter((trait) => trait.includedInScore !== false)
+    .toSorted((a, b) => a.percentage - b.percentage)
+    .slice(0, 3);
 
   return (
     <main
@@ -90,13 +97,20 @@ export default async function TokenPage({ params }: Props) {
               <span>{token.chain}</span>
               <span>Token #{token.canonicalTokenId}</span>
             </div>
+            <div className="marketRankHero">
+              <strong>Rank #{token.rank.toLocaleString()}</strong>
+              {percentileLabel && <span className="percentileChip">{percentileLabel}</span>}
+            </div>
           </div>
           <div className="tokenFacts marketTokenFacts">
+            <div className="rarityMeterCaption">
+              <span>Rarity position</span>
+              <span>#{token.rank.toLocaleString()} of {rankedTotal.toLocaleString()}</span>
+            </div>
+            <div className="rarityMeter" style={{ "--meter-fill": `${meterFill}%` } as CSSProperties}>
+              <span />
+            </div>
             <dl className="tokenStats marketTokenStats">
-              <div>
-                <dt>Rank</dt>
-                <dd className="rankValue">#{token.rank}</dd>
-              </div>
               <div>
                 <dt>Trait count</dt>
                 <dd>{token.traitCount}</dd>
@@ -125,6 +139,22 @@ export default async function TokenPage({ params }: Props) {
               {explorerUrl && <a href={explorerUrl}>Explorer</a>}
             </div>
           </div>
+          {rarestTraits.length > 0 && (
+            <div className="rarestTraits">
+              <h2>Rarest traits</h2>
+              <ol>
+                {rarestTraits.map((trait) => (
+                  <li key={`${trait.traitType}-${trait.value}`}>
+                    <div>
+                      <strong>{trait.value}</strong>
+                      <small>{trait.traitType}</small>
+                    </div>
+                    <span>{trait.percentage.toFixed(2)}%</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
         </div>
       </section>
 
@@ -150,6 +180,14 @@ export default async function TokenPage({ params }: Props) {
       </section>
     </main>
   );
+}
+
+function formatPercentile(rank: number, total: number) {
+  if (total <= 0 || rank <= 0) return "";
+  const percentile = (rank / total) * 100;
+  if (percentile <= 0.1) return "Top 0.1%";
+  if (percentile < 1) return `Top ${percentile.toFixed(1)}%`;
+  return `Top ${Math.ceil(percentile)}%`;
 }
 
 function getTraitRarityClass(percentage: number) {

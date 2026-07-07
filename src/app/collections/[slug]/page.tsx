@@ -526,9 +526,12 @@ export default async function CollectionPage({ params, searchParams }: Props) {
               {tokens.map((token) => {
                 const isOneOfOneTier = data.collection.slug === "metazoku" && token.rank <= 4;
                 const inscriptionUrl = ordinalExplorerBaseUrl ? `${ordinalExplorerBaseUrl}${token.canonicalTokenId}` : "";
+                const podiumClass = token.rank === 1 ? "podiumGold" : token.rank === 2 ? "podiumSilver" : token.rank === 3 ? "podiumBronze" : "";
                 return (
                 <tr className={isOneOfOneTier ? "oneOfOneTier" : undefined} key={token.canonicalTokenId}>
-                  <td className={`rankCell ${isOneOfOneTier ? "isOneOfOne" : ""}`}>#{token.rank}</td>
+                  <td className={`rankCell ${isOneOfOneTier ? "isOneOfOne" : ""} ${podiumClass}`}>
+                    {podiumClass ? <span className="podiumRank">#{token.rank}</span> : <>#{token.rank}</>}
+                  </td>
                   <td>
                     <Link
                       className="tokenThumb"
