@@ -5458,3 +5458,545 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
     height: 22px;
   }
 }
+
+/* ============================================================
+   Signature pass — landing second act, cinematic collection hero
+   ============================================================ */
+
+/* --- Stats ticker marquee --- */
+.rarityTicker {
+  overflow: hidden;
+  border-top: 1px solid rgba(240, 235, 226, 0.1);
+  border-bottom: 1px solid rgba(240, 235, 226, 0.1);
+  background: rgba(5, 6, 11, 0.82);
+  backdrop-filter: blur(6px);
+}
+
+.rarityTickerTrack {
+  display: flex;
+  width: max-content;
+}
+
+.rarityTickerGroup {
+  display: flex;
+  align-items: center;
+}
+
+.rarityTickerItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 34px 13px 20px;
+  font-family: var(--font-data), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(240, 235, 226, 0.62);
+  white-space: nowrap;
+}
+
+.rarityTickerDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tick-accent, #8adce8);
+  box-shadow: 0 0 10px 1px color-mix(in srgb, var(--tick-accent, #8adce8) 65%, transparent);
+}
+
+.rarityTickerName {
+  color: rgba(240, 235, 226, 0.92);
+  font-weight: 600;
+}
+
+.rarityTickerStat + .rarityTickerStat::before,
+.rarityTickerName + .rarityTickerStat::before {
+  content: "·";
+  margin-right: 14px;
+  color: rgba(240, 235, 226, 0.28);
+}
+
+/* --- Hall of Rarest --- */
+.hallOfRarest {
+  position: relative;
+  overflow: clip;
+  padding: clamp(72px, 10vw, 140px) clamp(20px, 5vw, 72px) clamp(64px, 8vw, 110px);
+  background:
+    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(255, 154, 50, 0.055), transparent 70%),
+    linear-gradient(180deg, rgba(5, 6, 11, 0.35), rgba(4, 5, 9, 0.92) 30%);
+}
+
+.hallGhostTitle {
+  position: absolute;
+  top: clamp(6px, 1.5vw, 26px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(5.2rem, 17vw, 15rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(240, 235, 226, 0.07);
+  pointer-events: none;
+  user-select: none;
+}
+
+.hallHeader {
+  position: relative;
+  max-width: 760px;
+  margin-bottom: clamp(40px, 5vw, 72px);
+}
+
+.hallHeader h2 {
+  margin: 10px 0 14px;
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.55rem, 3.4vw, 2.7rem);
+  font-weight: 600;
+  line-height: 1.12;
+  color: #f0ebe2;
+  text-wrap: balance;
+}
+
+.hallHeader .lede {
+  max-width: 560px;
+  margin: 0;
+}
+
+.hallGrid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(14px, 1.8vw, 24px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hallCard {
+  --hall-line: rgba(var(--hall-rgb), 0.24);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(240, 235, 226, 0.08);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(16, 18, 26, 0.85), rgba(8, 9, 14, 0.92));
+  overflow: hidden;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease, box-shadow 0.45s ease;
+}
+
+.hallCard:hover {
+  transform: translateY(-7px);
+  border-color: var(--hall-line);
+  box-shadow:
+    0 24px 48px -28px rgba(var(--hall-rgb), 0.45),
+    0 2px 0 0 rgba(var(--hall-rgb), 0.18) inset;
+}
+
+.hallCard:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.hallCardLink {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: clamp(14px, 1.6vw, 22px);
+  text-decoration: none;
+  color: inherit;
+}
+
+.hallCardRank {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-family: var(--font-data), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(240, 235, 226, 0.5);
+}
+
+.hallCardRank em {
+  font-style: normal;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--hall-accent);
+}
+
+.hallCardArt {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background-color: rgba(240, 235, 226, 0.04);
+  background-image: var(--hall-image);
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hallCard:hover .hallCardArt {
+  transform: scale(1.025);
+}
+
+.hallCardTick {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(var(--hall-rgb), 0.85);
+  border-style: solid;
+  border-width: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hallCard:hover .hallCardTick {
+  opacity: 1;
+}
+
+.hallCardTickTl {
+  top: 6px;
+  left: 6px;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.hallCardTickBr {
+  right: 6px;
+  bottom: 6px;
+  border-right-width: 1.5px;
+  border-bottom-width: 1.5px;
+}
+
+.hallCardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 14px;
+}
+
+.hallCardCollection {
+  font-family: var(--font-data), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(var(--hall-rgb), 0.9);
+}
+
+.hallCardToken {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(0.98rem, 1.4vw, 1.18rem);
+  font-weight: 600;
+  color: #f0ebe2;
+}
+
+.hallCardScore {
+  font-family: var(--font-data), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: rgba(240, 235, 226, 0.55);
+}
+
+.hallCardExplore {
+  display: block;
+  padding: 11px 20px 13px;
+  border-top: 1px solid rgba(240, 235, 226, 0.07);
+  font-family: var(--font-data), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(240, 235, 226, 0.55);
+  transition: color 0.25s ease, background 0.25s ease, letter-spacing 0.3s ease;
+}
+
+.hallCardExplore:hover {
+  color: var(--hall-accent);
+  background: rgba(var(--hall-rgb), 0.07);
+  letter-spacing: 0.24em;
+}
+
+.hallCardExplore::after {
+  content: " →";
+}
+
+/* --- Site footer --- */
+.siteFooter {
+  position: relative;
+  overflow: clip;
+  padding: clamp(48px, 7vw, 96px) clamp(20px, 5vw, 72px) clamp(28px, 3vw, 44px);
+  border-top: 1px solid rgba(240, 235, 226, 0.08);
+  background: linear-gradient(180deg, rgba(4, 5, 9, 0.6), #030409 70%);
+}
+
+.siteFooterWordmark {
+  margin: 0 0 clamp(26px, 4vw, 48px);
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(3.4rem, 12.5vw, 11rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(240, 235, 226, 0.13);
+  user-select: none;
+}
+
+.siteFooterRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.siteFooterNote {
+  max-width: 380px;
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: rgba(240, 235, 226, 0.45);
+}
+
+.siteFooterNav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  gap: 8px 34px;
+}
+
+.siteFooterNav a {
+  font-family: var(--font-data), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(240, 235, 226, 0.6);
+  transition: color 0.22s ease, transform 0.22s ease;
+}
+
+.siteFooterNav a:hover {
+  color: var(--foot-accent, #f0ebe2);
+  transform: translateX(3px);
+}
+
+/* --- Hero scroll cue --- */
+.scrollCue {
+  position: absolute;
+  right: clamp(14px, 2vw, 30px);
+  bottom: 74px;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-data), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  writing-mode: vertical-rl;
+  color: rgba(240, 235, 226, 0.5);
+  transition: color 0.25s ease;
+}
+
+.scrollCue:hover {
+  color: #f0ebe2;
+}
+
+.scrollCueLine {
+  width: 1px;
+  height: 34px;
+  background: linear-gradient(180deg, transparent, rgba(240, 235, 226, 0.65));
+  animation: scrollCueDrip 2.4s ease-in-out infinite;
+}
+
+@keyframes scrollCueDrip {
+  0%, 100% { transform: scaleY(0.45); transform-origin: top; opacity: 0.4; }
+  55% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+}
+
+/* --- Cinematic collection hero backdrop --- */
+.marketCollectionHeader {
+  position: relative;
+  overflow: hidden;
+  min-height: 264px;
+  align-items: flex-end;
+  padding-bottom: 30px;
+}
+
+.marketCollectionHeader > :not(.collectionHeroBackdrop) {
+  position: relative;
+  z-index: 1;
+}
+
+.collectionHeroBackdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(180deg, rgba(5, 6, 10, 0.1) 0%, rgba(5, 6, 10, 0.42) 58%, rgba(5, 6, 10, 0.94) 100%),
+    linear-gradient(115deg, rgba(var(--collection-accent-rgb), 0.3), rgba(5, 6, 10, 0) 52%),
+    url("/backdrops/mars-horizon.webp");
+  background-size: cover, cover, cover;
+  background-position: center, center, center 72%;
+  opacity: 0.9;
+  filter: saturate(0.92);
+}
+
+/* --- Motion: reveals (progressive enhancement) --- */
+@media (prefers-reduced-motion: no-preference) {
+  .rarityTickerTrack {
+    animation: rarityTickerScroll 46s linear infinite;
+  }
+
+  .rarityTicker:hover .rarityTickerTrack {
+    animation-play-state: paused;
+  }
+
+  @supports (animation-timeline: view()) {
+    .hallCard {
+      animation: hallCardRise both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+
+    .hallHeader {
+      animation: hallCardRise both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    .siteFooterWordmark {
+      animation: footerWordmarkRise both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+  }
+}
+
+@keyframes rarityTickerScroll {
+  to { transform: translateX(-50%); }
+}
+
+@keyframes hallCardRise {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes footerWordmarkRise {
+  from { opacity: 0; transform: translateY(34px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* --- Signature pass responsive --- */
+@media (max-width: 1080px) {
+  .hallGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hallCard:first-child {
+    grid-column: span 2;
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .hallGrid {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 14px;
+    margin-inline: -20px;
+    padding-inline: 20px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .hallGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hallCard,
+  .hallCard:first-child {
+    flex: 0 0 78vw;
+    scroll-snap-align: center;
+  }
+
+  .scrollCue {
+    display: none;
+  }
+
+  .siteFooterNav {
+    grid-template-columns: 1fr;
+  }
+
+  .marketCollectionHeader {
+    min-height: 190px;
+    align-items: flex-end;
+  }
+}
+
+/* Dock stays pinned to the hero, not the viewport (second act below) */
+.solarSystemFallback {
+  position: absolute;
+}
+
+/* Stat tile filling the hall grid tail */
+.hallStatCard {
+  grid-column: span 2;
+  justify-content: center;
+  padding: clamp(20px, 2.4vw, 34px);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 110%, rgba(255, 154, 50, 0.1), transparent 70%),
+    linear-gradient(180deg, rgba(12, 13, 20, 0.9), rgba(6, 7, 12, 0.94));
+}
+
+.hallStatNumber {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2.4rem, 4.6vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1;
+  color: #f0ebe2;
+  text-shadow: 0 0 34px rgba(255, 154, 50, 0.3);
+}
+
+.hallStatLabel {
+  margin-top: 10px;
+  font-family: var(--font-data), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(240, 235, 226, 0.6);
+}
+
+.hallStatRule {
+  width: 44px;
+  height: 1px;
+  margin: 16px 0 12px;
+  background: linear-gradient(90deg, rgba(255, 154, 50, 0.85), transparent);
+}
+
+.hallStatHint {
+  font-size: 0.78rem;
+  color: rgba(240, 235, 226, 0.42);
+}
+
+@media (max-width: 640px) {
+  .hallStatCard {
+    flex: 0 0 78vw;
+  }
+}
+
+/* Big hall card: art stretches to fill the 2-row span */
+.hallCard:first-child .hallCardArt {
+  flex: 1;
+  min-height: 320px;
+  aspect-ratio: auto;
+}

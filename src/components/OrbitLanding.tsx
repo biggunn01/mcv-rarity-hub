@@ -1334,6 +1334,10 @@ export function OrbitLanding({ collections }: Props) {
             {activePlanet.name}
           </div>
         )}
+        <a className="scrollCue" href="#hall-of-rarest">
+          <span className="scrollCueLine" aria-hidden="true" />
+          Hall of Rarest
+        </a>
         {transitionOverlay && (
           <div
             className={`solarTransitionName solarTransitionName--${transitionOverlay.phase}`}

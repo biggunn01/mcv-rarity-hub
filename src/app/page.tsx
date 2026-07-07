@@ -1,3 +1,4 @@
+import { LandingBelowFold } from "@/components/LandingBelowFold";
 import { OrbitLanding } from "@/components/OrbitLanding";
 import { getCollectionSummaries } from "@/lib/rarity-data";
 
@@ -7,6 +8,7 @@ export default function Home() {
   return (
     <main className="landingShell">
       <OrbitLanding collections={collections} />
+      <LandingBelowFold />
     </main>
   );
 }
