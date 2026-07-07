@@ -5353,6 +5353,78 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
   }
 }
 
+/* ----- Landing dock: planet-badge chips ----- */
+
+.solarSystemFallback button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  position: relative;
+  overflow: hidden;
+  padding: 4px 14px 4px 5px;
+}
+
+.dockBadge {
+  position: relative;
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.4));
+  box-shadow:
+    0 0 0 1px rgba(var(--planet-link-rgb, 255, 255, 255), 0.4),
+    0 0 12px rgba(var(--planet-link-rgb, 255, 255, 255), 0.22),
+    0 3px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dockBadge img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 300ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.dockName {
+  position: relative;
+  z-index: 1;
+}
+
+.solarSystemFallback button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 32%, rgba(255, 255, 255, 0.13) 47%, transparent 62%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+
+.solarSystemFallback button:hover {
+  border-color: var(--planet-link-accent, #ffb15d);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
+    rgba(2, 4, 10, 0.5);
+  box-shadow:
+    0 0 22px rgba(var(--planet-link-rgb, 255, 255, 255), 0.32),
+    0 8px 20px rgba(0, 0, 0, 0.42);
+}
+
+.solarSystemFallback button:hover .dockBadge img {
+  transform: scale(1.14);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .solarSystemFallback button::after {
+    transition: transform 520ms ease;
+  }
+
+  .solarSystemFallback button:hover::after {
+    transform: translateX(130%);
+  }
+}
+
 /* ----- Award pass responsive guards ----- */
 
 @media (max-width: 980px) {
@@ -5374,5 +5446,15 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
 
   .marketTokenLayout .tokenArtworkCard::after {
     inset: 10px;
+  }
+
+  .solarSystemFallback button {
+    gap: 6px;
+    padding: 3px 10px 3px 4px;
+  }
+
+  .dockBadge {
+    width: 22px;
+    height: 22px;
   }
 }

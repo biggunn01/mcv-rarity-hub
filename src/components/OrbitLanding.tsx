@@ -1,9 +1,20 @@
 "use client";
 
+import NextImage from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import * as THREE from "three";
 import type { CollectionSummary } from "@/lib/types";
+
+const badgeMap: Record<string, string> = {
+  "mars-cats-voyage": "/collection-badges/mars-cats-voyage.png",
+  "mars-alien-cats": "/collection-badges/mars-alien-cats.png",
+  "mars-cats-in-spacesuits": "/collection-badges/mars-cats-in-spacesuits.png",
+  "mars-cats-snipers": "/collection-badges/mars-cats-snipers.png",
+  metazoku: "/collection-badges/metazoku.png",
+  "battle-pawss": "/collection-badges/battle-pawss.png",
+  "cream-cats": "/collection-badges/cream-cats.png",
+};
 
 const logoMap: Record<string, string> = {
   "mars-cats-voyage": "/collection-logos/mcv-official-logo.png",
@@ -1277,9 +1288,17 @@ export function OrbitLanding({ collections }: Props) {
             <button
               type="button"
               onClick={() => navigate(`/collections/${center.collection.slug}`)}
-              style={{ "--planet-link-accent": planetThemeMap["mars-cats-voyage"].accent } as CSSProperties}
+              style={
+                {
+                  "--planet-link-accent": planetThemeMap["mars-cats-voyage"].accent,
+                  "--planet-link-rgb": planetThemeMap["mars-cats-voyage"].accentRgb,
+                } as CSSProperties
+              }
             >
-              {center.collection.name}
+              <span className="dockBadge" aria-hidden="true">
+                <NextImage src={badgeMap[center.collection.slug]} alt="" width={56} height={56} />
+              </span>
+              <span className="dockName">{center.collection.name}</span>
             </button>
           )}
           {planets.map((planet) => (
@@ -1287,9 +1306,17 @@ export function OrbitLanding({ collections }: Props) {
               key={planet.slug}
               type="button"
               onClick={() => navigate(planet.route)}
-              style={{ "--planet-link-accent": planet.accent } as CSSProperties}
+              style={
+                {
+                  "--planet-link-accent": planet.accent,
+                  "--planet-link-rgb": planet.accentRgb,
+                } as CSSProperties
+              }
             >
-              {planet.name}
+              <span className="dockBadge" aria-hidden="true">
+                <NextImage src={badgeMap[planet.slug]} alt="" width={56} height={56} />
+              </span>
+              <span className="dockName">{planet.name}</span>
             </button>
           ))}
         </nav>
