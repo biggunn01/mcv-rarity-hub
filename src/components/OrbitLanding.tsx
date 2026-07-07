@@ -1184,7 +1184,7 @@ export function OrbitLanding({ collections }: Props) {
       <div className="nebula nebulaTwo" aria-hidden="true" />
 
       <div className="orbitCopy threeOrbitCopy">
-        <p className="eyebrow">Mars Cats Voyage Rarity Hub</p>
+        <p className="eyebrow">Mars Cats Ventures Rarity Hub</p>
         <h1>
           <span>Choose a collection.</span>{" "}
           <span className="mobileTitleBreak">Drop into the rarity table.</span>
