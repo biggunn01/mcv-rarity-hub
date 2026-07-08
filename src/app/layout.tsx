@@ -25,9 +25,10 @@ const dataFont = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://rarity.marscatsvoyage.com"),
   title: "MCV Rarity Hub — trait-weighted rarity for the Mars Cats ecosystem",
   description:
-    "Live trait-weighted rarity rankings for 28,000+ tokens across seven Mars Cats Ventures collections on three chains — scores, listings, and trait explorers.",
+    "Live trait-weighted rarity rankings for 28,000+ tokens across seven Mars Cats Ventures collections on four chains — scores, listings, and trait explorers.",
   openGraph: {
     title: "MCV Rarity Hub",
     description: "Trait-weighted rarity rankings across the Mars Cats Ventures ecosystem — seven collections, three chains, one orbital selector.",

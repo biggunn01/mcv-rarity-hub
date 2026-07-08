@@ -126,6 +126,7 @@ type LandingTransition = {
   particles: TransitionParticle[];
   hasExploded: boolean;
   hasNavigated: boolean;
+  timeScale: number;
 };
 
 const orbitPresets = [
@@ -751,6 +752,15 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       stageElement.setAttribute("data-transitioning", "true");
       stageElement.style.cursor = "default";
 
+      let hasSeenDropIn = false;
+      try {
+        hasSeenDropIn = window.sessionStorage.getItem("mcvDropInSeen") === "1";
+        window.sessionStorage.setItem("mcvDropInSeen", "1");
+      } catch {
+        hasSeenDropIn = false;
+      }
+      const timeScale = hasSeenDropIn ? 0.55 : 1;
+
       landingTransition = {
         config,
         runtime,
@@ -765,14 +775,21 @@ export function OrbitLanding({ collections, chainCount }: Props) {
         particles: [],
         hasExploded: false,
         hasNavigated: false,
+        timeScale,
       };
 
       setTransitionOverlay({ name: config.name, accent: config.accent, phase: "approach" });
-      scheduleTransitionStep(TRANSITION_APPROACH_SECONDS * 1000, () => {
+      scheduleTransitionStep(TRANSITION_APPROACH_SECONDS * timeScale * 1000, () => {
         setTransitionOverlay({ name: config.name, accent: config.accent, phase: "hold" });
       });
-      scheduleTransitionStep(TRANSITION_EXPLODE_SECONDS * 1000, () => {
+      scheduleTransitionStep(TRANSITION_EXPLODE_SECONDS * timeScale * 1000, () => {
         setTransitionOverlay({ name: config.name, accent: config.accent, phase: "explode" });
+      });
+      scheduleTransitionStep(TRANSITION_NAV_SECONDS * timeScale * 1000 + 600, () => {
+        if (landingTransition && !landingTransition.hasNavigated) {
+          landingTransition.hasNavigated = true;
+          window.location.assign(config.route);
+        }
       });
     }
 
@@ -860,6 +877,9 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       overlapFade: number;
       x: number;
       y: number;
+      planetX: number;
+      planetY: number;
+      planetRadius: number;
       stageWidth: number;
       stageHeight: number;
     }[] = [];
@@ -874,7 +894,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       const activeSlug = activeRef.current;
       const transition = landingTransition;
       if (transition && !transition.startTime) transition.startTime = time;
-      const transitionElapsed = transition ? time - transition.startTime : 0;
+      const transitionElapsed = transition ? (time - transition.startTime) / transition.timeScale : 0;
 
       sunMaterial.uniforms.uTime.value = motionTime;
       sunGroup.rotation.y = Math.PI * 0.5 + motionTime * 0.28;
@@ -1040,6 +1060,9 @@ export function OrbitLanding({ collections, chainCount }: Props) {
           overlapFade,
           x: THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * stageRect.width, 110, stageRect.width - 110),
           y: THREE.MathUtils.clamp(Math.min(topY, centerY), 52, stageRect.height - 30),
+          planetX: (projected.x * 0.5 + 0.5) * stageRect.width,
+          planetY: centerY,
+          planetRadius: Math.abs(centerY - topY),
           stageWidth: stageRect.width,
           stageHeight: stageRect.height,
         });
@@ -1076,7 +1099,13 @@ export function OrbitLanding({ collections, chainCount }: Props) {
             Math.abs(state.x - other.x) < halfWidth + other.halfWidth + 12 &&
             Math.abs(state.y - other.y) < 26 + other.halfHeight,
         );
-        if (collides && !state.isActive) opacity = 0;
+        const hitsPlanet = labelStates.some(
+          (other) =>
+            other.config.slug !== state.config.slug &&
+            Math.abs(state.x - other.planetX) < halfWidth + other.planetRadius + 8 &&
+            Math.abs(state.y - other.planetY) < 24 + other.planetRadius + 8,
+        );
+        if ((collides || hitsPlanet) && !state.isActive) opacity = 0;
         if (state.y > state.stageHeight - 130 && !state.isActive) opacity = 0;
         if (opacity > 0.05) placedLabels.push({ x: state.x, y: state.y, halfWidth, halfHeight: 26 });
         label.style.setProperty("--label-x", `${state.x}px`);
