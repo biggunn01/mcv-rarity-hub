@@ -52,6 +52,15 @@ const collectionThemeMap: Record<string, { accent: string; accentRgb: string; wa
 
 export const dynamic = "force-dynamic";
 
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const data = getCollection(slug);
+  if (!data) return {};
+  const title = `${data.collection.name} rarity rankings · MCV Rarity Hub`;
+  const description = `Trait-weighted rarity scores, listings, and trait explorer for all ${data.collection.actualTokenCount.toLocaleString()} ${data.collection.name} tokens.`;
+  return { title, description, openGraph: { title, description } };
+}
+
 export function generateStaticParams() {
   return getCollectionSlugs().map((slug) => ({ slug }));
 }
@@ -564,7 +573,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                     <span className="scorePill" title={`Rarity score ${token.rarityScore.toFixed(2)}`}>{token.rarityScore.toFixed(2)}</span>
                   </td>
                   <td>
-                    <span className="traitCountPill" title={`${token.traitCount} scoring traits`}>{token.traitCount} traits</span>
+                    <span className="traitCountPill" title={`${token.traitCount} scoring trait${token.traitCount === 1 ? "" : "s"}`}>{token.traitCount} trait{token.traitCount === 1 ? "" : "s"}</span>
                   </td>
                   <td>
                     <span className="listingPill">
@@ -583,7 +592,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                   </td>
                   <td className="keyTraitsCell">
                     {token.attributes.filter((item) => !/trait count/i.test(item.traitType)).slice(0, 3).map((item) => (
-                      <span className="keyTraitChip" key={`${item.traitType}-${item.value}`}>{item.value}</span>
+                      <span className="keyTraitChip" key={`${item.traitType}-${item.value}`}>{item.value.replace(/_/g, " ")}</span>
                     ))}
                   </td>
                 </tr>

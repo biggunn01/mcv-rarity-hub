@@ -30,6 +30,25 @@ const collectionThemeMap: Record<string, { accent: string; accentRgb: string; wa
 
 export const dynamic = "force-dynamic";
 
+function humanizeTraitValue(value: string) {
+  return value.replace(/_/g, " ");
+}
+
+export async function generateMetadata({ params }: Props) {
+  const { collection, tokenId } = await params;
+  const data = getCollection(collection);
+  const token = getToken(collection, tokenId);
+  if (!data || !token) return {};
+  const title = `${token.name} — Rank #${token.rank.toLocaleString()} of ${data.collection.actualTokenCount.toLocaleString()} · ${data.collection.name}`;
+  const description = `Rarity score ${token.rarityScore.toFixed(2)} across ${token.traitCount} scoring traits. Trait-weighted ranking on the MCV Rarity Hub.`;
+  return {
+    title,
+    description,
+    openGraph: { title, description, images: [{ url: token.image }] },
+    twitter: { card: "summary_large_image", title, description, images: [token.image] },
+  };
+}
+
 export default async function TokenPage({ params }: Props) {
   const { collection, tokenId } = await params;
   const data = getCollection(collection);
@@ -64,6 +83,16 @@ export default async function TokenPage({ params }: Props) {
     .filter((trait) => trait.includedInScore !== false)
     .toSorted((a, b) => a.percentage - b.percentage)
     .slice(0, 3);
+  const tokenIndex = data.tokens.findIndex((item) => item.canonicalTokenId === token.canonicalTokenId);
+  const prevToken = tokenIndex > 0 ? data.tokens[tokenIndex - 1] : null;
+  const nextToken = tokenIndex >= 0 && tokenIndex < data.tokens.length - 1 ? data.tokens[tokenIndex + 1] : null;
+  const nearbyTokens =
+    tokenIndex >= 0
+      ? data.tokens
+          .slice(Math.max(0, tokenIndex - 3), tokenIndex + 4)
+          .filter((item) => item.canonicalTokenId !== token.canonicalTokenId)
+          .slice(0, 6)
+      : [];
 
   return (
     <main
@@ -102,6 +131,18 @@ export default async function TokenPage({ params }: Props) {
             <div className="marketRankHero">
               <strong>Rank #{token.rank.toLocaleString()}</strong>
               {percentileLabel && <span className="percentileChip">{percentileLabel}</span>}
+              <nav className="rankStepper" aria-label="Adjacent ranks">
+                {prevToken && (
+                  <Link href={`/tokens/${data.collection.slug}/${prevToken.canonicalTokenId}`} className="rankStepLink" title={prevToken.name}>
+                    ← #{prevToken.rank.toLocaleString()}
+                  </Link>
+                )}
+                {nextToken && (
+                  <Link href={`/tokens/${data.collection.slug}/${nextToken.canonicalTokenId}`} className="rankStepLink" title={nextToken.name}>
+                    #{nextToken.rank.toLocaleString()} →
+                  </Link>
+                )}
+              </nav>
             </div>
           </div>
           <div className="tokenFacts marketTokenFacts">
@@ -148,7 +189,7 @@ export default async function TokenPage({ params }: Props) {
                 {rarestTraits.map((trait) => (
                   <li key={`${trait.traitType}-${trait.value}`}>
                     <div>
-                      <strong>{trait.value}</strong>
+                      <strong>{humanizeTraitValue(trait.value)}</strong>
                       <small>{trait.traitType}</small>
                     </div>
                     <span>{trait.percentage.toFixed(2)}%</span>
@@ -163,7 +204,13 @@ export default async function TokenPage({ params }: Props) {
       <section className="section marketTraitSection">
         <div className="marketTraitHeader">
           <h2>Traits</h2>
-          <span>{token.attributes.filter((trait) => trait.includedInScore !== false && !/trait count/i.test(trait.traitType)).length} traits</span>
+          <span>
+            {(() => {
+              const realTraitCount = token.attributes.filter((trait) => trait.includedInScore !== false && !/trait count/i.test(trait.traitType)).length;
+              return `${realTraitCount} trait${realTraitCount === 1 ? "" : "s"}`;
+            })()}
+            {" · weight = share of the rarity score"}
+          </span>
         </div>
         <div className="tokenTraitCards">
           {token.attributes.map((trait, cardIndex) => (
@@ -173,7 +220,7 @@ export default async function TokenPage({ params }: Props) {
               key={`${trait.traitType}-${trait.value}`}
             >
               <span>{trait.traitType}</span>
-              <strong>{trait.value}</strong>
+              <strong>{humanizeTraitValue(trait.value)}</strong>
               <div>
                 <span>{trait.count} total</span>
                 <span>Rarity {trait.percentage.toFixed(2)}%</span>
@@ -184,6 +231,29 @@ export default async function TokenPage({ params }: Props) {
           ))}
         </div>
       </section>
+
+      {nearbyTokens.length > 0 && (
+        <section className="section nearbyRanks" aria-label="Nearby ranks">
+          <div className="marketTraitHeader">
+            <h2>Nearby ranks</h2>
+            <span>the rarity neighborhood</span>
+          </div>
+          <div className="nearbyRanksRow">
+            {nearbyTokens.map((item) => (
+              <Link
+                key={item.canonicalTokenId}
+                href={`/tokens/${data.collection.slug}/${item.canonicalTokenId}`}
+                className="nearbyRankCard"
+                style={{ "--nb-image": `url(${item.image})` } as CSSProperties}
+              >
+                <span className="nearbyRankArt" aria-hidden="true" />
+                <span className="nearbyRankRank">#{item.rank.toLocaleString()}</span>
+                <span className="nearbyRankName">{item.name}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   );
 }

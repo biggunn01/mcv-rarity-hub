@@ -849,6 +849,16 @@ export function OrbitLanding({ collections }: Props) {
     let lastTime = 0;
     const projected = new THREE.Vector3();
     const sunDirScratch = new THREE.Vector3();
+    const labelStates: {
+      config: PlanetConfig;
+      closeness: number;
+      isActive: boolean;
+      overlapFade: number;
+      x: number;
+      y: number;
+      stageWidth: number;
+      stageHeight: number;
+    }[] = [];
 
     function animate(now: number) {
       if (!start) start = now;
@@ -1001,20 +1011,17 @@ export function OrbitLanding({ collections }: Props) {
         (atmosphere.material.uniforms.uSunDir.value as THREE.Vector3).copy(sunDirScratch);
 
         projected.copy(group.position).project(camera);
-        const rect = stageElement.getBoundingClientRect();
-        const label = labelsRef.current[config.slug];
-        if (label) {
-          const labelX = THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * rect.width, 84, rect.width - 84);
-          const labelY = THREE.MathUtils.clamp((-projected.y * 0.5 + 0.5) * rect.height, 52, rect.height - 30);
-          label.style.setProperty("--label-x", `${labelX}px`);
-          label.style.setProperty("--label-y", `${labelY}px`);
-          label.style.setProperty("--label-depth", String(0.72 + closeness * 0.34));
-          label.style.setProperty(
-            "--label-opacity",
-            transition ? "0" : isActive ? "1" : ((0.52 + closeness * 0.2) * Math.max(0.5, overlapFade)).toFixed(3),
-          );
-          label.style.setProperty("--label-accent", config.accent);
-        }
+        const stageRect = stageElement.getBoundingClientRect();
+        labelStates.push({
+          config,
+          closeness,
+          isActive,
+          overlapFade,
+          x: THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * stageRect.width, 110, stageRect.width - 110),
+          y: THREE.MathUtils.clamp((-projected.y * 0.5 + 0.5) * stageRect.height, 52, stageRect.height - 30),
+          stageWidth: stageRect.width,
+          stageHeight: stageRect.height,
+        });
 
         if (!transition && isActive) {
           setActivePlanet({
@@ -1028,6 +1035,27 @@ export function OrbitLanding({ collections }: Props) {
           });
         }
       });
+
+      labelStates.sort((a, b) => Number(b.isActive) - Number(a.isActive) || b.closeness - a.closeness);
+      const placedLabels: { x: number; y: number }[] = [];
+      if (labelStates.length > 0) {
+        placedLabels.push({ x: labelStates[0].stageWidth / 2, y: labelStates[0].stageHeight / 2 - 124 });
+      }
+      labelStates.forEach((state) => {
+        const label = labelsRef.current[state.config.slug];
+        if (!label) return;
+        let opacity = state.isActive ? 1 : (0.52 + state.closeness * 0.2) * Math.max(0.5, state.overlapFade);
+        const collides = placedLabels.some((other) => Math.abs(state.x - other.x) < 170 && Math.abs(state.y - other.y) < 44);
+        if (collides && !state.isActive) opacity = 0;
+        if (state.y > state.stageHeight - 130 && !state.isActive) opacity *= 0.2;
+        if (opacity > 0.05) placedLabels.push({ x: state.x, y: state.y });
+        label.style.setProperty("--label-x", `${state.x}px`);
+        label.style.setProperty("--label-y", `${state.y}px`);
+        label.style.setProperty("--label-depth", String(0.72 + state.closeness * 0.34));
+        label.style.setProperty("--label-opacity", transition ? "0" : opacity.toFixed(3));
+        label.style.setProperty("--label-accent", state.config.accent);
+      });
+      labelStates.length = 0;
 
       renderer.render(scene, camera);
       frame = window.requestAnimationFrame(animate);

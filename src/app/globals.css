@@ -6601,3 +6601,117 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
     order: 1;
   }
 }
+
+/* ----- Judge iteration 4 additions ----- */
+
+/* Rank stepper: the browsing loop never dead-ends */
+.rankStepper {
+  display: inline-flex;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.rankStepLink {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(var(--collection-accent-rgb, 255, 154, 50), 0.3);
+  border-radius: 999px;
+  padding: 6px 13px;
+  background: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.07);
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-data), monospace;
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: transform var(--speed-hover) ease, background 420ms ease, border-color 420ms ease, color 420ms ease;
+}
+
+.rankStepLink:hover {
+  border-color: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.62);
+  background: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.16);
+  color: #ffffff;
+}
+
+/* Nearby ranks strip */
+.nearbyRanksRow {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(10px, 1.4vw, 18px);
+}
+
+.nearbyRankCard {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  transition: transform var(--speed-hover) ease, border-color 420ms ease, background 420ms ease;
+}
+
+.nearbyRankCard:hover {
+  transform: translateY(-3px);
+  border-color: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.42);
+  background: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.06);
+}
+
+.nearbyRankArt {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04) var(--nb-image) center / cover no-repeat;
+}
+
+.nearbyRankRank {
+  color: var(--collection-accent, #ffb15d);
+  font-family: var(--font-data), monospace;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.nearbyRankName {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .nearbyRanksRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Key traits: single quiet line, never uneven rows */
+.marketRankTable td.keyTraitsCell {
+  max-width: 320px;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, #000 84%, transparent 99%);
+  mask-image: linear-gradient(90deg, #000 84%, transparent 99%);
+}
+
+/* Header nav: scroll affordance on small screens */
+@media (max-width: 700px) {
+  .siteHeaderNav {
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent 100%);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent 100%);
+  }
+
+  .tableMeta span:last-child {
+    display: none;
+  }
+
+  .scoreMethodNote {
+    display: none;
+  }
+}
+
+/* Landing labels stay single-line pills */
+.solarPlanetLabel,
+.solarSunLabel {
+  white-space: nowrap;
+}
