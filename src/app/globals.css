@@ -6166,3 +6166,178 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
 .solarSunTrajectory {
   display: none;
 }
+
+/* ----- Judge iteration 1 fixes ----- */
+
+/* Global slim header (collection + token pages) */
+.siteHeader {
+  position: sticky;
+  top: 12px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: clamp(14px, 2vw, 24px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  padding: 8px 10px 8px 20px;
+  background:
+    linear-gradient(90deg, rgba(6, 8, 15, 0.72), rgba(12, 16, 27, 0.82), rgba(6, 8, 15, 0.72));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+}
+
+.siteHeaderBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #f0ebe2;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 420ms ease;
+}
+
+.siteHeaderBrand:hover {
+  color: #ffffff;
+}
+
+.siteHeaderMark {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff9a32;
+  box-shadow: 0 0 12px rgba(255, 154, 50, 0.85);
+}
+
+.siteHeaderNav {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.siteHeaderNav::-webkit-scrollbar {
+  display: none;
+}
+
+.siteHeaderNav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 999px;
+  padding: 7px 11px;
+  color: rgba(255, 255, 255, 0.62);
+  font-family: var(--font-data), monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 420ms ease, background var(--speed-hover) ease;
+}
+
+.siteHeaderNav a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.siteHeaderNav a.isActive {
+  color: var(--hd-accent, #8adce8);
+  background: color-mix(in srgb, var(--hd-accent, #8adce8) 12%, transparent);
+}
+
+.siteHeaderDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hd-accent, #8adce8);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--hd-accent, #8adce8) 70%, transparent);
+}
+
+/* Ghost hero title: intentional fade-out instead of hard clip */
+.heroGhostTitle {
+  max-width: calc(100% + 8px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, #000 72%, transparent 98%);
+  mask-image: linear-gradient(90deg, #000 72%, transparent 98%);
+}
+
+/* Rarity table: tighter data density */
+.marketRankTable td {
+  height: 96px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.marketRankTable .tokenThumb {
+  width: 72px;
+}
+
+/* Token page: action links join the accent system */
+.tokenSidePanel .links a {
+  border: 1px solid color-mix(in srgb, var(--collection-accent, #ffb15d) 32%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--collection-accent, #ffb15d) 9%, transparent);
+  color: color-mix(in srgb, var(--collection-accent, #ffb15d) 78%, #ffffff);
+  transition: transform var(--speed-hover) ease, background 420ms ease, border-color 420ms ease, color 420ms ease;
+}
+
+.tokenSidePanel .links a:hover {
+  border-color: color-mix(in srgb, var(--collection-accent, #ffb15d) 62%, transparent);
+  background: color-mix(in srgb, var(--collection-accent, #ffb15d) 16%, transparent);
+  color: #ffffff;
+}
+
+/* HUD micro-labels: legible contrast */
+.hudTag {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+/* Hall of Rarest: balanced bento — showcase card stays wide, not massive */
+.hallCard:first-child {
+  grid-row: span 1;
+}
+
+/* Mobile: compress the orbital stage, no dead space */
+@media (max-width: 640px) {
+  .solarSystemStage {
+    height: min(430px, 56svh);
+    margin-top: -8px;
+  }
+
+  .orbitHero.threeOrbitHero {
+    min-height: 0;
+  }
+}
+
+/* Mobile: tokens first, filters after the table */
+@media (max-width: 700px) {
+  .marketFilterRail {
+    order: 2;
+  }
+
+  .marketTableWrap {
+    order: 1;
+  }
+
+  .siteHeader {
+    top: 8px;
+    padding-left: 14px;
+  }
+
+  .siteHeaderBrand {
+    font-size: 0.7rem;
+  }
+}
+
+/* Mobile: dock chips carry identity; floating pills would collide */
+@media (max-width: 640px) {
+  .solarPlanetLabel,
+  .solarSunLabel {
+    display: none;
+  }
+}

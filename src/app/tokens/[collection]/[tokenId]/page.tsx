@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
+import { SiteHeader } from "@/components/SiteHeader";
 import { getCollection, getToken } from "@/lib/rarity-data";
 
 type Props = {
@@ -73,6 +74,7 @@ export default async function TokenPage({ params }: Props) {
         "--collection-warm": collectionTheme.warm,
       } as CSSProperties}
     >
+      <SiteHeader activeSlug={collection} />
       <section className="tokenPageTop marketTokenTop">
         <Link href={`/collections/${collection}`} className="backLink">Back to {data.collection.name}</Link>
         {token.isMock && <div className="notice">Mock token</div>}

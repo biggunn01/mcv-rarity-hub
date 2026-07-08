@@ -249,8 +249,8 @@ const PLANET_FRAGMENT_GLSL = /* glsl */ `
     col *= 0.26 + 0.92 * light;
 
     float fresnel = pow(1.0 - max(dot(V, N), 0.0), 2.6);
-    col += uMid * fresnel * (0.55 + uHover * 0.9);
-    col += uHigh * pow(max(diffuse, 0.0), 3.0) * 0.14;
+    col += uMid * fresnel * (0.42 + uHover * 0.9);
+    col += uHigh * pow(max(diffuse, 0.0), 3.0) * 0.1;
 
     gl_FragColor = vec4(col, 1.0);
   }
@@ -321,7 +321,7 @@ const SUN_FRAGMENT_GLSL = /* glsl */ `
     vec3 flow = vec3(t, -t * 0.7, t * 0.4);
     float churn = fbm(p + flow + 1.4 * vec3(fbm(p * 1.6 + vec3(0.0, t * 1.3, 0.0))));
     float granulation = fbm(p * 6.5 - vec3(0.0, 0.0, t * 2.0));
-    float heat = clamp(churn * 0.78 + granulation * 0.35, 0.0, 1.0);
+    float heat = clamp(churn * 0.92 + granulation * 0.5 - 0.16, 0.0, 1.0);
 
     vec3 col = mix(uEmber, uFlame, smoothstep(0.05, 0.52, heat));
     col = mix(col, uGold, smoothstep(0.52, 0.78, heat));
@@ -1004,14 +1004,14 @@ export function OrbitLanding({ collections }: Props) {
         const rect = stageElement.getBoundingClientRect();
         const label = labelsRef.current[config.slug];
         if (label) {
-          const labelX = (projected.x * 0.5 + 0.5) * rect.width;
-          const labelY = (-projected.y * 0.5 + 0.5) * rect.height;
+          const labelX = THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * rect.width, 84, rect.width - 84);
+          const labelY = THREE.MathUtils.clamp((-projected.y * 0.5 + 0.5) * rect.height, 52, rect.height - 30);
           label.style.setProperty("--label-x", `${labelX}px`);
           label.style.setProperty("--label-y", `${labelY}px`);
           label.style.setProperty("--label-depth", String(0.72 + closeness * 0.34));
           label.style.setProperty(
             "--label-opacity",
-            transition ? "0" : isActive ? "1" : ((0.42 + closeness * 0.26) * overlapFade).toFixed(3),
+            transition ? "0" : isActive ? "1" : ((0.52 + closeness * 0.2) * Math.max(0.5, overlapFade)).toFixed(3),
           );
           label.style.setProperty("--label-accent", config.accent);
         }

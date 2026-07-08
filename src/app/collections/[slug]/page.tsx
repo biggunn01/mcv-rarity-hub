@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 import { ClientSortLink, CollectionFilterForm, FilterBubbleLink } from "@/components/CollectionFilterControls";
+import { SiteHeader } from "@/components/SiteHeader";
 import { getCollection, getCollectionSlugs } from "@/lib/rarity-data";
 
 type Props = {
@@ -319,6 +320,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
         "--collection-warm": collectionTheme.warm,
       } as CSSProperties}
     >
+      <SiteHeader activeSlug={slug} />
       <section className="marketCollectionHeader">
         <span className="collectionHeroBackdrop" aria-hidden="true" />
         <span className="heroGhostTitle" aria-hidden="true">{data.collection.name}</span>
@@ -413,14 +415,16 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                   </div>
                 </>
               )}
-              <div className="chainSegment" aria-label="Chain filter">
-                <Link className={!selectedChain ? "isActive" : ""} href={filterHref({ chain: "" })}>All Chains</Link>
-                {chainOptions.map((chain) => (
-                  <Link className={selectedChain === chain ? "isActive" : ""} href={filterHref({ chain })} key={chain}>
-                    {chainLabel(chain)}
-                  </Link>
-                ))}
-              </div>
+              {chainOptions.length > 1 && (
+                <div className="chainSegment" aria-label="Chain filter">
+                  <Link className={!selectedChain ? "isActive" : ""} href={filterHref({ chain: "" })}>All Chains</Link>
+                  {chainOptions.map((chain) => (
+                    <Link className={selectedChain === chain ? "isActive" : ""} href={filterHref({ chain })} key={chain}>
+                      {chainLabel(chain)}
+                    </Link>
+                  ))}
+                </div>
+              )}
               <Link href={`/collections/${slug}`}>Clear all</Link>
             </div>
             <details className="rangeFilterGroup" open>
@@ -435,7 +439,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
             {!isOrdinalCollection && (
               <details className="rangeFilterGroup" open>
                 <summary>Price</summary>
-                <div className="rangeCurrency">ETH</div>
+                <div className="rangeCurrency">{chainLabel(selectedChain || (chainOptions.length === 1 ? chainOptions[0] : "eth"))}</div>
                 <div className="rangeInputs">
                   <input inputMode="decimal" name="priceMin" placeholder="Min" defaultValue={filters.priceMin ?? ""} />
                   <span>to</span>
