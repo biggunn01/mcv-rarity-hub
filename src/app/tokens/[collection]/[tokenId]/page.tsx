@@ -241,7 +241,7 @@ export default async function TokenPage({ params }: Props) {
                   <span />
                 </span>
               )}
-              <small>{trait.includedInScore === false ? "Display only" : `${sharePercent.toFixed(1)}% of this token's raw score`}</small>
+              <small>{trait.includedInScore === false ? "Display only" : `${sharePercent < 0.1 ? "<0.1" : sharePercent.toFixed(1)}% of this token's raw score`}</small>
             </article>
           );
           })}

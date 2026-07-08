@@ -1059,7 +1059,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
           isActive,
           overlapFade,
           x: THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * stageRect.width, 110, stageRect.width - 110),
-          y: THREE.MathUtils.clamp(Math.min(topY, centerY), 52, stageRect.height - 30),
+          y: THREE.MathUtils.clamp(Math.min(topY, centerY), 96, stageRect.height - 30),
           planetX: (projected.x * 0.5 + 0.5) * stageRect.width,
           planetY: centerY,
           planetRadius: Math.abs(centerY - topY),

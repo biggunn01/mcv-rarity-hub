@@ -424,7 +424,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
           <CollectionFilterForm key={filterStateKey}>
             <label className="marketControlGroup">
               <span>Search</span>
-              <input name="q" placeholder="Token ID..." defaultValue={filters.q ?? ""} />
+              <input name="q" placeholder="Token ID — press Enter" defaultValue={filters.q ?? ""} />
             </label>
             {sort !== "rank-asc" && <input type="hidden" name="sort" value={sort} />}
             <div className="filterActions topFilterActions">
