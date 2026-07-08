@@ -848,6 +848,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
     let frame = 0;
     let start = 0;
     let lastTime = 0;
+    let sceneSlow = 0;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const projected = new THREE.Vector3();
     const topProjected = new THREE.Vector3();
@@ -935,11 +936,14 @@ export function OrbitLanding({ collections, chainCount }: Props) {
         }
       }
 
+      sceneSlow += ((activeSlug ? 1 : 0) - sceneSlow) * Math.min(1, delta * 6);
+      const orbitScale = 1 - sceneSlow * 0.85;
+
       const positions = runtimePlanets.map((planet, index) => {
         const { config } = planet;
         const isActive = activeSlug === config.slug;
         const speed = isActive ? config.orbitSpeed * 0.08 : config.orbitSpeed;
-        planet.angle += motionDelta * speed;
+        planet.angle += motionDelta * speed * orbitScale;
         const point = orbitPoint(config, index, planet.angle);
         return { x: point.x, y: point.y, z: point.z, isActive };
       });
@@ -1054,21 +1058,28 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       });
 
       labelStates.sort((a, b) => Number(b.isActive) - Number(a.isActive) || b.closeness - a.closeness);
-      const placedLabels: { x: number; y: number }[] = [];
+      const placedLabels: { x: number; y: number; halfWidth: number }[] = [];
       if (labelStates.length > 0) {
-        placedLabels.push({ x: labelStates[0].stageWidth / 2, y: labelStates[0].stageHeight / 2 - 124 });
+        const stageW = labelStates[0].stageWidth;
+        const stageH = labelStates[0].stageHeight;
+        placedLabels.push({ x: stageW / 2, y: stageH / 2 - 124, halfWidth: 110 });
+        placedLabels.push({ x: stageW / 2, y: stageH / 2, halfWidth: 120 });
       }
       labelStates.forEach((state) => {
         const label = labelsRef.current[state.config.slug];
         if (!label) return;
+        const depthScale = 0.72 + state.closeness * 0.34;
+        const halfWidth = (state.config.name.length * 7.4 * depthScale + 44) / 2;
         let opacity = state.isActive ? 1 : (0.52 + state.closeness * 0.2) * Math.max(0.5, state.overlapFade);
-        const collides = placedLabels.some((other) => Math.abs(state.x - other.x) < 195 && Math.abs(state.y - other.y) < 56);
+        const collides = placedLabels.some(
+          (other) => Math.abs(state.x - other.x) < halfWidth + other.halfWidth + 12 && Math.abs(state.y - other.y) < 52,
+        );
         if (collides && !state.isActive) opacity = 0;
         if (state.y > state.stageHeight - 130 && !state.isActive) opacity *= 0.2;
-        if (opacity > 0.05) placedLabels.push({ x: state.x, y: state.y });
+        if (opacity > 0.05) placedLabels.push({ x: state.x, y: state.y, halfWidth });
         label.style.setProperty("--label-x", `${state.x}px`);
         label.style.setProperty("--label-y", `${state.y}px`);
-        label.style.setProperty("--label-depth", String(0.72 + state.closeness * 0.34));
+        label.style.setProperty("--label-depth", String(depthScale));
         label.style.setProperty("--label-opacity", transition ? "0" : opacity.toFixed(3));
         label.style.setProperty("--label-accent", state.config.accent);
       });

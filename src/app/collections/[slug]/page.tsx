@@ -52,6 +52,16 @@ const collectionThemeMap: Record<string, { accent: string; accentRgb: string; wa
 
 export const dynamic = "force-dynamic";
 
+const backdropMap: Record<string, string> = {
+  "mars-cats-voyage": "/backdrops/mars-horizon.webp",
+  "mars-alien-cats": "/backdrops/alien-crystals.webp",
+  "mars-cats-in-spacesuits": "/backdrops/ice-plains.webp",
+  "mars-cats-snipers": "/backdrops/jungle-ridge.webp",
+  metazoku: "/backdrops/obsidian-fields.webp",
+  "battle-pawss": "/backdrops/ocean-world.webp",
+  "cream-cats": "/backdrops/dune-sea.webp",
+};
+
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const data = getCollection(slug);
@@ -266,6 +276,8 @@ export default async function CollectionPage({ params, searchParams }: Props) {
   const collectionLogo = collectionLogoMap[data.collection.slug];
   const collectionTheme = collectionThemeMap[data.collection.slug] ?? { accent: "#8adce8", accentRgb: "138, 220, 232", warm: "#ff8b63" };
   const chainOptions = [...new Set(data.tokens.map((token) => token.chain))].sort((a, b) => a.localeCompare(b));
+  const scoreTieCounts = new Map<number, number>();
+  data.tokens.forEach((token) => scoreTieCounts.set(token.rarityScore, (scoreTieCounts.get(token.rarityScore) ?? 0) + 1));
   const listedTokens = data.tokens.filter((token) => token.listing);
   const floorListing = listedTokens.reduce<(typeof listedTokens)[number] | null>((floor, token) => {
     if (!token.listing) return floor;
@@ -328,6 +340,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
         "--collection-accent": collectionTheme.accent,
         "--collection-accent-rgb": collectionTheme.accentRgb,
         "--collection-warm": collectionTheme.warm,
+        "--collection-backdrop": `url(${backdropMap[slug] ?? "/backdrops/mars-horizon.webp"})`,
       } as CSSProperties}
     >
       <SiteHeader activeSlug={slug} />
@@ -348,7 +361,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
         <div className="marketHeaderActions">
           <div className="rankedBadge">
             <span aria-hidden="true" />
-            {formatRankedCount(data.collection.actualTokenCount)} tokens ranked
+            {data.collection.actualTokenCount.toLocaleString()} tokens ranked
           </div>
           <Link href="/" className="marketBackLink">Back</Link>
         </div>
@@ -581,6 +594,9 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                   </td>
                   <td className="scoreCell">
                     <span className="scorePill" title={`Rarity score ${token.rarityScore.toFixed(2)}`}>{token.rarityScore.toFixed(2)}</span>
+                    {(scoreTieCounts.get(token.rarityScore) ?? 0) > 1 && (
+                      <span className="tieFlag" title={`${scoreTieCounts.get(token.rarityScore)} tokens tie at this score — ordered by token ID`}>tied</span>
+                    )}
                   </td>
                   <td>
                     <span className="traitCountPill" title={`${token.traitCount} scoring trait${token.traitCount === 1 ? "" : "s"}`}>{token.traitCount} trait{token.traitCount === 1 ? "" : "s"}</span>
@@ -603,7 +619,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                   <td className="keyTraitsCell">
                     <span className="keyTraitChipRow">
                       {token.attributes.filter((item) => !/trait count/i.test(item.traitType)).slice(0, 3).map((item) => (
-                        <span className="keyTraitChip" key={`${item.traitType}-${item.value}`}>{item.value.replace(/_/g, " ")}</span>
+                        <span className="keyTraitChip" key={`${item.traitType}-${item.value}`}>{item.value.replace(/_/g, " ").replace(/С/g, "C").replace(/с/g, "c")}</span>
                       ))}
                     </span>
                   </td>

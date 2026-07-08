@@ -8,7 +8,7 @@ export default function NotFound() {
       <section className="notFoundBody">
         <p className="eyebrow">Telemetry lost · signal 404</p>
         <h1 className="notFoundTitle">
-          This world isn&apos;t
+          <span style={{ whiteSpace: "nowrap" }}>This world isn&apos;t</span>
           <br />
           on our charts.
         </h1>

@@ -31,7 +31,11 @@ const collectionThemeMap: Record<string, { accent: string; accentRgb: string; wa
 export const dynamic = "force-dynamic";
 
 function humanizeTraitValue(value: string) {
-  return value.replace(/_/g, " ");
+  return value
+    .replace(/_/g, " ")
+    .replace(/С/g, "C")
+    .replace(/с/g, "c")
+    .replace(/^1 traits$/, "1 trait");
 }
 
 export async function generateMetadata({ params }: Props) {
@@ -80,7 +84,7 @@ export default async function TokenPage({ params }: Props) {
   const percentileLabel = formatPercentile(token.rank, rankedTotal);
   const meterFill = rankedTotal > 1 ? Math.max(2, (1 - (token.rank - 1) / (rankedTotal - 1)) * 100) : 100;
   const rarestTraits = token.attributes
-    .filter((trait) => trait.includedInScore !== false)
+    .filter((trait) => trait.includedInScore !== false && !/trait count/i.test(trait.traitType))
     .toSorted((a, b) => a.percentage - b.percentage)
     .slice(0, 3);
   const tokenIndex = data.tokens.findIndex((item) => item.canonicalTokenId === token.canonicalTokenId);
@@ -214,10 +218,15 @@ export default async function TokenPage({ params }: Props) {
           </span>
         </div>
         <div className="tokenTraitCards">
-          {token.attributes.map((trait, cardIndex) => (
+          {token.attributes.map((trait, cardIndex) => {
+            const sharePercent =
+              trait.includedInScore === false || token.rawTraitScore <= 0
+                ? 0
+                : Math.min(100, (trait.rarityWeight / token.rawTraitScore) * 100);
+            return (
             <article
               className={`tokenTraitCard ${getTraitRarityClass(trait.percentage)}`}
-              style={{ "--card-i": cardIndex } as CSSProperties}
+              style={{ "--card-i": cardIndex, "--share": `${sharePercent.toFixed(1)}%` } as CSSProperties}
               key={`${trait.traitType}-${trait.value}`}
             >
               <span>{trait.traitType}</span>
@@ -227,9 +236,15 @@ export default async function TokenPage({ params }: Props) {
                 <span>Rarity {trait.percentage.toFixed(2)}%</span>
                 <span>{trait.rarityWeight >= 9999 ? "1 of 1 — max weight" : `Weight ${trait.rarityWeight.toFixed(2)}`}</span>
               </div>
-              <small>{trait.includedInScore === false ? "Display only" : "Included in score"}</small>
+              {trait.includedInScore !== false && (
+                <span className="traitShareBar" aria-hidden="true">
+                  <span />
+                </span>
+              )}
+              <small>{trait.includedInScore === false ? "Display only" : `${sharePercent.toFixed(1)}% of this token's raw score`}</small>
             </article>
-          ))}
+          );
+          })}
         </div>
       </section>
 
