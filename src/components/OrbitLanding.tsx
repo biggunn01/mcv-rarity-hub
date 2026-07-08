@@ -120,6 +120,7 @@ type LandingTransition = {
   atmosphere?: THREE.Mesh<THREE.SphereGeometry, THREE.ShaderMaterial>;
   route: string;
   startTime: number;
+  startedAtMs: number;
   fromPosition: THREE.Vector3;
   fromScale: number;
   targetScale: number;
@@ -247,12 +248,13 @@ const PLANET_FRAGMENT_GLSL = /* glsl */ `
     vec3 N = normalize(vNormalW);
     vec3 V = normalize(vViewW);
     float diffuse = dot(N, normalize(uSunDir));
-    float light = smoothstep(-0.5, 0.45, diffuse);
-    col *= 0.26 + 0.92 * light;
+    float light = smoothstep(-0.42, 0.5, diffuse);
+    col *= 0.15 + 1.18 * light;
 
     float fresnel = pow(1.0 - max(dot(V, N), 0.0), 2.6);
-    col += uMid * fresnel * (0.42 + uHover * 0.9);
-    col += uHigh * pow(max(diffuse, 0.0), 3.0) * 0.1;
+    float sunSideRim = 0.45 + 0.55 * smoothstep(-0.2, 0.7, diffuse);
+    col += uMid * fresnel * (0.3 + uHover * 0.9) * sunSideRim;
+    col += uHigh * pow(max(diffuse, 0.0), 3.0) * 0.16;
 
     gl_FragColor = vec4(col, 1.0);
   }
@@ -350,6 +352,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
   const labelsRef = useRef<Record<string, HTMLButtonElement | null>>({});
   const activeRef = useRef<string | null>(null);
   const launchTransitionRef = useRef<(slug: string) => void>(() => {});
+  const setActiveExternalRef = useRef<(slug: string | null) => void>(() => {});
   const transitionTimersRef = useRef<number[]>([]);
   const [activePlanet, setActivePlanet] = useState<ActivePlanet | null>(null);
   const [transitionOverlay, setTransitionOverlay] = useState<TransitionOverlay | null>(null);
@@ -539,16 +542,32 @@ export function OrbitLanding({ collections, chainCount }: Props) {
         map: sunGlowTexture,
         color: 0xffa844,
         transparent: true,
-        opacity: 0.58,
+        opacity: 0.72,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
         depthTest: false,
       }),
     );
-    sunGlow.scale.set(3.75, 3.75, 1);
+    sunGlow.scale.set(5.4, 5.4, 1);
     sunGlow.position.set(0, 0, -0.08);
     sunGlow.renderOrder = -4;
     scene.add(sunGlow);
+
+    const sunCorona = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: sunGlowTexture,
+        color: 0xffe0a0,
+        transparent: true,
+        opacity: 0.55,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        depthTest: false,
+      }),
+    );
+    sunCorona.scale.set(3.1, 3.1, 1);
+    sunCorona.position.set(0, 0, -0.06);
+    sunCorona.renderOrder = -3;
+    scene.add(sunCorona);
 
     const sunParticleTexture = makeSunParticleTexture();
     const sunParticles = Array.from({ length: 26 }, (_, index) => {
@@ -759,7 +778,8 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       } catch {
         hasSeenDropIn = false;
       }
-      const timeScale = hasSeenDropIn ? 0.55 : 1;
+      const timeScale = hasSeenDropIn ? 0.35 : 1;
+      stageElement.parentElement?.setAttribute("data-transitioning", "true");
 
       landingTransition = {
         config,
@@ -769,6 +789,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
         atmosphere,
         route: config.route,
         startTime: 0,
+        startedAtMs: performance.now(),
         fromPosition: group.position.clone(),
         fromScale,
         targetScale: fromScale * (isCenter ? 2 : 4),
@@ -795,6 +816,9 @@ export function OrbitLanding({ collections, chainCount }: Props) {
 
     launchTransitionRef.current = startLandingTransition;
 
+    const baseCamera = { y: 8.1, z: 9.9 };
+    const pointerParallax = { targetX: 0, targetY: 0, x: 0, y: 0 };
+
     function resize() {
       const rect = stageElement.getBoundingClientRect();
       const width = Math.max(320, Math.floor(rect.width));
@@ -802,7 +826,9 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.fov = camera.aspect < 0.72 ? 45 : 37;
-      camera.position.set(0, camera.aspect < 0.72 ? 9.8 : 8.1, camera.aspect < 0.72 ? 13.8 : 9.9);
+      baseCamera.y = camera.aspect < 0.72 ? 9.8 : 8.1;
+      baseCamera.z = camera.aspect < 0.72 ? 13.8 : 9.9;
+      camera.position.set(0, baseCamera.y, baseCamera.z);
       camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
     }
@@ -818,6 +844,9 @@ export function OrbitLanding({ collections, chainCount }: Props) {
 
     function setActive(slug: string | null) {
       activeRef.current = slug;
+      stageElement.querySelectorAll<HTMLElement>("[data-planet-chip]").forEach((chip) => {
+        chip.classList.toggle("isOrbitActive", chip.dataset.planetChip === slug);
+      });
       if (!slug) {
         setActivePlanet(null);
         stageElement.removeAttribute("data-active-planet");
@@ -825,8 +854,20 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       }
       stageElement.setAttribute("data-active-planet", slug);
     }
+    setActiveExternalRef.current = setActive;
+
+    function skipTransitionIfRunning() {
+      if (!landingTransition || landingTransition.hasNavigated) return false;
+      if (performance.now() - landingTransition.startedAtMs < 350) return true;
+      landingTransition.hasNavigated = true;
+      window.location.assign(landingTransition.route);
+      return true;
+    }
 
     const onPointerMove = (event: PointerEvent) => {
+      const rect = stageElement.getBoundingClientRect();
+      pointerParallax.targetX = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      pointerParallax.targetY = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
       if (landingTransition) return;
       const slug = pick(event.clientX, event.clientY) ?? null;
       if (slug !== activeRef.current) setActive(slug);
@@ -834,41 +875,46 @@ export function OrbitLanding({ collections, chainCount }: Props) {
     };
 
     const onPointerLeave = () => {
+      pointerParallax.targetX = 0;
+      pointerParallax.targetY = 0;
       if (landingTransition) return;
       setActive(null);
       stageElement.style.cursor = "default";
     };
 
     const onPointerDown = (event: PointerEvent) => {
-      if (landingTransition) return;
+      if (skipTransitionIfRunning()) return;
       const slug = pick(event.clientX, event.clientY) ?? activeRef.current;
       if (slug) startLandingTransition(slug);
     };
 
     const onClick = (event: MouseEvent) => {
       const target = event.target as Element | null;
-      if (landingTransition) return;
+      if (skipTransitionIfRunning()) return;
       if (target?.closest(".solarSystemFallback, .solarSunLabel, .solarPlanetLabel")) return;
       const slug = pick(event.clientX, event.clientY) ?? activeRef.current;
       if (slug) startLandingTransition(slug);
     };
 
     const onPageShow = (event: PageTransitionEvent) => {
-      if (!event.persisted || !landingTransition) return;
+      if (!event.persisted) return;
+      setActive(null);
+      stageElement.style.cursor = "default";
+      if (!landingTransition) return;
       if (landingTransition.particles.length) removeExplosionParticles(landingTransition.particles);
       clearTransitionTimers();
       landingTransition = null;
       setTransitionOverlay(null);
       stageElement.removeAttribute("data-transitioning");
-      stageElement.style.cursor = "default";
+      stageElement.parentElement?.removeAttribute("data-transitioning");
       sunGlow.visible = true;
+      sunCorona.visible = true;
       sunGroup.visible = true;
       sunGroup.position.set(0, 0, 0);
       sunGroup.scale.setScalar(1);
       runtimePlanets.forEach((planet) => {
         planet.group.visible = true;
       });
-      setActive(null);
     };
 
     canvasElement.addEventListener("pointermove", onPointerMove);
@@ -889,6 +935,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
     const projected = new THREE.Vector3();
     const topProjected = new THREE.Vector3();
     const sunDirScratch = new THREE.Vector3();
+    const labelVisibility = new Map<string, boolean>();
     const labelStates: {
       config: PlanetConfig;
       closeness: number;
@@ -920,7 +967,8 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       sunGroup.rotation.x = BODY_FACE_TILT_X + Math.sin(motionTime * 0.14) * 0.018;
       sunGroup.rotation.z = BODY_FACE_TILT_Z;
       const glowPulse = 1 + Math.sin(motionTime * 1.4) * 0.035;
-      sunGlow.scale.set(3.75 * glowPulse, 3.75 * glowPulse, 1);
+      sunGlow.scale.set(5.4 * glowPulse, 5.4 * glowPulse, 1);
+      sunCorona.scale.set(3.1 * (2 - glowPulse), 3.1 * (2 - glowPulse), 1);
 
       sunParticles.forEach((particle) => {
         const progress = (motionTime * particle.speed + particle.phase) % 1;
@@ -957,6 +1005,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
           transition.particles = createExplosionParticles(transition.config, transition.group.position);
           transition.group.visible = false;
           sunGlow.visible = false;
+          sunCorona.visible = false;
         }
 
         if (transition.hasExploded) {
@@ -978,11 +1027,25 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       sceneSlow += ((activeSlug ? 1 : 0) - sceneSlow) * Math.min(1, delta * 6);
       const orbitScale = 1 - sceneSlow * 0.85;
 
+      if (!prefersReducedMotion) {
+        pointerParallax.x += (pointerParallax.targetX - pointerParallax.x) * Math.min(1, delta * 3);
+        pointerParallax.y += (pointerParallax.targetY - pointerParallax.y) * Math.min(1, delta * 3);
+        const idleX = Math.sin(time * 0.07) * 0.16;
+        const idleY = Math.cos(time * 0.05) * 0.09;
+        camera.position.set(
+          pointerParallax.x * 0.42 + idleX,
+          baseCamera.y + pointerParallax.y * -0.26 + idleY,
+          baseCamera.z,
+        );
+        camera.lookAt(0, 0, 0);
+      }
+
       const positions = runtimePlanets.map((planet, index) => {
         const { config } = planet;
         const isActive = activeSlug === config.slug;
         const speed = isActive ? config.orbitSpeed * 0.08 : config.orbitSpeed;
-        planet.angle += motionDelta * speed * orbitScale;
+        const keplerSway = 0.78 + 0.44 * Math.sin(planet.angle + index * 1.7);
+        planet.angle += motionDelta * speed * orbitScale * keplerSway;
         const point = orbitPoint(config, index, planet.angle);
         return { x: point.x, y: point.y, z: point.z, isActive };
       });
@@ -993,7 +1056,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
         const isTransitionPlanet = transition?.config.slug === config.slug;
         const isTransitioningOtherPlanet = Boolean(transition && !isTransitionPlanet);
         const closeness = THREE.MathUtils.clamp((z + config.orbitDepth) / (config.orbitDepth * 2), 0, 1);
-        const scale = (0.86 + closeness * 0.34) * (isActive ? 1.14 : 1);
+        const scale = (0.74 + closeness * 0.5) * (isActive ? 1.14 : 1);
         const nearestNeighbor = positions.reduce((nearest, other, otherIndex) => {
           if (otherIndex === index) return nearest;
           const distance = Math.hypot(other.x - x, other.y - y);
@@ -1110,9 +1173,9 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       labelStates.forEach((state) => {
         const label = labelsRef.current[state.config.slug];
         if (!label) return;
-        const depthScale = 0.72 + state.closeness * 0.34;
+        const wasVisible = labelVisibility.get(state.config.slug) ?? false;
+        const depthScale = state.closeness > 0.5 ? 1 : 0.9;
         const halfWidth = (state.config.name.length * 7.4 * depthScale + 44) / 2;
-        let opacity = state.isActive ? 1 : (0.52 + state.closeness * 0.2) * Math.max(0.5, state.overlapFade);
         const collides = placedLabels.some(
           (other) =>
             Math.abs(state.x - other.x) < halfWidth + other.halfWidth + 12 &&
@@ -1124,8 +1187,16 @@ export function OrbitLanding({ collections, chainCount }: Props) {
             Math.abs(state.x - other.planetX) < halfWidth + other.planetRadius + 8 &&
             Math.abs(state.y - other.planetY) < 24 + other.planetRadius + 8,
         );
-        if ((collides || hitsPlanet) && !state.isActive) opacity = 0;
-        if (state.y > state.stageHeight - 130 && !state.isActive) opacity = 0;
+        const inDockZone = state.y > state.stageHeight - 130;
+        const wantVisible =
+          state.isActive ||
+          (!collides &&
+            !hitsPlanet &&
+            !inDockZone &&
+            state.closeness > (wasVisible ? 0.1 : 0.2) &&
+            state.overlapFade > (wasVisible ? 0.35 : 0.5));
+        labelVisibility.set(state.config.slug, wantVisible);
+        const opacity = state.isActive ? 1 : wantVisible ? 0.85 : 0;
         if (opacity > 0.05) placedLabels.push({ x: state.x, y: state.y, halfWidth, halfHeight: 26 });
         label.style.setProperty("--label-x", `${state.x}px`);
         label.style.setProperty("--label-y", `${state.y}px`);
@@ -1201,12 +1272,21 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       <div className="orbitCopy threeOrbitCopy">
         <p className="eyebrow">Mars Cats Ventures Rarity Hub</p>
         <h1>
-          <span>Choose a collection.</span>{" "}
-          <span className="mobileTitleBreak">Drop into the rarity table.</span>
+          <span>Every Mars Cats token,</span>{" "}
+          <span className="mobileTitleBreak">ranked by rarity.</span>
         </h1>
         <p className="lede">
-          Real imported rarity data for the MCV ecosystem, ranked across traits, trait counts, listings, and collection-specific scoring rules.
+          Trait-weighted scores recomputed from raw on-chain metadata — check any token&apos;s rank, or drop into a world below.
         </p>
+        <form className="heroSearch" action="/search" role="search">
+          <input
+            name="q"
+            inputMode="numeric"
+            placeholder="Paste a token ID — e.g. 7865"
+            aria-label="Search a token ID across all collections"
+          />
+          <button type="submit">Check rarity</button>
+        </form>
         <p className="orbitStatLine">
           <span>{collections.length} collections</span>
           <span>{collections.reduce((sum, entry) => sum + entry.collection.actualTokenCount, 0).toLocaleString()} tokens ranked</span>
@@ -1282,7 +1362,10 @@ export function OrbitLanding({ collections, chainCount }: Props) {
           {center && (
             <button
               type="button"
+              data-planet-chip={center.collection.slug}
               onClick={() => navigate(`/collections/${center.collection.slug}`)}
+              onPointerEnter={() => setActiveExternalRef.current(center.collection.slug)}
+              onPointerLeave={() => setActiveExternalRef.current(null)}
               style={
                 {
                   "--planet-link-accent": planetThemeMap["mars-cats-voyage"].accent,
@@ -1300,7 +1383,10 @@ export function OrbitLanding({ collections, chainCount }: Props) {
             <button
               key={planet.slug}
               type="button"
+              data-planet-chip={planet.slug}
               onClick={() => navigate(planet.route)}
+              onPointerEnter={() => setActiveExternalRef.current(planet.slug)}
+              onPointerLeave={() => setActiveExternalRef.current(null)}
               style={
                 {
                   "--planet-link-accent": planet.accent,

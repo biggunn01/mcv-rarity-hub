@@ -6998,3 +6998,260 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
 .tableMeta {
   color: rgba(255, 255, 255, 0.6);
 }
+
+/* ==========================================================================
+   Panel-critique pass — three-judge landing fixes
+   Relit hero, cinematic participation, hero search, quantized labels,
+   1366px integrity, data-trust cleanup, Hall CTA.
+   ========================================================================== */
+
+/* 1366px integrity: corner kickers only where they have room */
+@media (max-width: 1520px) {
+  .hudTag {
+    display: none;
+  }
+}
+
+/* Headline: one voice, one tone, no orphans */
+.threeOrbitCopy h1 {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  color: #f2e9d8;
+  -webkit-text-fill-color: #f2e9d8;
+  text-wrap: balance;
+}
+
+/* Hero search: the promise, made actionable */
+.heroSearch {
+  display: flex;
+  gap: 8px;
+  width: min(470px, calc(100vw - 40px));
+  margin: 16px 0 6px;
+  pointer-events: auto;
+}
+
+.heroSearch input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: rgba(4, 6, 12, 0.66);
+  color: #f0ebe2;
+  font-family: var(--font-data), monospace;
+  font-size: 0.82rem;
+  backdrop-filter: blur(10px);
+  transition: border-color 420ms ease, background 420ms ease;
+}
+
+.heroSearch input::placeholder {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.heroSearch input:focus-visible {
+  border-color: rgba(255, 154, 50, 0.6);
+  outline: none;
+  background: rgba(4, 6, 12, 0.85);
+}
+
+.heroSearch button {
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 154, 50, 0.45);
+  border-radius: 999px;
+  padding: 12px 20px;
+  background: rgba(255, 154, 50, 0.14);
+  color: #ffc98d;
+  font-weight: 700;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: transform var(--speed-hover) ease, background 420ms ease, border-color 420ms ease, color 420ms ease;
+}
+
+.heroSearch button:hover {
+  border-color: rgba(255, 154, 50, 0.8);
+  background: rgba(255, 154, 50, 0.24);
+  color: #ffffff;
+}
+
+/* The page participates in its own cinematic */
+.threeOrbitCopy,
+.scrollCue,
+.solarSystemFallback {
+  transition: opacity 320ms ease, transform 420ms ease;
+}
+
+.orbitHero[data-transitioning="true"] .threeOrbitCopy {
+  opacity: 0;
+  transform: translateY(-16px);
+  pointer-events: none;
+}
+
+.orbitHero[data-transitioning="true"] .scrollCue,
+.orbitHero[data-transitioning="true"] .solarSystemFallback {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.landingShell:has(.orbitHero[data-transitioning="true"]) .siteHeader {
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+
+/* Dock chip lights up when its planet is hovered (and vice versa) */
+.solarSystemFallback button.isOrbitActive {
+  border-color: var(--planet-link-accent);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
+    rgba(2, 4, 10, 0.6);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--planet-link-accent) 38%, transparent);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Labels: two clean states, no live scaling shimmer */
+.solarPlanetLabel {
+  transition: opacity 220ms ease, transform 260ms ease, border-color 420ms ease;
+}
+
+/* Scroll rail: never truncates mid-word */
+.scrollCue {
+  top: 38%;
+  bottom: auto;
+}
+
+/* Hall CTA tile: the closing beat */
+.hallCtaCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: clamp(18px, 2vw, 28px);
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 110%, rgba(255, 154, 50, 0.16), transparent 70%),
+    linear-gradient(180deg, rgba(12, 13, 20, 0.9), rgba(6, 7, 12, 0.94));
+}
+
+.hallCtaKicker {
+  color: rgba(255, 201, 141, 0.85);
+  font-family: var(--font-data), monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hallCtaTitle {
+  color: #f0ebe2;
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(1.1rem, 1.5vw, 1.45rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.hallCtaAction {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  border: 1px solid rgba(255, 154, 50, 0.45);
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: rgba(255, 154, 50, 0.12);
+  color: #ffc98d;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: transform var(--speed-hover) ease, background 420ms ease, border-color 420ms ease, color 420ms ease;
+}
+
+.hallCtaAction:hover {
+  border-color: rgba(255, 154, 50, 0.8);
+  background: rgba(255, 154, 50, 0.22);
+  color: #ffffff;
+}
+
+/* Footer: tighter band, wordmark reads intentional */
+.siteFooter {
+  padding-top: clamp(36px, 5vw, 64px);
+}
+
+.siteFooterWordmark {
+  margin-bottom: clamp(18px, 2.6vw, 32px);
+}
+
+/* Search page */
+.searchShell {
+  min-height: 100svh;
+  padding: 18px clamp(18px, 4vw, 48px);
+}
+
+.searchBody {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  max-width: 720px;
+  padding-top: clamp(60px, 12vh, 140px);
+}
+
+.searchTitle {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1.02;
+  color: #f2e9d8;
+}
+
+.searchPageForm {
+  width: min(520px, 100%);
+  margin-top: 6px;
+}
+
+.searchEmpty {
+  margin-top: 18px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.searchMeta {
+  margin-top: 18px;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--font-data), monospace;
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.searchResults {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.searchResultCollection {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.72rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Arrival beat: the world fades up when you land on it */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes worldArrival {
+    from {
+      opacity: 0.25;
+    }
+  }
+
+  .marketCollectionHeader {
+    animation: worldArrival 700ms ease both;
+  }
+}
+
+/* Mobile: search stacks, hero copy stays balanced */
+@media (max-width: 640px) {
+  .heroSearch {
+    width: calc(100vw - 32px);
+  }
+
+  .heroSearch button {
+    padding: 12px 14px;
+  }
+}

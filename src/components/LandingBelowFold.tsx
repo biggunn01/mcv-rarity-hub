@@ -49,9 +49,9 @@ function buildSpotlights(): Spotlight[] {
       return {
         slug,
         collectionName: data.collection.name,
-        tokenName: top.name,
+        tokenName: top.name.replace(/\s*\(#\d+\)\s*$/, ""),
         image: top.image,
-        score: top.rarityScore.toFixed(2),
+        score: top.rarityScore.toFixed(1),
         supply: data.collection.actualTokenCount,
         floorText,
         listedText: listedCount > 0 ? `${listedCount.toLocaleString()} listed` : "unlisted market",
@@ -90,8 +90,8 @@ export function LandingBelowFold() {
                   <span className="rarityTickerDot" />
                   <span className="rarityTickerName">{item.label}</span>
                   <span className="rarityTickerStat">{item.supply.toLocaleString()} ranked</span>
-                  <span className="rarityTickerStat">floor {item.floor}</span>
-                  <span className="rarityTickerStat">{item.listed}</span>
+                  {item.floor !== "—" && <span className="rarityTickerStat">floor {item.floor}</span>}
+                  {item.listed !== "unlisted market" && <span className="rarityTickerStat">{item.listed}</span>}
                 </span>
               ))}
             </div>
@@ -102,13 +102,13 @@ export function LandingBelowFold() {
       <section className="hallOfRarest" id="hall-of-rarest" aria-label="Hall of Rarest — the top ranked token of every collection">
         <span className="hallGhostTitle" aria-hidden="true">Rarest</span>
         <header className="hallHeader">
-          <p className="eyebrow">Signal archive · Hall of Rarest</p>
+          <p className="eyebrow">Hall of Rarest</p>
           <h2>
-            One specimen outranks
+            The seven rarest tokens
             <br />
-            every other on its world.
+            in the ecosystem.
           </h2>
-          <p className="lede">The single #1-ranked token from each of the seven MCV collections — pulled live from the same scoring data that powers the tables.</p>
+          <p className="lede">Seven out of {totalRanked.toLocaleString()} — the #1-ranked token from each world, recomputed from the same trait data that powers the tables.</p>
         </header>
         <ol className="hallGrid">
           {spotlights.map((spotlight, index) => (
@@ -136,11 +136,12 @@ export function LandingBelowFold() {
               </Link>
             </li>
           ))}
-          <li className="hallCard hallStatCard" aria-label={`${totalRanked.toLocaleString()} tokens ranked in total`}>
-            <span className="hallStatNumber">{totalRanked.toLocaleString()}</span>
-            <span className="hallStatLabel">tokens ranked across {spotlights.length} worlds · {chainCount} chains</span>
-            <span className="hallStatRule" aria-hidden="true" />
-            <span className="hallStatHint">Every score recomputed from raw trait data</span>
+          <li className="hallCard hallCtaCard">
+            <span className="hallCtaKicker">How rare is yours?</span>
+            <span className="hallCtaTitle">Check any token in seconds.</span>
+            <Link href="/search" className="hallCtaAction">
+              Search a token ID →
+            </Link>
           </li>
         </ol>
       </section>
@@ -149,7 +150,7 @@ export function LandingBelowFold() {
         <p className="siteFooterWordmark" aria-hidden="true">Mars Cats</p>
         <div className="siteFooterRow">
           <p className="siteFooterNote">
-            Mars Cats Ventures Rarity Hub — trait-weighted rankings across {spotlights.length} collections and {chainCount} chains, recomputed from imported metadata.
+            Mars Cats Ventures Rarity Hub — trait-weighted rankings across {spotlights.length} collections and {chainCount} chains, recomputed from raw on-chain trait metadata.
           </p>
           <nav className="siteFooterNav" aria-label="Collections">
             {spotlights.map((spotlight) => (
