@@ -579,7 +579,11 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                     )}
                     </span>
                   </td>
-                  <td className="keyTraitsCell">{token.attributes.slice(0, 3).map((item) => `${item.value}`).join(" - ")}</td>
+                  <td className="keyTraitsCell">
+                    {token.attributes.slice(0, 3).map((item) => (
+                      <span className="keyTraitChip" key={`${item.traitType}-${item.value}`}>{item.value}</span>
+                    ))}
+                  </td>
                 </tr>
               )})}
             </tbody>

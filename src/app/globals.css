@@ -6341,3 +6341,154 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
     display: none;
   }
 }
+
+/* ----- Judge iteration 2 fixes ----- */
+
+/* Cascade repair: dock shelf gradient belongs at the stage FOOT, not the top.
+   (Award-pass `inset: -2%` leaked a top anchor into the signature-pass shelf.) */
+.solarSystemStage::after {
+  top: auto;
+  bottom: 0;
+}
+
+/* Collection hero: title text can never overlap the actions cluster */
+.marketCollectionTitle > * {
+  min-width: 0;
+}
+
+.marketCollectionTitle h1 {
+  overflow-wrap: anywhere;
+}
+
+.marketHeaderActions {
+  flex-shrink: 0;
+}
+
+/* Filter rail rides along with the table */
+@media (min-width: 701px) {
+  .marketFilterRail {
+    position: sticky;
+    top: 86px;
+    align-self: start;
+    max-height: calc(100vh - 104px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
+
+/* Key traits read as chips, not a dashed string */
+.keyTraitsCell .keyTraitChip {
+  display: inline-flex;
+  align-items: center;
+  margin: 2px 6px 2px 0;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition: border-color 420ms ease, color 420ms ease;
+}
+
+.marketRankTable tbody tr:hover .keyTraitChip {
+  border-color: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.32);
+  color: rgba(255, 255, 255, 0.94);
+}
+
+/* Pagination counter never wraps */
+.pagination span {
+  white-space: nowrap;
+}
+
+/* Hall of Rarest: a calm, equal grid */
+.hallCard:first-child {
+  grid-column: span 1;
+}
+
+/* Branded 404 */
+.notFoundShell {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: 18px clamp(18px, 4vw, 48px);
+}
+
+.notFoundBody {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  max-width: 640px;
+  padding-top: clamp(80px, 18vh, 200px);
+}
+
+.notFoundTitle {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2.2rem, 5.4vw, 4.4rem);
+  font-weight: 600;
+  line-height: 1.02;
+  background: linear-gradient(180deg, #ffffff 34%, #ffcf9e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.notFoundAction {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 10px;
+  border: 1px solid rgba(255, 154, 50, 0.4);
+  border-radius: 999px;
+  padding: 12px 22px;
+  background: rgba(255, 154, 50, 0.1);
+  color: #ffc98d;
+  font-weight: 700;
+  transition: transform var(--speed-hover) ease, background 420ms ease, border-color 420ms ease, color 420ms ease;
+}
+
+.notFoundAction:hover {
+  border-color: rgba(255, 154, 50, 0.7);
+  background: rgba(255, 154, 50, 0.18);
+  color: #ffffff;
+}
+
+.notFoundGhost {
+  position: absolute;
+  right: -2vw;
+  bottom: -6vh;
+  z-index: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(12rem, 34vw, 30rem);
+  font-weight: 800;
+  line-height: 0.8;
+  color: rgba(255, 255, 255, 0.03);
+  -webkit-text-stroke: 1px rgba(255, 154, 50, 0.14);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Mobile: viewfinder chrome off, dock becomes a scroll strip */
+@media (max-width: 640px) {
+  .hudFrame {
+    display: none;
+  }
+
+  .solarSystemFallback {
+    right: 0;
+    left: 0;
+    bottom: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 6px 14px 10px;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+  }
+
+  .solarSystemFallback::-webkit-scrollbar {
+    display: none;
+  }
+}

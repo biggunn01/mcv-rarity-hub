@@ -163,7 +163,7 @@ export default async function TokenPage({ params }: Props) {
       <section className="section marketTraitSection">
         <div className="marketTraitHeader">
           <h2>Traits</h2>
-          <span>{token.attributes.length} traits</span>
+          <span>{token.attributes.filter((trait) => trait.includedInScore !== false && !/trait count/i.test(trait.traitType)).length} traits</span>
         </div>
         <div className="tokenTraitCards">
           {token.attributes.map((trait, cardIndex) => (
