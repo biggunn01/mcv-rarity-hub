@@ -16,16 +16,6 @@ const badgeMap: Record<string, string> = {
   "cream-cats": "/collection-badges/cream-cats.png",
 };
 
-const logoMap: Record<string, string> = {
-  "mars-cats-voyage": "/collection-logos/mcv-official-logo.png",
-  "mars-alien-cats": "/collection-logos/mars-alien-cats.avif",
-  "mars-cats-in-spacesuits": "/collection-logos/mars-cats-in-spacesuits.avif",
-  "mars-cats-snipers": "/collection-logos/mars-cats-snipers.avif",
-  metazoku: "/collection-logos/metazoku-official.png",
-  "battle-pawss": "/collection-logos/battle-pawss-planet-logo.png",
-  "cream-cats": "/collection-logos/cream-cats.webp",
-};
-
 const planetThemeMap: Record<string, { color: number; accent: string; accentRgb: string }> = {
   "mars-cats-voyage": { color: 0xffa34a, accent: "#ff9a32", accentRgb: "255, 154, 50" },
   "mars-alien-cats": { color: 0x75e6ff, accent: "#75e6ff", accentRgb: "117, 230, 255" },
@@ -36,8 +26,31 @@ const planetThemeMap: Record<string, { color: number; accent: string; accentRgb:
   "cream-cats": { color: 0xf4cf7a, accent: "#f4cf7a", accentRgb: "244, 207, 122" },
 };
 
+type PlanetArchetype = {
+  band: number;
+  warp: number;
+  crack: number;
+  cap: number;
+  noiseScale: number;
+  deep?: number;
+  highMix?: number;
+  ring?: { inner: number; outer: number; tilt: number; opacity: number };
+};
+
+const planetArchetypes: Record<string, PlanetArchetype> = {
+  "mars-alien-cats": { band: 0.82, warp: 0.75, crack: 0, cap: 0, noiseScale: 2.1 },
+  "mars-cats-in-spacesuits": { band: 0.14, warp: 0.4, crack: 0, cap: 0.95, noiseScale: 2.7, highMix: 0.72 },
+  "mars-cats-snipers": { band: 0.55, warp: 1.0, crack: 0, cap: 0.18, noiseScale: 2.3, ring: { inner: 1.55, outer: 1.95, tilt: -0.44, opacity: 0.22 } },
+  metazoku: { band: 0, warp: 0.55, crack: 1, cap: 0, noiseScale: 3.1, deep: 0x090c07 },
+  "battle-pawss": { band: 0.28, warp: 1.5, crack: 0, cap: 0, noiseScale: 2.4 },
+  "cream-cats": { band: 0.68, warp: 0.35, crack: 0, cap: 0, noiseScale: 2.0, ring: { inner: 1.5, outer: 2.15, tilt: -0.37, opacity: 0.36 } },
+};
+
+const defaultArchetype: PlanetArchetype = { band: 0.4, warp: 0.7, crack: 0, cap: 0, noiseScale: 2.4 };
+
 type Props = {
   collections: CollectionSummary[];
+  chainCount: number;
 };
 
 type PlanetConfig = {
@@ -45,7 +58,6 @@ type PlanetConfig = {
   slug: string;
   name: string;
   route: string;
-  logo: string;
   radius: number;
   orbitRadius: number;
   orbitHeight: number;
@@ -58,11 +70,20 @@ type PlanetConfig = {
   color: number;
 };
 
+type TrailRuntime = {
+  line: THREE.Line;
+  geometry: THREE.BufferGeometry;
+  positions: Float32Array;
+};
+
 type PlanetRuntime = {
   config: PlanetConfig;
   group: THREE.Group;
-  sphere: THREE.Mesh<THREE.SphereGeometry, THREE.MeshStandardMaterial>;
-  atmosphere: THREE.Sprite;
+  sphere: THREE.Mesh<THREE.SphereGeometry, THREE.ShaderMaterial>;
+  atmosphere: THREE.Mesh<THREE.SphereGeometry, THREE.ShaderMaterial>;
+  trail: TrailRuntime;
+  angle: number;
+  hover: number;
   label: HTMLButtonElement | null;
 };
 
@@ -89,13 +110,6 @@ type TransitionParticle = {
   size: number;
 };
 
-type OrbitTrail = {
-  line: THREE.LineLoop;
-  material: THREE.LineDashedMaterial;
-  shaderStore: { current: { uniforms: Record<string, { value: number }> } | null };
-  dashSpeed: number;
-};
-
 type TransitionTargetConfig = Pick<PlanetConfig, "slug" | "name" | "route" | "spinSpeed" | "accent" | "color">;
 
 type LandingTransition = {
@@ -103,7 +117,7 @@ type LandingTransition = {
   runtime?: PlanetRuntime;
   group: THREE.Group;
   sphere: THREE.Mesh;
-  atmosphere?: THREE.Sprite;
+  atmosphere?: THREE.Mesh<THREE.SphereGeometry, THREE.ShaderMaterial>;
   route: string;
   startTime: number;
   fromPosition: THREE.Vector3;
@@ -112,15 +126,16 @@ type LandingTransition = {
   particles: TransitionParticle[];
   hasExploded: boolean;
   hasNavigated: boolean;
+  timeScale: number;
 };
 
 const orbitPresets = [
-  { orbitRadius: 3.38, orbitHeight: 0.82, orbitDepth: 1.56, phase: 2.55, orbitSpeed: 0.18, radius: 0.38, spinSpeed: 0.28 },
-  { orbitRadius: 4.36, orbitHeight: 1.02, orbitDepth: 1.98, phase: 5.05, orbitSpeed: 0.145, radius: 0.35, spinSpeed: 0.24 },
-  { orbitRadius: 5.32, orbitHeight: 1.34, orbitDepth: 2.36, phase: 3.35, orbitSpeed: 0.12, radius: 0.37, spinSpeed: 0.22 },
-  { orbitRadius: 6.28, orbitHeight: 1.52, orbitDepth: 2.74, phase: 0.2, orbitSpeed: 0.1, radius: 0.41, spinSpeed: 0.2 },
-  { orbitRadius: 4.92, orbitHeight: 1.92, orbitDepth: 2.98, phase: 1.35, orbitSpeed: 0.088, radius: 0.36, spinSpeed: 0.17 },
-  { orbitRadius: 6.82, orbitHeight: 2.16, orbitDepth: 3.44, phase: 4.45, orbitSpeed: 0.078, radius: 0.38, spinSpeed: 0.15 },
+  { orbitRadius: 3.38, orbitHeight: 0.82, orbitDepth: 1.56, phase: 2.55, orbitSpeed: 0.1, radius: 0.38, spinSpeed: 0.28 },
+  { orbitRadius: 4.36, orbitHeight: 1.02, orbitDepth: 1.98, phase: 5.05, orbitSpeed: 0.08, radius: 0.35, spinSpeed: 0.24 },
+  { orbitRadius: 5.32, orbitHeight: 1.34, orbitDepth: 2.36, phase: 3.35, orbitSpeed: 0.066, radius: 0.37, spinSpeed: 0.22 },
+  { orbitRadius: 6.28, orbitHeight: 1.52, orbitDepth: 2.74, phase: 0.2, orbitSpeed: 0.055, radius: 0.41, spinSpeed: 0.2 },
+  { orbitRadius: 4.92, orbitHeight: 1.92, orbitDepth: 2.98, phase: 1.35, orbitSpeed: 0.048, radius: 0.36, spinSpeed: 0.17 },
+  { orbitRadius: 6.82, orbitHeight: 2.16, orbitDepth: 3.44, phase: 4.45, orbitSpeed: 0.043, radius: 0.38, spinSpeed: 0.15 },
 ];
 
 const ORBIT_TILT_X = -0.42;
@@ -139,8 +154,197 @@ const TRANSITION_APPROACH_SECONDS = 0.53;
 const TRANSITION_EXPLODE_SECONDS = 2.03;
 const TRANSITION_NAV_SECONDS = 2.44;
 const TRANSITION_EXPLOSION_SECONDS = 0.41;
+const TRAIL_POINTS = 72;
+const TRAIL_SPAN = 1.05;
 
-export function OrbitLanding({ collections }: Props) {
+const NOISE_GLSL = /* glsl */ `
+  float hash31(vec3 p) {
+    p = fract(p * 0.3183099 + 0.1);
+    p *= 17.0;
+    return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+  }
+
+  float vnoise(vec3 x) {
+    vec3 i = floor(x);
+    vec3 f = fract(x);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(
+      mix(mix(hash31(i + vec3(0.0, 0.0, 0.0)), hash31(i + vec3(1.0, 0.0, 0.0)), f.x),
+          mix(hash31(i + vec3(0.0, 1.0, 0.0)), hash31(i + vec3(1.0, 1.0, 0.0)), f.x), f.y),
+      mix(mix(hash31(i + vec3(0.0, 0.0, 1.0)), hash31(i + vec3(1.0, 0.0, 1.0)), f.x),
+          mix(hash31(i + vec3(0.0, 1.0, 1.0)), hash31(i + vec3(1.0, 1.0, 1.0)), f.x), f.y),
+      f.z);
+  }
+
+  float fbm(vec3 p) {
+    float value = 0.0;
+    float amplitude = 0.5;
+    for (int i = 0; i < 5; i += 1) {
+      value += amplitude * vnoise(p);
+      p = p * 2.03 + vec3(11.7);
+      amplitude *= 0.5;
+    }
+    return value;
+  }
+`;
+
+const BODY_VERTEX_GLSL = /* glsl */ `
+  varying vec3 vObj;
+  varying vec3 vNormalW;
+  varying vec3 vViewW;
+
+  void main() {
+    vObj = position;
+    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+    vNormalW = normalize(mat3(modelMatrix) * normal);
+    vViewW = cameraPosition - worldPosition.xyz;
+    gl_Position = projectionMatrix * viewMatrix * worldPosition;
+  }
+`;
+
+const PLANET_FRAGMENT_GLSL = /* glsl */ `
+  varying vec3 vObj;
+  varying vec3 vNormalW;
+  varying vec3 vViewW;
+
+  uniform vec3 uDeep;
+  uniform vec3 uMid;
+  uniform vec3 uHigh;
+  uniform vec3 uSunDir;
+  uniform float uTime;
+  uniform float uHover;
+  uniform float uBand;
+  uniform float uWarp;
+  uniform float uCrack;
+  uniform float uCap;
+  uniform float uNoiseScale;
+
+  __NOISE__
+
+  void main() {
+    vec3 p = normalize(vObj);
+    vec3 q = p * uNoiseScale;
+    float drift = uTime * 0.016;
+    vec3 warpVec = vec3(
+      fbm(q + vec3(0.0, drift, 0.0)),
+      fbm(q + vec3(5.2, 1.3, drift * 0.8)),
+      0.0
+    );
+    float field = fbm(q + uWarp * warpVec);
+    float bands = 0.5 + 0.5 * sin(p.y * 7.5 + field * 4.2);
+    float tex = mix(field, bands, uBand);
+
+    vec3 col = mix(uDeep, uMid, smoothstep(0.18, 0.62, tex));
+    col = mix(col, uHigh, smoothstep(0.62, 0.95, tex));
+
+    float ridge = 1.0 - abs(2.0 * fbm(q * 1.7 + vec3(3.1)) - 1.0);
+    float crackGlow = pow(smoothstep(0.78, 1.0, ridge), 2.0) * (0.62 + 0.38 * sin(uTime * 1.35 + p.x * 4.0));
+    col += uHigh * uCrack * crackGlow;
+
+    float capMask = uCap * smoothstep(0.62, 0.86, abs(p.y)) * (0.62 + 0.38 * field);
+    col = mix(col, mix(uHigh, vec3(1.0), 0.55), capMask);
+
+    vec3 N = normalize(vNormalW);
+    vec3 V = normalize(vViewW);
+    float diffuse = dot(N, normalize(uSunDir));
+    float light = smoothstep(-0.5, 0.45, diffuse);
+    col *= 0.26 + 0.92 * light;
+
+    float fresnel = pow(1.0 - max(dot(V, N), 0.0), 2.6);
+    col += uMid * fresnel * (0.42 + uHover * 0.9);
+    col += uHigh * pow(max(diffuse, 0.0), 3.0) * 0.1;
+
+    gl_FragColor = vec4(col, 1.0);
+  }
+`;
+
+const ATMOSPHERE_FRAGMENT_GLSL = /* glsl */ `
+  varying vec3 vObj;
+  varying vec3 vNormalW;
+  varying vec3 vViewW;
+
+  uniform vec3 uColor;
+  uniform vec3 uSunDir;
+  uniform float uIntensity;
+
+  void main() {
+    vec3 N = normalize(vNormalW);
+    vec3 V = normalize(vViewW);
+    float rim = pow(1.0 - abs(dot(V, N)), 3.4);
+    float dayBoost = 0.4 + 0.6 * smoothstep(-0.5, 0.6, dot(N, normalize(uSunDir)));
+    gl_FragColor = vec4(uColor, rim * dayBoost * uIntensity);
+  }
+`;
+
+const RING_VERTEX_GLSL = /* glsl */ `
+  varying vec2 vRingPos;
+
+  void main() {
+    vRingPos = position.xy;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const RING_FRAGMENT_GLSL = /* glsl */ `
+  varying vec2 vRingPos;
+
+  uniform vec3 uColor;
+  uniform float uInner;
+  uniform float uOuter;
+  uniform float uOpacity;
+
+  void main() {
+    float radius = length(vRingPos);
+    float t = (radius - uInner) / (uOuter - uInner);
+    if (t < 0.0 || t > 1.0) discard;
+    float grain = 0.82 + 0.18 * sin(t * 18.0);
+    float gap = 1.0 - 0.85 * smoothstep(0.52, 0.56, t) * (1.0 - smoothstep(0.64, 0.68, t));
+    float soft = smoothstep(0.0, 0.18, t) * (1.0 - smoothstep(0.78, 1.0, t));
+    gl_FragColor = vec4(uColor, grain * gap * soft * uOpacity);
+  }
+`;
+
+const SUN_FRAGMENT_GLSL = /* glsl */ `
+  varying vec3 vObj;
+  varying vec3 vNormalW;
+  varying vec3 vViewW;
+
+  uniform float uTime;
+  uniform vec3 uEmber;
+  uniform vec3 uFlame;
+  uniform vec3 uGold;
+  uniform vec3 uCore;
+
+  __NOISE__
+
+  void main() {
+    vec3 p = normalize(vObj) * 2.6;
+    float t = uTime * 0.055;
+    vec3 flow = vec3(t, -t * 0.7, t * 0.4);
+    float churn = fbm(p + flow + 1.4 * vec3(fbm(p * 1.6 + vec3(0.0, t * 1.3, 0.0))));
+    float granulation = fbm(p * 6.5 - vec3(0.0, 0.0, t * 2.0));
+    float heat = clamp(churn * 0.92 + granulation * 0.5 - 0.16, 0.0, 1.0);
+
+    vec3 col = mix(uEmber, uFlame, smoothstep(0.05, 0.52, heat));
+    col = mix(col, uGold, smoothstep(0.52, 0.78, heat));
+    col = mix(col, uCore, smoothstep(0.78, 0.97, heat));
+
+    vec3 N = normalize(vNormalW);
+    vec3 V = normalize(vViewW);
+    float limb = pow(max(dot(V, N), 0.0), 0.6);
+    col *= 0.55 + 0.45 * limb;
+    float rim = pow(1.0 - max(dot(V, N), 0.0), 3.0);
+    col += uFlame * rim * 0.9;
+
+    gl_FragColor = vec4(col, 1.0);
+  }
+`;
+
+function withNoise(shader: string) {
+  return shader.replace("__NOISE__", NOISE_GLSL);
+}
+
+export function OrbitLanding({ collections, chainCount }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const labelsRef = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -149,7 +353,6 @@ export function OrbitLanding({ collections }: Props) {
   const transitionTimersRef = useRef<number[]>([]);
   const [activePlanet, setActivePlanet] = useState<ActivePlanet | null>(null);
   const [transitionOverlay, setTransitionOverlay] = useState<TransitionOverlay | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   const center = collections.find((entry) => entry.collection.slug === "mars-cats-voyage");
   const planets = useMemo<PlanetConfig[]>(
@@ -165,7 +368,6 @@ export function OrbitLanding({ collections }: Props) {
             slug,
             name: entry.collection.name,
             route: `/collections/${slug}`,
-            logo: logoMap[slug],
             ...preset,
             ...theme,
           };
@@ -179,12 +381,11 @@ export function OrbitLanding({ collections }: Props) {
     if (!canvas || !stage || !center) return;
     const canvasElement = canvas;
     const stageElement = stage;
-    const centerLogoSrc = logoMap[center.collection.slug];
 
     const renderer = new THREE.WebGLRenderer({ canvas: canvasElement, antialias: true, alpha: true, powerPreference: "high-performance" });
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setClearColor(0x000000, 0);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x03050d, 0.035);
@@ -194,266 +395,97 @@ export function OrbitLanding({ collections }: Props) {
     camera.lookAt(0, 0, 0);
 
     const runtimePlanets: PlanetRuntime[] = [];
-    const orbitTrails: OrbitTrail[] = [];
     const sunGroup = new THREE.Group();
     sunGroup.rotation.x = BODY_FACE_TILT_X;
     sunGroup.rotation.z = BODY_FACE_TILT_Z;
     scene.add(sunGroup);
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.78);
-    const sunLight = new THREE.PointLight(0xffffff, 6.2, 18, 1.25);
-    const rimLight = new THREE.DirectionalLight(0xffffff, 1.15);
-    rimLight.position.set(-4, 3, 7);
-    scene.add(ambient, sunLight, rimLight);
-
-    function hexToRgb(hex: number) {
-      return {
-        r: (hex >> 16) & 255,
-        g: (hex >> 8) & 255,
-        b: hex & 255,
-      };
+    function accentPalette(config: PlanetConfig, archetype: PlanetArchetype) {
+      const accent = new THREE.Color(config.color);
+      const deep =
+        archetype.deep !== undefined
+          ? new THREE.Color(archetype.deep)
+          : accent.clone().multiplyScalar(0.16).lerp(new THREE.Color(0x040711), 0.55);
+      const mid = accent.clone().multiplyScalar(0.86);
+      const high = accent.clone().lerp(new THREE.Color(0xffffff), archetype.highMix ?? 0.5);
+      return { deep, mid, high };
     }
 
-    function rgbToHex({ r, g, b }: { r: number; g: number; b: number }) {
-      return `#${[r, g, b].map((channel) => Math.round(channel).toString(16).padStart(2, "0")).join("")}`;
+    function makePlanetMaterial(config: PlanetConfig, archetype: PlanetArchetype) {
+      const palette = accentPalette(config, archetype);
+      return new THREE.ShaderMaterial({
+        vertexShader: BODY_VERTEX_GLSL,
+        fragmentShader: withNoise(PLANET_FRAGMENT_GLSL),
+        uniforms: {
+          uDeep: { value: palette.deep },
+          uMid: { value: palette.mid },
+          uHigh: { value: palette.high },
+          uSunDir: { value: new THREE.Vector3(0, 0, 1) },
+          uTime: { value: 0 },
+          uHover: { value: 0 },
+          uBand: { value: archetype.band },
+          uWarp: { value: archetype.warp },
+          uCrack: { value: archetype.crack },
+          uCap: { value: archetype.cap },
+          uNoiseScale: { value: archetype.noiseScale },
+        },
+      });
     }
 
-    function boostLogoColor({ r, g, b }: { r: number; g: number; b: number }) {
-      const average = (r + g + b) / 3;
-      const boost = (channel: number) => Math.min(Math.max(average + (channel - average) * 1.24 + 12, 0), 255);
-      return {
-        r: boost(r),
-        g: boost(g),
-        b: boost(b),
-      };
+    function makeAtmosphereMesh(config: PlanetConfig) {
+      const accent = new THREE.Color(config.color);
+      const material = new THREE.ShaderMaterial({
+        vertexShader: BODY_VERTEX_GLSL,
+        fragmentShader: ATMOSPHERE_FRAGMENT_GLSL,
+        uniforms: {
+          uColor: { value: accent.clone().lerp(new THREE.Color(0xffffff), 0.2) },
+          uSunDir: { value: new THREE.Vector3(0, 0, 1) },
+          uIntensity: { value: 0.5 },
+        },
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(config.radius * 1.24, 32, 32), material);
+      mesh.renderOrder = 4;
+      return mesh;
     }
 
-    function estimateLogoBaseColor(image: HTMLImageElement, fallback: number) {
-      const sampleSize = 96;
-      const sampleCanvas = document.createElement("canvas");
-      sampleCanvas.width = sampleSize;
-      sampleCanvas.height = sampleSize;
-      const sampleContext = sampleCanvas.getContext("2d", { willReadFrequently: true });
-      if (!sampleContext) return hexToRgb(fallback);
-
-      sampleContext.drawImage(image, 0, 0, sampleSize, sampleSize);
-      const { data } = sampleContext.getImageData(0, 0, sampleSize, sampleSize);
-      let r = 0;
-      let g = 0;
-      let b = 0;
-      let weight = 0;
-
-      for (let pixel = 0; pixel < data.length; pixel += 4) {
-        const alpha = data[pixel + 3] / 255;
-        const brightness = (data[pixel] + data[pixel + 1] + data[pixel + 2]) / 3;
-        const saturation = Math.max(data[pixel], data[pixel + 1], data[pixel + 2]) - Math.min(data[pixel], data[pixel + 1], data[pixel + 2]);
-        if (alpha < 0.35 || brightness < 20 || brightness > 244) continue;
-        const pixelWeight = alpha * (0.65 + saturation / 255);
-        r += data[pixel] * pixelWeight;
-        g += data[pixel + 1] * pixelWeight;
-        b += data[pixel + 2] * pixelWeight;
-        weight += pixelWeight;
-      }
-
-      if (weight < 1) return hexToRgb(fallback);
-      return { r: r / weight, g: g / weight, b: b / weight };
+    function makeRingMesh(config: PlanetConfig, archetype: PlanetArchetype) {
+      if (!archetype.ring) return null;
+      const inner = config.radius * archetype.ring.inner;
+      const outer = config.radius * archetype.ring.outer;
+      const material = new THREE.ShaderMaterial({
+        vertexShader: RING_VERTEX_GLSL,
+        fragmentShader: RING_FRAGMENT_GLSL,
+        uniforms: {
+          uColor: { value: new THREE.Color(config.color).lerp(new THREE.Color(0xffffff), 0.35) },
+          uInner: { value: inner },
+          uOuter: { value: outer },
+          uOpacity: { value: archetype.ring.opacity },
+        },
+        transparent: true,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+      });
+      const mesh = new THREE.Mesh(new THREE.RingGeometry(inner, outer, 96, 1), material);
+      mesh.rotation.x = Math.PI / 2 + archetype.ring.tilt;
+      mesh.rotation.y = 0.16;
+      mesh.renderOrder = 5;
+      return mesh;
     }
 
-    function estimateLogoBackgroundColor(image: HTMLImageElement, fallback: number) {
-      const sampleSize = 96;
-      const sampleCanvas = document.createElement("canvas");
-      sampleCanvas.width = sampleSize;
-      sampleCanvas.height = sampleSize;
-      const sampleContext = sampleCanvas.getContext("2d", { willReadFrequently: true });
-      if (!sampleContext) return hexToRgb(fallback);
-
-      sampleContext.drawImage(image, 0, 0, sampleSize, sampleSize);
-      const { data } = sampleContext.getImageData(0, 0, sampleSize, sampleSize);
-      let r = 0;
-      let g = 0;
-      let b = 0;
-      let weight = 0;
-
-      for (let y = 0; y < sampleSize; y += 1) {
-        for (let x = 0; x < sampleSize; x += 1) {
-          const edgeDistance = Math.min(x, y, sampleSize - 1 - x, sampleSize - 1 - y);
-          if (edgeDistance > 14) continue;
-          const offset = (y * sampleSize + x) * 4;
-          const alpha = data[offset + 3] / 255;
-          if (alpha < 0.35) continue;
-          const edgeWeight = alpha * (1 + (14 - edgeDistance) / 14);
-          r += data[offset] * edgeWeight;
-          g += data[offset + 1] * edgeWeight;
-          b += data[offset + 2] * edgeWeight;
-          weight += edgeWeight;
-        }
-      }
-
-      if (weight < 1) return hexToRgb(fallback);
-      return { r: r / weight, g: g / weight, b: b / weight };
-    }
-
-    function paintEquatorLogoBand(
-      context: CanvasRenderingContext2D,
-      image: HTMLImageElement,
-      width: number,
-      height: number,
-      options: {
-        tileWidth: number;
-        logoSize: number;
-        alpha: number;
-        centerTile?: boolean;
-        centerU?: number;
-        transparentBackground?: { r: number; g: number; b: number };
-        logoPadding?: number;
-        removeDarkBackground?: boolean;
-        cropToVisibleContent?: boolean;
+    const sunMaterial = new THREE.ShaderMaterial({
+      vertexShader: BODY_VERTEX_GLSL,
+      fragmentShader: withNoise(SUN_FRAGMENT_GLSL),
+      uniforms: {
+        uTime: { value: 0 },
+        uEmber: { value: new THREE.Color(0x461003) },
+        uFlame: { value: new THREE.Color(0xff5c08) },
+        uGold: { value: new THREE.Color(0xffb347) },
+        uCore: { value: new THREE.Color(0xfff3d6) },
       },
-    ) {
-      const y = height * 0.5 - options.logoSize / 2;
-      const source = options.cropToVisibleContent
-        ? makeCroppedLogoCanvas(image, options.logoSize, options.logoPadding ?? 0)
-        : options.transparentBackground
-          ? makeLogoForegroundCanvas(image, options.logoSize, options.transparentBackground, options.logoPadding ?? 0, options.removeDarkBackground)
-          : image;
-      const drawWrappedLogo = (drawX: number) => {
-        context.drawImage(source, drawX, y, options.logoSize, options.logoSize);
-        if (drawX < 0) context.drawImage(source, drawX + width, y, options.logoSize, options.logoSize);
-        if (drawX + options.logoSize > width) context.drawImage(source, drawX - width, y, options.logoSize, options.logoSize);
-      };
-
-      context.save();
-      context.globalAlpha = options.alpha;
-      const centerX = width * (options.centerU ?? 0.5);
-      const firstX = options.centerTile
-        ? centerX - options.tileWidth * 0.5 - Math.ceil(width / options.tileWidth) * options.tileWidth
-        : -options.tileWidth;
-      for (let x = firstX; x < width + options.tileWidth; x += options.tileWidth) {
-        const drawX = x + (options.tileWidth - options.logoSize) / 2;
-        drawWrappedLogo(drawX);
-      }
-      context.restore();
-    }
-
-    function makeLogoForegroundCanvas(
-      image: HTMLImageElement,
-      size: number,
-      backgroundColor: { r: number; g: number; b: number },
-      padding: number,
-      removeDarkBackground = false,
-    ) {
-      const sourceCanvas = document.createElement("canvas");
-      sourceCanvas.width = size;
-      sourceCanvas.height = size;
-      const sourceContext = sourceCanvas.getContext("2d", { willReadFrequently: true });
-      if (!sourceContext) return image;
-
-      const drawSize = size - padding * 2;
-      sourceContext.imageSmoothingEnabled = true;
-      sourceContext.imageSmoothingQuality = "high";
-      sourceContext.drawImage(image, padding, padding, drawSize, drawSize);
-      const imageData = sourceContext.getImageData(0, 0, size, size);
-      const { data } = imageData;
-
-      for (let pixel = 0; pixel < data.length; pixel += 4) {
-        const redDelta = data[pixel] - backgroundColor.r;
-        const greenDelta = data[pixel + 1] - backgroundColor.g;
-        const blueDelta = data[pixel + 2] - backgroundColor.b;
-        const distance = Math.sqrt(redDelta * redDelta + greenDelta * greenDelta + blueDelta * blueDelta);
-        const brightness = (data[pixel] + data[pixel + 1] + data[pixel + 2]) / 3;
-        const saturation = Math.max(data[pixel], data[pixel + 1], data[pixel + 2]) - Math.min(data[pixel], data[pixel + 1], data[pixel + 2]);
-
-        if (distance <= 44) {
-          data[pixel + 3] = 0;
-        } else if (distance < 112) {
-          data[pixel + 3] = Math.round(data[pixel + 3] * ((distance - 44) / 68));
-        }
-
-        if (removeDarkBackground && brightness < 54 && saturation < 34) {
-          data[pixel + 3] = 0;
-        } else if (removeDarkBackground && brightness < 86 && saturation < 34) {
-          data[pixel + 3] = Math.round(data[pixel + 3] * ((brightness - 54) / 32));
-        }
-      }
-
-      sourceContext.putImageData(imageData, 0, 0);
-      return sourceCanvas;
-    }
-
-    function makeCroppedLogoCanvas(image: HTMLImageElement, size: number, padding: number) {
-      const scanCanvas = document.createElement("canvas");
-      scanCanvas.width = image.naturalWidth || image.width;
-      scanCanvas.height = image.naturalHeight || image.height;
-      const scanContext = scanCanvas.getContext("2d", { willReadFrequently: true });
-      if (!scanContext) return image;
-
-      scanContext.drawImage(image, 0, 0, scanCanvas.width, scanCanvas.height);
-      const { data } = scanContext.getImageData(0, 0, scanCanvas.width, scanCanvas.height);
-      let minX = scanCanvas.width;
-      let minY = scanCanvas.height;
-      let maxX = 0;
-      let maxY = 0;
-
-      for (let y = 0; y < scanCanvas.height; y += 1) {
-        for (let x = 0; x < scanCanvas.width; x += 1) {
-          const offset = (y * scanCanvas.width + x) * 4;
-          const alpha = data[offset + 3];
-          const r = data[offset];
-          const g = data[offset + 1];
-          const b = data[offset + 2];
-          const brightness = (r + g + b) / 3;
-          const saturation = Math.max(r, g, b) - Math.min(r, g, b);
-          if (alpha < 16 || (brightness < 46 && saturation < 38)) continue;
-          minX = Math.min(minX, x);
-          minY = Math.min(minY, y);
-          maxX = Math.max(maxX, x);
-          maxY = Math.max(maxY, y);
-        }
-      }
-
-      if (minX >= maxX || minY >= maxY) return image;
-
-      const sourceWidth = maxX - minX + 1;
-      const sourceHeight = maxY - minY + 1;
-      const cropSize = Math.max(sourceWidth, sourceHeight);
-      const sourceX = Math.max(0, minX - (cropSize - sourceWidth) / 2);
-      const sourceY = Math.max(0, minY - (cropSize - sourceHeight) / 2);
-      const clampedCropSize = Math.min(cropSize, scanCanvas.width - sourceX, scanCanvas.height - sourceY);
-
-      const outputCanvas = document.createElement("canvas");
-      outputCanvas.width = size;
-      outputCanvas.height = size;
-      const outputContext = outputCanvas.getContext("2d");
-      if (!outputContext) return image;
-      const drawSize = size - padding * 2;
-      outputContext.imageSmoothingEnabled = true;
-      outputContext.imageSmoothingQuality = "high";
-      outputContext.drawImage(image, sourceX, sourceY, clampedCropSize, clampedCropSize, padding, padding, drawSize, drawSize);
-      return outputCanvas;
-    }
-
-    function sealHorizontalTextureSeam(context: CanvasRenderingContext2D, width: number, height: number, stripWidth = 14) {
-      const leftStrip = context.getImageData(0, 0, stripWidth, height);
-      const rightStrip = context.getImageData(width - stripWidth, 0, stripWidth, height);
-      const { data: leftData } = leftStrip;
-      const { data: rightData } = rightStrip;
-
-      for (let y = 0; y < height; y += 1) {
-        for (let x = 0; x < stripWidth; x += 1) {
-          const leftOffset = (y * stripWidth + x) * 4;
-          const rightOffset = (y * stripWidth + (stripWidth - 1 - x)) * 4;
-
-          for (let channel = 0; channel < 4; channel += 1) {
-            const blended = Math.round((leftData[leftOffset + channel] + rightData[rightOffset + channel]) * 0.5);
-            leftData[leftOffset + channel] = blended;
-            rightData[rightOffset + channel] = blended;
-          }
-        }
-      }
-
-      context.putImageData(leftStrip, 0, 0);
-      context.putImageData(rightStrip, width - stripWidth, 0);
-    }
+    });
 
     function makeSunGlowTexture() {
       const size = 512;
@@ -496,80 +528,8 @@ export function OrbitLanding({ collections }: Props) {
       return texture;
     }
 
-    function makeSunSurfaceTexture() {
-      const width = 1024;
-      const height = 512;
-      const canvasTexture = document.createElement("canvas");
-      canvasTexture.width = width;
-      canvasTexture.height = height;
-      const context = canvasTexture.getContext("2d");
-      if (!context) return null;
-
-      const paintBase = () => {
-        const baseGradient = context.createLinearGradient(0, 0, 0, height);
-        baseGradient.addColorStop(0, "#020202");
-        baseGradient.addColorStop(0.2, "#020202");
-        baseGradient.addColorStop(0.38, "#080808");
-        baseGradient.addColorStop(0.5, "#111111");
-        baseGradient.addColorStop(0.62, "#080808");
-        baseGradient.addColorStop(0.8, "#020202");
-        baseGradient.addColorStop(1, "#020202");
-        context.fillStyle = baseGradient;
-        context.fillRect(0, 0, width, height);
-
-        const equatorGlow = context.createLinearGradient(0, height * 0.24, 0, height * 0.76);
-        equatorGlow.addColorStop(0, "rgba(255, 255, 255, 0)");
-        equatorGlow.addColorStop(0.45, "rgba(255, 255, 255, 0.12)");
-        equatorGlow.addColorStop(0.55, "rgba(255, 255, 255, 0.12)");
-        equatorGlow.addColorStop(1, "rgba(255, 255, 255, 0)");
-        context.fillStyle = equatorGlow;
-        context.fillRect(0, 0, width, height);
-      };
-
-      paintBase();
-      const texture = new THREE.CanvasTexture(canvasTexture);
-      texture.colorSpace = THREE.SRGBColorSpace;
-
-      const logoImage = new Image();
-      logoImage.onload = () => {
-        paintBase();
-        paintEquatorLogoBand(context, logoImage, width, height, {
-          tileWidth: width / 4,
-          logoSize: 264,
-          alpha: 0.98,
-          centerTile: true,
-          centerU: 0,
-          transparentBackground: { r: 2, g: 2, b: 2 },
-          logoPadding: 10,
-        });
-
-        const limbShade = context.createLinearGradient(width * 0.12, 0, width * 0.88, 0);
-        limbShade.addColorStop(0, "rgba(0, 0, 0, 0.32)");
-        limbShade.addColorStop(0.34, "rgba(0, 0, 0, 0)");
-        limbShade.addColorStop(0.66, "rgba(0, 0, 0, 0)");
-        limbShade.addColorStop(1, "rgba(0, 0, 0, 0.34)");
-        context.fillStyle = limbShade;
-        context.fillRect(0, 0, width, height);
-        sealHorizontalTextureSeam(context, width, height);
-        texture.needsUpdate = true;
-        setIsLoading(false);
-      };
-      logoImage.onerror = () => setIsLoading(false);
-      logoImage.src = centerLogoSrc;
-
-      return texture;
-    }
-
-    const sunTexture = makeSunSurfaceTexture();
-    if (sunTexture) sunTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-
-    const sunMaterial = new THREE.MeshBasicMaterial({
-      map: sunTexture,
-      color: 0xffffff,
-      fog: false,
-    });
     const sunRadius = 1.3125;
-    const sun = new THREE.Mesh(new THREE.SphereGeometry(sunRadius, 96, 96), sunMaterial);
+    const sun = new THREE.Mesh(new THREE.SphereGeometry(sunRadius, 64, 64), sunMaterial);
     sun.renderOrder = 2;
     sunGroup.add(sun);
 
@@ -577,9 +537,9 @@ export function OrbitLanding({ collections }: Props) {
     const sunGlow = new THREE.Sprite(
       new THREE.SpriteMaterial({
         map: sunGlowTexture,
-        color: 0xffffff,
+        color: 0xffa844,
         transparent: true,
-        opacity: 0.62,
+        opacity: 0.58,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
         depthTest: false,
@@ -598,7 +558,7 @@ export function OrbitLanding({ collections }: Props) {
       const sprite = new THREE.Sprite(
         new THREE.SpriteMaterial({
           map: sunParticleTexture,
-          color: 0xffffff,
+          color: 0xffc76a,
           transparent: true,
           opacity: 0.65,
           blending: THREE.AdditiveBlending,
@@ -685,93 +645,6 @@ export function OrbitLanding({ collections }: Props) {
       });
     }
 
-    function makeAtmosphereTexture(accentRgb: string) {
-      const size = 256;
-      const canvasTexture = document.createElement("canvas");
-      canvasTexture.width = size;
-      canvasTexture.height = size;
-      const context = canvasTexture.getContext("2d");
-      if (!context) return null;
-
-      const gradient = context.createRadialGradient(size * 0.5, size * 0.5, size * 0.02, size * 0.5, size * 0.5, size * 0.5);
-      gradient.addColorStop(0, `rgba(255, 255, 255, 0.12)`);
-      gradient.addColorStop(0.26, `rgba(${accentRgb}, 0.34)`);
-      gradient.addColorStop(0.52, `rgba(${accentRgb}, 0.22)`);
-      gradient.addColorStop(0.76, `rgba(${accentRgb}, 0.07)`);
-      gradient.addColorStop(0.92, `rgba(${accentRgb}, 0.015)`);
-      gradient.addColorStop(1, `rgba(${accentRgb}, 0)`);
-      context.clearRect(0, 0, size, size);
-      context.fillStyle = gradient;
-      context.fillRect(0, 0, size, size);
-
-      const texture = new THREE.CanvasTexture(canvasTexture);
-      texture.colorSpace = THREE.SRGBColorSpace;
-      return texture;
-    }
-
-    function makePlanetSurfaceTexture(config: PlanetConfig) {
-      const width = 1024;
-      const height = 512;
-      const isBattlePawss = config.slug === "battle-pawss";
-      const canvasTexture = document.createElement("canvas");
-      canvasTexture.width = width;
-      canvasTexture.height = height;
-      const context = canvasTexture.getContext("2d");
-      if (!context) return null;
-
-      const paintBase = (baseColor = hexToRgb(config.color), poleColor = baseColor) => {
-        context.clearRect(0, 0, width, height);
-        const backgroundHex = rgbToHex(isBattlePawss ? { r: 3, g: 5, b: 9 } : poleColor);
-        const baseGradient = context.createLinearGradient(0, 0, 0, height);
-        baseGradient.addColorStop(0, backgroundHex);
-        baseGradient.addColorStop(1, backgroundHex);
-        context.fillStyle = baseGradient;
-        context.fillRect(0, 0, width, height);
-
-        const surfaceColor = isBattlePawss ? hexToRgb(config.color) : boostLogoColor(baseColor);
-        const accentGlow = context.createRadialGradient(width * 0.5, height * 0.5, 0, width * 0.5, height * 0.5, width * 0.58);
-        accentGlow.addColorStop(0, `rgba(${Math.round(surfaceColor.r)}, ${Math.round(surfaceColor.g)}, ${Math.round(surfaceColor.b)}, ${isBattlePawss ? 0.2 : 0.16})`);
-        accentGlow.addColorStop(0.6, `rgba(${Math.round(surfaceColor.r)}, ${Math.round(surfaceColor.g)}, ${Math.round(surfaceColor.b)}, ${isBattlePawss ? 0.08 : 0.05})`);
-        accentGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
-        context.fillStyle = accentGlow;
-        context.fillRect(0, 0, width, height);
-      };
-
-      paintBase();
-
-      const texture = new THREE.CanvasTexture(canvasTexture);
-      texture.colorSpace = THREE.SRGBColorSpace;
-
-      const logoImage = new Image();
-      logoImage.onload = () => {
-        const baseColor = isBattlePawss ? hexToRgb(0x05070b) : estimateLogoBaseColor(logoImage, config.color);
-        const poleColor = isBattlePawss ? hexToRgb(0x030509) : estimateLogoBackgroundColor(logoImage, config.color);
-        const logoBackgroundColor = isBattlePawss ? estimateLogoBackgroundColor(logoImage, 0xffffff) : poleColor;
-        paintBase(baseColor, poleColor);
-        paintEquatorLogoBand(context, logoImage, width, height, {
-          tileWidth: isBattlePawss ? width / 3 : width / 4,
-          logoSize: isBattlePawss ? 224 : 292,
-          alpha: 1,
-          transparentBackground: isBattlePawss ? undefined : logoBackgroundColor,
-          logoPadding: isBattlePawss ? 10 : 24,
-          cropToVisibleContent: isBattlePawss,
-        });
-
-        const limbShade = context.createLinearGradient(width * 0.14, 0, width * 0.86, 0);
-        limbShade.addColorStop(0, `rgba(0, 0, 0, ${isBattlePawss ? 0.24 : 0.12})`);
-        limbShade.addColorStop(0.32, "rgba(0, 0, 0, 0)");
-        limbShade.addColorStop(0.68, "rgba(0, 0, 0, 0)");
-        limbShade.addColorStop(1, `rgba(0, 0, 0, ${isBattlePawss ? 0.28 : 0.16})`);
-        context.fillStyle = limbShade;
-        context.fillRect(0, 0, width, height);
-        sealHorizontalTextureSeam(context, width, height);
-        texture.needsUpdate = true;
-      };
-      logoImage.src = config.logo;
-
-      return texture;
-    }
-
     function orbitPoint(config: PlanetConfig, index: number, angle: number) {
       const point = new THREE.Vector3(
         Math.cos(angle) * config.orbitRadius,
@@ -783,78 +656,69 @@ export function OrbitLanding({ collections }: Props) {
       return point;
     }
 
-    function makeTrail(config: PlanetConfig, index: number) {
+    function makeOrbitEllipse(config: PlanetConfig, index: number) {
       const points: THREE.Vector3[] = [];
-      const pointCount = 720;
+      const pointCount = 240;
       for (let i = 0; i < pointCount; i += 1) {
-        const progress = i / pointCount;
-        const angle = progress * Math.PI * 2;
-        points.push(orbitPoint(config, index, angle));
+        points.push(orbitPoint(config, index, (i / pointCount) * Math.PI * 2));
       }
-
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      const material = new THREE.LineDashedMaterial({
-        color: config.color,
+      const material = new THREE.LineBasicMaterial({
+        color: 0x94a3c0,
         transparent: true,
-        opacity: 0.28,
+        opacity: 0.07,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
-        dashSize: 0.11,
-        gapSize: 0.08,
-        scale: 1,
       });
-      const shaderStore: OrbitTrail["shaderStore"] = { current: null };
-      material.onBeforeCompile = (shader) => {
-        shader.uniforms.dashOffset = { value: 0 };
-        shader.fragmentShader = `uniform float dashOffset;\n${shader.fragmentShader}`.replace(
-          "mod( vLineDistance, totalSize )",
-          "mod( vLineDistance + dashOffset, totalSize )",
-        );
-        shaderStore.current = shader;
-      };
-      const trail = new THREE.LineLoop(geometry, material);
-      trail.computeLineDistances();
-      trail.renderOrder = -2;
-      scene.add(trail);
-      orbitTrails.push({ line: trail, material, shaderStore, dashSpeed: config.orbitSpeed * 1.8 });
+      const line = new THREE.LineLoop(geometry, material);
+      line.renderOrder = -2;
+      scene.add(line);
+    }
+
+    function makeTrail(config: PlanetConfig): TrailRuntime {
+      const positions = new Float32Array(TRAIL_POINTS * 3);
+      const colors = new Float32Array(TRAIL_POINTS * 3);
+      const accent = new THREE.Color(config.color);
+      for (let i = 0; i < TRAIL_POINTS; i += 1) {
+        const fade = Math.pow(1 - i / (TRAIL_POINTS - 1), 1.7) * 0.62;
+        colors[i * 3] = accent.r * fade;
+        colors[i * 3 + 1] = accent.g * fade;
+        colors[i * 3 + 2] = accent.b * fade;
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+      const material = new THREE.LineBasicMaterial({
+        vertexColors: true,
+        transparent: true,
+        opacity: 1,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const line = new THREE.Line(geometry, material);
+      line.frustumCulled = false;
+      line.renderOrder = -1;
+      scene.add(line);
+      return { line, geometry, positions };
     }
 
     planets.forEach((config, index) => {
-      makeTrail(config, index);
-
-      const surfaceTexture = makePlanetSurfaceTexture(config);
-      if (surfaceTexture) surfaceTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      makeOrbitEllipse(config, index);
+      const archetype = planetArchetypes[config.slug] ?? defaultArchetype;
 
       const group = new THREE.Group();
       group.userData = { slug: config.slug, route: config.route, name: config.name };
 
-      const material = new THREE.MeshStandardMaterial({
-        map: surfaceTexture,
-        color: 0xffffff,
-        metalness: 0.02,
-        roughness: 0.34,
-        emissive: new THREE.Color(0xffffff),
-        emissiveMap: surfaceTexture,
-        emissiveIntensity: 0.34,
-      });
-      const sphere = new THREE.Mesh(new THREE.SphereGeometry(config.radius, 72, 72), material);
+      const material = makePlanetMaterial(config, archetype);
+      const sphere = new THREE.Mesh(new THREE.SphereGeometry(config.radius, 48, 48), material);
       sphere.userData = group.userData;
       group.add(sphere);
 
-      const atmosphereTexture = makeAtmosphereTexture(config.accentRgb);
-      const atmosphere = new THREE.Sprite(
-        new THREE.SpriteMaterial({
-          map: atmosphereTexture,
-          color: 0xffffff,
-          transparent: true,
-          opacity: 0.22,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-        }),
-      );
-      atmosphere.scale.setScalar(config.radius * 2.72);
-      atmosphere.renderOrder = -1;
+      const atmosphere = makeAtmosphereMesh(config);
       group.add(atmosphere);
+
+      const ring = makeRingMesh(config, archetype);
+      if (ring) group.add(ring);
 
       scene.add(group);
       hitTargets.push(sphere);
@@ -863,6 +727,9 @@ export function OrbitLanding({ collections }: Props) {
         group,
         sphere,
         atmosphere,
+        trail: makeTrail(config),
+        angle: config.phase,
+        hover: 0,
         label: labelsRef.current[config.slug] ?? null,
       });
     });
@@ -885,6 +752,15 @@ export function OrbitLanding({ collections }: Props) {
       stageElement.setAttribute("data-transitioning", "true");
       stageElement.style.cursor = "default";
 
+      let hasSeenDropIn = false;
+      try {
+        hasSeenDropIn = window.sessionStorage.getItem("mcvDropInSeen") === "1";
+        window.sessionStorage.setItem("mcvDropInSeen", "1");
+      } catch {
+        hasSeenDropIn = false;
+      }
+      const timeScale = hasSeenDropIn ? 0.55 : 1;
+
       landingTransition = {
         config,
         runtime,
@@ -899,14 +775,21 @@ export function OrbitLanding({ collections }: Props) {
         particles: [],
         hasExploded: false,
         hasNavigated: false,
+        timeScale,
       };
 
       setTransitionOverlay({ name: config.name, accent: config.accent, phase: "approach" });
-      scheduleTransitionStep(TRANSITION_APPROACH_SECONDS * 1000, () => {
+      scheduleTransitionStep(TRANSITION_APPROACH_SECONDS * timeScale * 1000, () => {
         setTransitionOverlay({ name: config.name, accent: config.accent, phase: "hold" });
       });
-      scheduleTransitionStep(TRANSITION_EXPLODE_SECONDS * 1000, () => {
+      scheduleTransitionStep(TRANSITION_EXPLODE_SECONDS * timeScale * 1000, () => {
         setTransitionOverlay({ name: config.name, accent: config.accent, phase: "explode" });
+      });
+      scheduleTransitionStep(TRANSITION_NAV_SECONDS * timeScale * 1000 + 600, () => {
+        if (landingTransition && !landingTransition.hasNavigated) {
+          landingTransition.hasNavigated = true;
+          window.location.assign(config.route);
+        }
       });
     }
 
@@ -970,48 +853,93 @@ export function OrbitLanding({ collections }: Props) {
       if (slug) startLandingTransition(slug);
     };
 
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted || !landingTransition) return;
+      if (landingTransition.particles.length) removeExplosionParticles(landingTransition.particles);
+      clearTransitionTimers();
+      landingTransition = null;
+      setTransitionOverlay(null);
+      stageElement.removeAttribute("data-transitioning");
+      stageElement.style.cursor = "default";
+      sunGlow.visible = true;
+      sunGroup.visible = true;
+      sunGroup.position.set(0, 0, 0);
+      sunGroup.scale.setScalar(1);
+      runtimePlanets.forEach((planet) => {
+        planet.group.visible = true;
+      });
+      setActive(null);
+    };
+
     canvasElement.addEventListener("pointermove", onPointerMove);
     canvasElement.addEventListener("pointerleave", onPointerLeave);
     canvasElement.addEventListener("pointerdown", onPointerDown);
     canvasElement.addEventListener("click", onClick);
     stageElement.addEventListener("click", onClick);
+    window.addEventListener("pageshow", onPageShow);
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(stageElement);
     resize();
 
     let frame = 0;
     let start = 0;
+    let lastTime = 0;
+    let sceneSlow = 0;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const projected = new THREE.Vector3();
+    const topProjected = new THREE.Vector3();
+    const sunDirScratch = new THREE.Vector3();
+    const labelStates: {
+      config: PlanetConfig;
+      closeness: number;
+      isActive: boolean;
+      overlapFade: number;
+      x: number;
+      y: number;
+      planetX: number;
+      planetY: number;
+      planetRadius: number;
+      stageWidth: number;
+      stageHeight: number;
+    }[] = [];
 
     function animate(now: number) {
       if (!start) start = now;
       const time = (now - start) / 1000;
+      const delta = Math.min(Math.max(time - lastTime, 0), 0.05);
+      lastTime = time;
+      const motionTime = prefersReducedMotion ? 14 : time;
+      const motionDelta = prefersReducedMotion ? 0 : delta;
       const activeSlug = activeRef.current;
       const transition = landingTransition;
       if (transition && !transition.startTime) transition.startTime = time;
-      const transitionElapsed = transition ? time - transition.startTime : 0;
+      const transitionElapsed = transition ? (time - transition.startTime) / transition.timeScale : 0;
 
-      sunGroup.rotation.y = Math.PI * 0.5 + time * 0.28;
-      sunGroup.rotation.x = BODY_FACE_TILT_X + Math.sin(time * 0.14) * 0.018;
+      sunMaterial.uniforms.uTime.value = motionTime;
+      sunGroup.rotation.y = Math.PI * 0.5 + motionTime * 0.28;
+      sunGroup.rotation.x = BODY_FACE_TILT_X + Math.sin(motionTime * 0.14) * 0.018;
       sunGroup.rotation.z = BODY_FACE_TILT_Z;
-      const glowPulse = 1 + Math.sin(time * 1.4) * 0.035;
+      const glowPulse = 1 + Math.sin(motionTime * 1.4) * 0.035;
       sunGlow.scale.set(3.75 * glowPulse, 3.75 * glowPulse, 1);
 
       sunParticles.forEach((particle) => {
-        const progress = (time * particle.speed + particle.phase) % 1;
+        const progress = (motionTime * particle.speed + particle.phase) % 1;
         const distance = 1.34 + progress * 0.59;
         particle.sprite.position.copy(particle.direction).multiplyScalar(distance);
-        particle.sprite.material.opacity = (1 - progress) * 0.46;
+        particle.sprite.material.opacity = prefersReducedMotion ? 0 : (1 - progress) * 0.46;
         particle.sprite.scale.setScalar(particle.size * (0.72 + progress * 1.05));
-      });
-
-      orbitTrails.forEach((trail) => {
-        if (trail.shaderStore.current) trail.shaderStore.current.uniforms.dashOffset.value = -time * trail.dashSpeed;
       });
 
       const centerLabel = labelsRef.current[centerTransitionConfig.slug];
       if (centerLabel) {
-        centerLabel.style.setProperty("--label-opacity", transition ? "0" : activeSlug === centerTransitionConfig.slug ? "1" : "0");
+        const stageRectForSun = stageElement.getBoundingClientRect();
+        projected.set(0, 0, 0).project(camera);
+        topProjected.set(0, sunRadius * 1.12, 0).project(camera);
+        const sunCenterY = (-projected.y * 0.5 + 0.5) * stageRectForSun.height;
+        const sunTopY = (-topProjected.y * 0.5 + 0.5) * stageRectForSun.height;
+        const sunLabelLift = Math.max(96, sunCenterY - sunTopY + 20);
+        centerLabel.style.transform = `translate(-50%, ${-sunLabelLift}px)`;
+        centerLabel.style.setProperty("--label-opacity", transition ? "0" : activeSlug === centerTransitionConfig.slug ? "1" : "0.55");
         centerLabel.style.setProperty("--label-accent", centerTransitionConfig.accent);
         centerLabel.style.setProperty("--label-rgb", planetThemeMap["mars-cats-voyage"].accentRgb);
       }
@@ -1047,17 +975,20 @@ export function OrbitLanding({ collections }: Props) {
         }
       }
 
+      sceneSlow += ((activeSlug ? 1 : 0) - sceneSlow) * Math.min(1, delta * 6);
+      const orbitScale = 1 - sceneSlow * 0.85;
+
       const positions = runtimePlanets.map((planet, index) => {
         const { config } = planet;
         const isActive = activeSlug === config.slug;
         const speed = isActive ? config.orbitSpeed * 0.08 : config.orbitSpeed;
-        const angle = config.phase + time * speed;
-        const point = orbitPoint(config, index, angle);
+        planet.angle += motionDelta * speed * orbitScale;
+        const point = orbitPoint(config, index, planet.angle);
         return { x: point.x, y: point.y, z: point.z, isActive };
       });
 
       runtimePlanets.forEach((planet, index) => {
-        const { config, group, sphere, atmosphere } = planet;
+        const { config, group, sphere, atmosphere, trail } = planet;
         const { x, y, z, isActive } = positions[index];
         const isTransitionPlanet = transition?.config.slug === config.slug;
         const isTransitioningOtherPlanet = Boolean(transition && !isTransitionPlanet);
@@ -1070,6 +1001,20 @@ export function OrbitLanding({ collections }: Props) {
         }, Number.POSITIVE_INFINITY);
         const overlapFade = THREE.MathUtils.smoothstep(nearestNeighbor, 0.78, 1.28);
 
+        planet.hover += ((isActive ? 1 : 0) - planet.hover) * Math.min(1, delta * 9);
+        sphere.material.uniforms.uTime.value = motionTime;
+        sphere.material.uniforms.uHover.value = planet.hover;
+
+        for (let k = 0; k < TRAIL_POINTS; k += 1) {
+          const trailAngle = planet.angle - (k / (TRAIL_POINTS - 1)) * TRAIL_SPAN;
+          const trailPoint = orbitPoint(config, index, trailAngle);
+          trail.positions[k * 3] = trailPoint.x;
+          trail.positions[k * 3 + 1] = trailPoint.y;
+          trail.positions[k * 3 + 2] = trailPoint.z;
+        }
+        trail.geometry.attributes.position.needsUpdate = true;
+        (trail.line.material as THREE.LineBasicMaterial).opacity = isTransitioningOtherPlanet ? 0.24 : transition ? 0.4 : 1;
+
         if (isTransitionPlanet && transition) {
           const approachProgress = THREE.MathUtils.clamp(transitionElapsed / TRANSITION_APPROACH_SECONDS, 0, 1);
           const easedApproach = easeInOutCubic(approachProgress);
@@ -1079,8 +1024,8 @@ export function OrbitLanding({ collections }: Props) {
           sphere.rotation.y += config.spinSpeed * 0.075;
           sphere.rotation.x = BODY_FACE_TILT_X + Math.sin(time * 1.25) * 0.08;
           sphere.rotation.z = BODY_FACE_TILT_Z;
-          sphere.material.emissiveIntensity = 0.62;
-          atmosphere.material.opacity = transition.hasExploded ? 0 : 0.58;
+          sphere.material.uniforms.uHover.value = 1;
+          atmosphere.material.uniforms.uIntensity.value = transition.hasExploded ? 0 : 1.3;
 
           if (transitionElapsed >= TRANSITION_EXPLODE_SECONDS && !transition.hasExploded) {
             transition.hasExploded = true;
@@ -1107,25 +1052,39 @@ export function OrbitLanding({ collections }: Props) {
           group.position.set(x, y, z);
           group.scale.setScalar(isTransitioningOtherPlanet ? scale * 0.92 : scale);
           group.renderOrder = Math.round(closeness * 20);
-          sphere.rotation.y += (isActive ? config.spinSpeed * 0.15 : config.spinSpeed) * 0.016;
-          sphere.rotation.x = BODY_FACE_TILT_X + Math.sin(time * 0.18 + index) * 0.05;
+          sphere.rotation.y += (isActive ? config.spinSpeed * 0.15 : config.spinSpeed) * 0.016 * (prefersReducedMotion ? 0 : 1);
+          sphere.rotation.x = BODY_FACE_TILT_X + Math.sin(motionTime * 0.18 + index) * 0.05;
           sphere.rotation.z = BODY_FACE_TILT_Z;
-          sphere.material.emissiveIntensity = isActive ? 0.5 : 0.3 + closeness * 0.12;
-          atmosphere.material.opacity = (isTransitioningOtherPlanet ? 0.08 : isActive ? 0.46 : 0.2 + closeness * 0.16) * overlapFade;
+          atmosphere.material.uniforms.uIntensity.value =
+            (isTransitioningOtherPlanet ? 0.16 : 0.42 + closeness * 0.22 + planet.hover * 0.55) * overlapFade;
         }
 
+        sunDirScratch.copy(group.position).multiplyScalar(-1);
+        if (sunDirScratch.lengthSq() < 0.0001) sunDirScratch.set(0, 0, 1);
+        sunDirScratch.normalize();
+        (sphere.material.uniforms.uSunDir.value as THREE.Vector3).copy(sunDirScratch);
+        (atmosphere.material.uniforms.uSunDir.value as THREE.Vector3).copy(sunDirScratch);
+
         projected.copy(group.position).project(camera);
-        const rect = stageElement.getBoundingClientRect();
-        const label = labelsRef.current[config.slug];
-        if (label) {
-          const labelX = (projected.x * 0.5 + 0.5) * rect.width;
-          const labelY = (-projected.y * 0.5 + 0.5) * rect.height;
-          label.style.setProperty("--label-x", `${labelX}px`);
-          label.style.setProperty("--label-y", `${labelY}px`);
-          label.style.setProperty("--label-depth", String(0.72 + closeness * 0.34));
-          label.style.setProperty("--label-opacity", transition ? "0" : isActive ? "1" : "0");
-          label.style.setProperty("--label-accent", config.accent);
-        }
+        topProjected.copy(group.position);
+        topProjected.y += config.radius * group.scale.x * 1.05;
+        topProjected.project(camera);
+        const stageRect = stageElement.getBoundingClientRect();
+        const centerY = (-projected.y * 0.5 + 0.5) * stageRect.height;
+        const topY = (-topProjected.y * 0.5 + 0.5) * stageRect.height;
+        labelStates.push({
+          config,
+          closeness,
+          isActive,
+          overlapFade,
+          x: THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * stageRect.width, 110, stageRect.width - 110),
+          y: THREE.MathUtils.clamp(Math.min(topY, centerY), 96, stageRect.height - 30),
+          planetX: (projected.x * 0.5 + 0.5) * stageRect.width,
+          planetY: centerY,
+          planetRadius: Math.abs(centerY - topY),
+          stageWidth: stageRect.width,
+          stageHeight: stageRect.height,
+        });
 
         if (!transition && isActive) {
           setActivePlanet({
@@ -1139,6 +1098,42 @@ export function OrbitLanding({ collections }: Props) {
           });
         }
       });
+
+      labelStates.sort((a, b) => Number(b.isActive) - Number(a.isActive) || b.closeness - a.closeness);
+      const placedLabels: { x: number; y: number; halfWidth: number; halfHeight: number }[] = [];
+      if (labelStates.length > 0) {
+        const stageW = labelStates[0].stageWidth;
+        const stageH = labelStates[0].stageHeight;
+        placedLabels.push({ x: stageW / 2, y: stageH / 2 - 124, halfWidth: 116, halfHeight: 30 });
+        placedLabels.push({ x: stageW / 2, y: stageH / 2, halfWidth: 150, halfHeight: 118 });
+      }
+      labelStates.forEach((state) => {
+        const label = labelsRef.current[state.config.slug];
+        if (!label) return;
+        const depthScale = 0.72 + state.closeness * 0.34;
+        const halfWidth = (state.config.name.length * 7.4 * depthScale + 44) / 2;
+        let opacity = state.isActive ? 1 : (0.52 + state.closeness * 0.2) * Math.max(0.5, state.overlapFade);
+        const collides = placedLabels.some(
+          (other) =>
+            Math.abs(state.x - other.x) < halfWidth + other.halfWidth + 12 &&
+            Math.abs(state.y - other.y) < 26 + other.halfHeight,
+        );
+        const hitsPlanet = labelStates.some(
+          (other) =>
+            other.config.slug !== state.config.slug &&
+            Math.abs(state.x - other.planetX) < halfWidth + other.planetRadius + 8 &&
+            Math.abs(state.y - other.planetY) < 24 + other.planetRadius + 8,
+        );
+        if ((collides || hitsPlanet) && !state.isActive) opacity = 0;
+        if (state.y > state.stageHeight - 130 && !state.isActive) opacity = 0;
+        if (opacity > 0.05) placedLabels.push({ x: state.x, y: state.y, halfWidth, halfHeight: 26 });
+        label.style.setProperty("--label-x", `${state.x}px`);
+        label.style.setProperty("--label-y", `${state.y}px`);
+        label.style.setProperty("--label-depth", String(depthScale));
+        label.style.setProperty("--label-opacity", transition ? "0" : opacity.toFixed(3));
+        label.style.setProperty("--label-accent", state.config.accent);
+      });
+      labelStates.length = 0;
 
       renderer.render(scene, camera);
       frame = window.requestAnimationFrame(animate);
@@ -1157,6 +1152,7 @@ export function OrbitLanding({ collections }: Props) {
       canvasElement.removeEventListener("pointerdown", onPointerDown);
       canvasElement.removeEventListener("click", onClick);
       stageElement.removeEventListener("click", onClick);
+      window.removeEventListener("pageshow", onPageShow);
       renderer.dispose();
       scene.traverse((object) => {
         if (object instanceof THREE.Mesh || object instanceof THREE.Line) {
@@ -1214,7 +1210,7 @@ export function OrbitLanding({ collections }: Props) {
         <p className="orbitStatLine">
           <span>{collections.length} collections</span>
           <span>{collections.reduce((sum, entry) => sum + entry.collection.actualTokenCount, 0).toLocaleString()} tokens ranked</span>
-          <span>3 chains</span>
+          <span>{chainCount} chains</span>
         </p>
       </div>
 
@@ -1227,7 +1223,6 @@ export function OrbitLanding({ collections }: Props) {
         </div>
         <div className="solarSunTrajectory" aria-hidden="true" />
         <canvas className="solarSystemCanvas" ref={canvasRef} aria-label="Interactive 3D MCV collection solar system" />
-        {isLoading && <span className="solarSystemLoading">Loading orbit</span>}
         {center && (
           <button
             className="solarSunLabel"

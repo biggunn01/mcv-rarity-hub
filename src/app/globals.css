@@ -6084,3 +6084,917 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
     letter-spacing: 0.12em;
   }
 }
+
+/* ==========================================================================
+   Celestial pass — shader worlds + two-speed interaction discipline
+   Landing planets rebuilt in GLSL (fresnel worlds, turbulent sun, motion
+   trails); Linear two-speed motion tokens; Superpower tinted chips;
+   mobile hero integrity fixes.
+   ========================================================================== */
+
+:root {
+  --speed-hover: 100ms;
+  --speed-layout: 250ms;
+}
+
+/* ----- Landing: labels are faint flight-deck callouts, sharp on approach ----- */
+.solarPlanetLabel,
+.solarSunLabel {
+  transition: opacity 180ms ease, transform 180ms ease, border-color 420ms ease;
+}
+
+/* ----- Rarity table: row destination affordance (Linear reveal) ----- */
+.marketRankTable td.keyTraitsCell {
+  position: relative;
+  padding-right: 46px;
+}
+
+.marketRankTable td.keyTraitsCell::after {
+  content: "→";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  color: var(--collection-accent, #ffb15d);
+  opacity: 0;
+  transform: translate(-6px, -50%);
+  transition: opacity var(--speed-hover) ease, transform var(--speed-hover) ease;
+}
+
+.marketRankTable tbody tr:hover td.keyTraitsCell::after {
+  opacity: 0.9;
+  transform: translate(0, -50%);
+}
+
+/* ----- Tinted accent chips (accent text on 10% accent field) ----- */
+.scorePill {
+  border-color: transparent;
+  border-radius: 999px;
+  background: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.12);
+}
+
+.traitCountPill {
+  border-radius: 999px;
+}
+
+/* ----- Buttons: position snaps fast, color drifts slow ----- */
+.marketBackLink,
+.pagination a,
+.hallCardExplore {
+  transition: transform var(--speed-hover) ease, background 420ms ease, border-color 420ms ease, color 420ms ease;
+}
+
+/* ----- Mobile hero integrity: no horizontal bleed at phone widths ----- */
+@media (max-width: 640px) {
+  .threeOrbitCopy {
+    max-width: calc(100vw - 24px);
+  }
+
+  .threeOrbitCopy h1 {
+    font-size: clamp(1.5rem, 7vw, 2.1rem);
+    line-height: 1.05;
+    white-space: normal;
+  }
+
+  .orbitStatLine {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 6px;
+  }
+}
+
+/* ----- Retire the award-pass comet dash — clashes with shader sun ----- */
+.solarSunTrajectory {
+  display: none;
+}
+
+/* ----- Judge iteration 1 fixes ----- */
+
+/* Global slim header (collection + token pages) */
+.siteHeader {
+  position: sticky;
+  top: 12px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: clamp(14px, 2vw, 24px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  padding: 8px 10px 8px 20px;
+  background:
+    linear-gradient(90deg, rgba(6, 8, 15, 0.72), rgba(12, 16, 27, 0.82), rgba(6, 8, 15, 0.72));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+}
+
+.siteHeaderBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #f0ebe2;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 420ms ease;
+}
+
+.siteHeaderBrand:hover {
+  color: #ffffff;
+}
+
+.siteHeaderMark {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff9a32;
+  box-shadow: 0 0 12px rgba(255, 154, 50, 0.85);
+}
+
+.siteHeaderNav {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.siteHeaderNav::-webkit-scrollbar {
+  display: none;
+}
+
+.siteHeaderNav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 999px;
+  padding: 7px 11px;
+  color: rgba(255, 255, 255, 0.62);
+  font-family: var(--font-data), monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 420ms ease, background var(--speed-hover) ease;
+}
+
+.siteHeaderNav a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.siteHeaderNav a.isActive {
+  color: var(--hd-accent, #8adce8);
+  background: color-mix(in srgb, var(--hd-accent, #8adce8) 12%, transparent);
+}
+
+.siteHeaderDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hd-accent, #8adce8);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--hd-accent, #8adce8) 70%, transparent);
+}
+
+/* Ghost hero title: intentional fade-out instead of hard clip */
+.heroGhostTitle {
+  max-width: calc(100% + 8px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, #000 52%, transparent 90%);
+  mask-image: linear-gradient(90deg, #000 52%, transparent 90%);
+}
+
+/* Rarity table: tighter data density */
+.marketRankTable td {
+  height: 96px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.marketRankTable .tokenThumb {
+  width: 72px;
+}
+
+/* Token page: action links join the accent system */
+.tokenSidePanel .links a {
+  border: 1px solid color-mix(in srgb, var(--collection-accent, #ffb15d) 32%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--collection-accent, #ffb15d) 9%, transparent);
+  color: color-mix(in srgb, var(--collection-accent, #ffb15d) 78%, #ffffff);
+  transition: transform var(--speed-hover) ease, background 420ms ease, border-color 420ms ease, color 420ms ease;
+}
+
+.tokenSidePanel .links a:hover {
+  border-color: color-mix(in srgb, var(--collection-accent, #ffb15d) 62%, transparent);
+  background: color-mix(in srgb, var(--collection-accent, #ffb15d) 16%, transparent);
+  color: #ffffff;
+}
+
+/* HUD micro-labels: legible contrast */
+.hudTag {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+/* Hall of Rarest: balanced bento — showcase card stays wide, not massive */
+.hallCard:first-child {
+  grid-row: span 1;
+}
+
+/* Mobile: compress the orbital stage, no dead space */
+@media (max-width: 640px) {
+  .solarSystemStage {
+    height: min(430px, 56svh);
+    margin-top: -8px;
+  }
+
+  .orbitHero.threeOrbitHero {
+    min-height: 0;
+  }
+}
+
+/* Mobile: tokens first, filters after the table */
+@media (max-width: 700px) {
+  .marketFilterRail {
+    order: 2;
+  }
+
+  .marketTableWrap {
+    order: 1;
+  }
+
+  .siteHeader {
+    top: 8px;
+    padding-left: 14px;
+  }
+
+  .siteHeaderBrand {
+    font-size: 0.7rem;
+  }
+}
+
+/* Mobile: dock chips carry identity; floating pills would collide */
+@media (max-width: 640px) {
+  .solarPlanetLabel,
+  .solarSunLabel {
+    display: none;
+  }
+}
+
+/* ----- Judge iteration 2 fixes ----- */
+
+/* Cascade repair: dock shelf gradient belongs at the stage FOOT, not the top.
+   (Award-pass `inset: -2%` leaked a top anchor into the signature-pass shelf.) */
+.solarSystemStage::after {
+  top: auto;
+  bottom: 0;
+}
+
+/* Collection hero: title wraps at word boundaries; actions never collide */
+.marketCollectionHeader {
+  flex-wrap: wrap;
+  row-gap: 18px;
+  padding-bottom: 88px;
+}
+
+.marketCollectionTitle {
+  flex: 1 1 460px;
+}
+
+.marketCollectionTitle h1 {
+  min-width: 0;
+  text-wrap: balance;
+}
+
+.marketHeaderActions {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Filter rail rides along with the table */
+@media (min-width: 701px) {
+  .marketFilterRail {
+    position: sticky;
+    top: 86px;
+    align-self: start;
+    max-height: calc(100vh - 104px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
+
+/* Key traits read as chips, not a dashed string */
+.keyTraitsCell .keyTraitChip {
+  display: inline-flex;
+  align-items: center;
+  margin: 2px 6px 2px 0;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition: border-color 420ms ease, color 420ms ease;
+}
+
+.marketRankTable tbody tr:hover .keyTraitChip {
+  border-color: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.32);
+  color: rgba(255, 255, 255, 0.94);
+}
+
+/* Pagination counter never wraps */
+.pagination span {
+  white-space: nowrap;
+}
+
+/* Hall of Rarest: a calm, equal grid */
+.hallCard:first-child {
+  grid-column: span 1;
+}
+
+/* Branded 404 */
+.notFoundShell {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: 18px clamp(18px, 4vw, 48px);
+}
+
+.notFoundBody {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  max-width: 640px;
+  padding-top: clamp(80px, 18vh, 200px);
+}
+
+.notFoundTitle {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  font-size: clamp(2.2rem, 5.4vw, 4.4rem);
+  font-weight: 600;
+  line-height: 1.02;
+  background: linear-gradient(180deg, #ffffff 34%, #ffcf9e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.notFoundAction {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 10px;
+  border: 1px solid rgba(255, 154, 50, 0.4);
+  border-radius: 999px;
+  padding: 12px 22px;
+  background: rgba(255, 154, 50, 0.1);
+  color: #ffc98d;
+  font-weight: 700;
+  transition: transform var(--speed-hover) ease, background 420ms ease, border-color 420ms ease, color 420ms ease;
+}
+
+.notFoundAction:hover {
+  border-color: rgba(255, 154, 50, 0.7);
+  background: rgba(255, 154, 50, 0.18);
+  color: #ffffff;
+}
+
+.notFoundGhost {
+  position: absolute;
+  right: -2vw;
+  bottom: -6vh;
+  z-index: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(12rem, 34vw, 30rem);
+  font-weight: 800;
+  line-height: 0.8;
+  color: rgba(255, 255, 255, 0.03);
+  -webkit-text-stroke: 1px rgba(255, 154, 50, 0.14);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Mobile: viewfinder chrome off, dock becomes a scroll strip */
+@media (max-width: 640px) {
+  .hudFrame {
+    display: none;
+  }
+
+  .solarSystemFallback {
+    right: 0;
+    left: 0;
+    bottom: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 6px 14px 10px;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+  }
+
+  .solarSystemFallback::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ----- Judge iteration 3 fixes ----- */
+
+/* Landing joins the global shell: floating header over the hero */
+.landingShell {
+  position: relative;
+}
+
+.landingShell .siteHeader {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  z-index: 70;
+  width: min(1240px, calc(100vw - 28px));
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+.landingShell .threeOrbitCopy .eyebrow {
+  visibility: hidden;
+  height: 0;
+  margin: 0;
+}
+
+.orbitHero.threeOrbitHero {
+  padding-top: clamp(64px, 7vh, 88px);
+}
+
+/* Orbital labels: on-brand instrument callouts */
+.solarPlanetLabel,
+.solarSunLabel {
+  font-family: var(--font-data), monospace;
+  font-size: clamp(0.6rem, 0.78vw, 0.72rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.88);
+  border-color: rgba(var(--label-rgb, 255, 255, 255), 0.45);
+  background: rgba(2, 4, 10, 0.74);
+}
+
+/* Scoring method is stated where scores live */
+.scoreMethodNote {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+@media (max-width: 900px) {
+  .scoreMethodNote {
+    display: none;
+  }
+}
+
+/* Mobile filter drawer: rail is a single collapsed control above the table */
+.mobileFilterToggle {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .marketFilterRail {
+    order: 0;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .mobileFilterToggle {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    border: 0;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.88);
+    font-family: var(--font-data), monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .mobileFilterToggleIcon {
+    color: var(--collection-accent, #ffb15d);
+    font-size: 1rem;
+  }
+
+  .marketFilterRail .filterRailBody {
+    display: none;
+    padding: 16px;
+  }
+
+  .marketFilterRail.isOpen .filterRailBody {
+    display: block;
+  }
+
+  .marketTableWrap {
+    order: 1;
+  }
+}
+
+/* ----- Judge iteration 4 additions ----- */
+
+/* Rank stepper: the browsing loop never dead-ends */
+.rankStepper {
+  display: inline-flex;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.rankStepLink {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(var(--collection-accent-rgb, 255, 154, 50), 0.3);
+  border-radius: 999px;
+  padding: 6px 13px;
+  background: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.07);
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-data), monospace;
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: transform var(--speed-hover) ease, background 420ms ease, border-color 420ms ease, color 420ms ease;
+}
+
+.rankStepLink:hover {
+  border-color: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.62);
+  background: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.16);
+  color: #ffffff;
+}
+
+/* Nearby ranks strip */
+.nearbyRanksRow {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(10px, 1.4vw, 18px);
+}
+
+.nearbyRankCard {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  transition: transform var(--speed-hover) ease, border-color 420ms ease, background 420ms ease;
+}
+
+.nearbyRankCard:hover {
+  transform: translateY(-3px);
+  border-color: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.42);
+  background: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.06);
+}
+
+.nearbyRankArt {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04) var(--nb-image) center / cover no-repeat;
+}
+
+.nearbyRankRank {
+  color: var(--collection-accent, #ffb15d);
+  font-family: var(--font-data), monospace;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.nearbyRankName {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .nearbyRanksRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Key traits: whole chips only — extras drop to a hidden second line */
+.marketRankTable td.keyTraitsCell {
+  max-width: 340px;
+}
+
+.keyTraitChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 32px;
+  overflow: hidden;
+}
+
+/* Header nav: scroll affordance on small screens */
+@media (max-width: 700px) {
+  .siteHeaderNav {
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent 100%);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent 100%);
+  }
+
+  .tableMeta span:last-child {
+    display: none;
+  }
+
+  .scoreMethodNote {
+    display: none;
+  }
+}
+
+/* Landing labels stay single-line pills */
+.solarPlanetLabel,
+.solarSunLabel {
+  white-space: nowrap;
+}
+
+/* ----- Judge iteration 5/6 fixes: compact mobile row + contrast ----- */
+
+.rarityTickerItem {
+  color: rgba(240, 235, 226, 0.74);
+}
+
+.listingPill:not(:has(a)) {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 700px) {
+  .marketRankTable tr {
+    grid-template-columns: 88px minmax(0, 1fr) auto;
+    gap: 3px 12px;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .marketRankTable td:nth-child(1) {
+    grid-column: 3;
+    grid-row: 1;
+    z-index: auto;
+    align-self: center;
+    justify-self: end;
+  }
+
+  .marketRankTable td:nth-child(2) {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    align-self: center;
+  }
+
+  .marketRankTable td:nth-child(3) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .marketRankTable td:nth-child(4) {
+    grid-column: 2 / span 2;
+    grid-row: 2;
+  }
+
+  .marketRankTable td:nth-child(5) {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .marketRankTable td:nth-child(6) {
+    grid-column: 3;
+    grid-row: 3;
+    justify-self: end;
+  }
+
+  .marketRankTable td:nth-child(7) {
+    grid-column: 2 / span 2;
+    grid-row: 4;
+    margin-top: 4px;
+  }
+
+  .marketRankTable td:nth-child(4)::before,
+  .marketRankTable td:nth-child(5)::before,
+  .marketRankTable td:nth-child(6)::before {
+    display: inline-block;
+    margin: 0 7px 0 0;
+    vertical-align: middle;
+  }
+
+  .marketRankTable td:nth-child(6)::before {
+    content: none;
+  }
+
+  .scorePill,
+  .traitCountPill,
+  .listingPill {
+    display: inline-flex;
+    width: auto;
+    min-height: 26px;
+    justify-content: flex-start;
+    padding: 2px 11px;
+  }
+
+  .rankCell {
+    background: transparent;
+    padding: 0;
+  }
+
+  .podiumRank {
+    min-width: 0;
+    min-height: 28px;
+    padding: 0 11px;
+    font-size: 0.82rem;
+  }
+
+  .keyTraitsCell {
+    padding-right: 0;
+  }
+
+  .marketRankTable td.keyTraitsCell::after {
+    content: none;
+  }
+}
+
+/* Density rule is desktop-only; mobile rows stay compact */
+@media (max-width: 700px) {
+  .marketRankTable td {
+    height: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .marketRankTable tr.podiumGold td,
+  .marketRankTable tr.podiumSilver td,
+  .marketRankTable tr.podiumBronze td {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .marketRankTable tr.podiumGold {
+    border-color: rgba(255, 210, 75, 0.4);
+    background: rgba(58, 48, 22, 0.32);
+  }
+
+  .marketRankTable tr.podiumSilver {
+    border-color: rgba(207, 214, 228, 0.32);
+    background: rgba(38, 42, 52, 0.32);
+  }
+
+  .marketRankTable tr.podiumBronze {
+    border-color: rgba(216, 146, 90, 0.36);
+    background: rgba(52, 38, 26, 0.32);
+  }
+}
+
+@media (max-width: 700px) {
+  .marketRankTable tr.podiumGold td:first-child,
+  .marketRankTable tr.podiumSilver td:first-child,
+  .marketRankTable tr.podiumBronze td:first-child {
+    box-shadow: none;
+  }
+}
+
+/* ----- Judge iteration 7 additions ----- */
+
+/* Trait cards: weight visualized as share-of-score bar */
+.traitShareBar {
+  display: block;
+  height: 3px;
+  margin-top: 10px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.traitShareBar span {
+  display: block;
+  height: 100%;
+  width: var(--share, 0%);
+  border-radius: inherit;
+  background: var(--collection-accent, #ffb15d);
+  box-shadow: 0 0 8px rgba(var(--collection-accent-rgb, 255, 154, 50), 0.5);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes traitShareGrow {
+    from {
+      width: 0;
+    }
+  }
+
+  .traitShareBar span {
+    animation: traitShareGrow 900ms 250ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+}
+
+/* Tie flag: honest about equal scores */
+.tieFlag {
+  display: inline-block;
+  margin-left: 8px;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-data), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Wider mobile nav fade */
+@media (max-width: 700px) {
+  .siteHeaderNav {
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 56px), transparent 100%);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 56px), transparent 100%);
+  }
+}
+
+/* Seven worlds, seven horizons: per-collection hero backdrops */
+.collectionHeroBackdrop {
+  background-image:
+    linear-gradient(180deg, rgba(5, 6, 10, 0.1) 0%, rgba(5, 6, 10, 0.42) 58%, rgba(5, 6, 10, 0.94) 100%),
+    linear-gradient(115deg, rgba(var(--collection-accent-rgb), 0.3), rgba(5, 6, 10, 0) 52%),
+    var(--collection-backdrop, url("/backdrops/mars-horizon.webp"));
+}
+
+/* ----- Judge iteration 8 fixes ----- */
+
+/* Hall of Rarest: 8 equal cells, two clean rows */
+.hallStatCard {
+  grid-column: span 1;
+}
+
+.hallStatNumber {
+  font-size: clamp(2.1rem, 3.4vw, 3.2rem);
+}
+
+/* Filter rail: visible scroll affordance */
+.marketFilterRail {
+  scrollbar-color: rgba(255, 255, 255, 0.26) transparent;
+}
+
+/* Ghost type: fade begins sooner, reads as deliberate crop */
+.heroGhostTitle {
+  -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 78%);
+  mask-image: linear-gradient(90deg, #000 40%, transparent 78%);
+}
+
+/* ----- Judge iteration 9 fixes ----- */
+
+/* Collection hero: scroll parallax (progressive enhancement) */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    @keyframes heroBackdropDrift {
+      to {
+        background-position: center calc(50% + 46px), center, center 60%;
+      }
+    }
+
+    .collectionHeroBackdrop {
+      animation: heroBackdropDrift linear both;
+      animation-timeline: scroll();
+      animation-range: 0 640px;
+    }
+  }
+}
+
+/* HUD kickers: off the legibility floor */
+.hudTag {
+  font-size: 0.68rem;
+}
+
+/* Mobile: nearby-ranks section keeps container padding */
+@media (max-width: 700px) {
+  .nearbyRanks {
+    padding-inline: 16px;
+  }
+}
+
+/* ----- Judge iteration 10 polish ----- */
+
+/* Token page: rarity position bar fills on arrival */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rarityMeterFill {
+    from {
+      width: 0;
+    }
+  }
+
+  .rarityMeter > * {
+    animation: rarityMeterFill 1100ms 300ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+}
+
+/* ----- Judge iteration 11 fixes ----- */
+
+/* Microcopy contrast lift */
+.scoreMethodNote {
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.tableMeta {
+  color: rgba(255, 255, 255, 0.6);
+}
