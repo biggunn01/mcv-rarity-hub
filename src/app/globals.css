@@ -6919,3 +6919,25 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
     linear-gradient(115deg, rgba(var(--collection-accent-rgb), 0.3), rgba(5, 6, 10, 0) 52%),
     var(--collection-backdrop, url("/backdrops/mars-horizon.webp"));
 }
+
+/* ----- Judge iteration 8 fixes ----- */
+
+/* Hall of Rarest: 8 equal cells, two clean rows */
+.hallStatCard {
+  grid-column: span 1;
+}
+
+.hallStatNumber {
+  font-size: clamp(2.1rem, 3.4vw, 3.2rem);
+}
+
+/* Filter rail: visible scroll affordance */
+.marketFilterRail {
+  scrollbar-color: rgba(255, 255, 255, 0.26) transparent;
+}
+
+/* Ghost type: fade begins sooner, reads as deliberate crop */
+.heroGhostTitle {
+  -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 78%);
+  mask-image: linear-gradient(90deg, #000 40%, transparent 78%);
+}

@@ -1058,12 +1058,12 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       });
 
       labelStates.sort((a, b) => Number(b.isActive) - Number(a.isActive) || b.closeness - a.closeness);
-      const placedLabels: { x: number; y: number; halfWidth: number }[] = [];
+      const placedLabels: { x: number; y: number; halfWidth: number; halfHeight: number }[] = [];
       if (labelStates.length > 0) {
         const stageW = labelStates[0].stageWidth;
         const stageH = labelStates[0].stageHeight;
-        placedLabels.push({ x: stageW / 2, y: stageH / 2 - 124, halfWidth: 110 });
-        placedLabels.push({ x: stageW / 2, y: stageH / 2, halfWidth: 120 });
+        placedLabels.push({ x: stageW / 2, y: stageH / 2 - 124, halfWidth: 116, halfHeight: 30 });
+        placedLabels.push({ x: stageW / 2, y: stageH / 2, halfWidth: 150, halfHeight: 118 });
       }
       labelStates.forEach((state) => {
         const label = labelsRef.current[state.config.slug];
@@ -1072,11 +1072,13 @@ export function OrbitLanding({ collections, chainCount }: Props) {
         const halfWidth = (state.config.name.length * 7.4 * depthScale + 44) / 2;
         let opacity = state.isActive ? 1 : (0.52 + state.closeness * 0.2) * Math.max(0.5, state.overlapFade);
         const collides = placedLabels.some(
-          (other) => Math.abs(state.x - other.x) < halfWidth + other.halfWidth + 12 && Math.abs(state.y - other.y) < 52,
+          (other) =>
+            Math.abs(state.x - other.x) < halfWidth + other.halfWidth + 12 &&
+            Math.abs(state.y - other.y) < 26 + other.halfHeight,
         );
         if (collides && !state.isActive) opacity = 0;
-        if (state.y > state.stageHeight - 130 && !state.isActive) opacity *= 0.2;
-        if (opacity > 0.05) placedLabels.push({ x: state.x, y: state.y, halfWidth });
+        if (state.y > state.stageHeight - 130 && !state.isActive) opacity = 0;
+        if (opacity > 0.05) placedLabels.push({ x: state.x, y: state.y, halfWidth, halfHeight: 26 });
         label.style.setProperty("--label-x", `${state.x}px`);
         label.style.setProperty("--label-y", `${state.y}px`);
         label.style.setProperty("--label-depth", String(depthScale));
