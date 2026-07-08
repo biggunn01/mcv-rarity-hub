@@ -6084,3 +6084,85 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
     letter-spacing: 0.12em;
   }
 }
+
+/* ==========================================================================
+   Celestial pass — shader worlds + two-speed interaction discipline
+   Landing planets rebuilt in GLSL (fresnel worlds, turbulent sun, motion
+   trails); Linear two-speed motion tokens; Superpower tinted chips;
+   mobile hero integrity fixes.
+   ========================================================================== */
+
+:root {
+  --speed-hover: 100ms;
+  --speed-layout: 250ms;
+}
+
+/* ----- Landing: labels are faint flight-deck callouts, sharp on approach ----- */
+.solarPlanetLabel,
+.solarSunLabel {
+  transition: opacity 180ms ease, transform 180ms ease, border-color 420ms ease;
+}
+
+/* ----- Rarity table: row destination affordance (Linear reveal) ----- */
+.marketRankTable td.keyTraitsCell {
+  position: relative;
+  padding-right: 46px;
+}
+
+.marketRankTable td.keyTraitsCell::after {
+  content: "→";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  color: var(--collection-accent, #ffb15d);
+  opacity: 0;
+  transform: translate(-6px, -50%);
+  transition: opacity var(--speed-hover) ease, transform var(--speed-hover) ease;
+}
+
+.marketRankTable tbody tr:hover td.keyTraitsCell::after {
+  opacity: 0.9;
+  transform: translate(0, -50%);
+}
+
+/* ----- Tinted accent chips (accent text on 10% accent field) ----- */
+.scorePill {
+  border-color: transparent;
+  border-radius: 999px;
+  background: rgba(var(--collection-accent-rgb, 255, 154, 50), 0.12);
+}
+
+.traitCountPill {
+  border-radius: 999px;
+}
+
+/* ----- Buttons: position snaps fast, color drifts slow ----- */
+.marketBackLink,
+.pagination a,
+.hallCardExplore {
+  transition: transform var(--speed-hover) ease, background 420ms ease, border-color 420ms ease, color 420ms ease;
+}
+
+/* ----- Mobile hero integrity: no horizontal bleed at phone widths ----- */
+@media (max-width: 640px) {
+  .threeOrbitCopy {
+    max-width: calc(100vw - 24px);
+  }
+
+  .threeOrbitCopy h1 {
+    font-size: clamp(1.5rem, 7vw, 2.1rem);
+    line-height: 1.05;
+    white-space: normal;
+  }
+
+  .orbitStatLine {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 6px;
+  }
+}
+
+/* ----- Retire the award-pass comet dash — clashes with shader sun ----- */
+.solarSunTrajectory {
+  display: none;
+}
