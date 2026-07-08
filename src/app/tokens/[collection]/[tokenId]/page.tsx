@@ -86,10 +86,11 @@ export default async function TokenPage({ params }: Props) {
   const tokenIndex = data.tokens.findIndex((item) => item.canonicalTokenId === token.canonicalTokenId);
   const prevToken = tokenIndex > 0 ? data.tokens[tokenIndex - 1] : null;
   const nextToken = tokenIndex >= 0 && tokenIndex < data.tokens.length - 1 ? data.tokens[tokenIndex + 1] : null;
+  const nearbyWindowStart = Math.min(Math.max(0, tokenIndex - 3), Math.max(0, data.tokens.length - 7));
   const nearbyTokens =
     tokenIndex >= 0
       ? data.tokens
-          .slice(Math.max(0, tokenIndex - 3), tokenIndex + 4)
+          .slice(nearbyWindowStart, nearbyWindowStart + 7)
           .filter((item) => item.canonicalTokenId !== token.canonicalTokenId)
           .slice(0, 6)
       : [];

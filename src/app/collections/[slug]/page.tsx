@@ -530,12 +530,22 @@ export default async function CollectionPage({ params, searchParams }: Props) {
           <table className="marketRankTable">
             <thead>
               <tr>
-                <th><ClientSortLink href={sortHref(sort === "rank-asc" ? "rank-desc" : "rank-asc")}>Rank</ClientSortLink></th>
+                <th aria-sort={sort === "rank-asc" ? "ascending" : sort === "rank-desc" ? "descending" : undefined}>
+                  <ClientSortLink href={sortHref(sort === "rank-asc" ? "rank-desc" : "rank-asc")}>Rank{sort === "rank-asc" ? " ↑" : sort === "rank-desc" ? " ↓" : ""}</ClientSortLink>
+                </th>
                 <th>Preview</th>
-                <th><ClientSortLink href={sortHref(sort === "token-asc" ? "token-desc" : "token-asc")}>Token</ClientSortLink></th>
-                <th><ClientSortLink href={sortHref(sort === "score-desc" ? "score-asc" : "score-desc")}>Score</ClientSortLink></th>
-                <th><ClientSortLink href={sortHref(sort === "trait-count-desc" ? "trait-count-asc" : "trait-count-desc")}>Traits</ClientSortLink></th>
-                <th>{isOrdinalCollection ? "Inscription" : <ClientSortLink href={sortHref(sort === "listed-asc" ? "listed-desc" : "listed-asc")}>Listed</ClientSortLink>}</th>
+                <th aria-sort={sort === "token-asc" ? "ascending" : sort === "token-desc" ? "descending" : undefined}>
+                  <ClientSortLink href={sortHref(sort === "token-asc" ? "token-desc" : "token-asc")}>Token{sort === "token-asc" ? " ↑" : sort === "token-desc" ? " ↓" : ""}</ClientSortLink>
+                </th>
+                <th aria-sort={sort === "score-asc" ? "ascending" : sort === "score-desc" ? "descending" : undefined}>
+                  <ClientSortLink href={sortHref(sort === "score-desc" ? "score-asc" : "score-desc")}>Score{sort === "score-asc" ? " ↑" : sort === "score-desc" ? " ↓" : ""}</ClientSortLink>
+                </th>
+                <th aria-sort={sort === "trait-count-asc" ? "ascending" : sort === "trait-count-desc" ? "descending" : undefined}>
+                  <ClientSortLink href={sortHref(sort === "trait-count-desc" ? "trait-count-asc" : "trait-count-desc")}>Traits{sort === "trait-count-asc" ? " ↑" : sort === "trait-count-desc" ? " ↓" : ""}</ClientSortLink>
+                </th>
+                <th aria-sort={sort === "listed-asc" ? "ascending" : sort === "listed-desc" ? "descending" : undefined}>
+                  {isOrdinalCollection ? "Inscription" : <ClientSortLink href={sortHref(sort === "listed-asc" ? "listed-desc" : "listed-asc")}>Listed{sort === "listed-asc" ? " ↑" : sort === "listed-desc" ? " ↓" : ""}</ClientSortLink>}
+                </th>
                 <th>Key Traits</th>
               </tr>
             </thead>
@@ -591,9 +601,11 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                     </span>
                   </td>
                   <td className="keyTraitsCell">
-                    {token.attributes.filter((item) => !/trait count/i.test(item.traitType)).slice(0, 3).map((item) => (
-                      <span className="keyTraitChip" key={`${item.traitType}-${item.value}`}>{item.value.replace(/_/g, " ")}</span>
-                    ))}
+                    <span className="keyTraitChipRow">
+                      {token.attributes.filter((item) => !/trait count/i.test(item.traitType)).slice(0, 3).map((item) => (
+                        <span className="keyTraitChip" key={`${item.traitType}-${item.value}`}>{item.value.replace(/_/g, " ")}</span>
+                      ))}
+                    </span>
                   </td>
                 </tr>
               )})}

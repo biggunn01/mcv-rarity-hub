@@ -847,7 +847,9 @@ export function OrbitLanding({ collections }: Props) {
     let frame = 0;
     let start = 0;
     let lastTime = 0;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const projected = new THREE.Vector3();
+    const topProjected = new THREE.Vector3();
     const sunDirScratch = new THREE.Vector3();
     const labelStates: {
       config: PlanetConfig;
@@ -865,28 +867,37 @@ export function OrbitLanding({ collections }: Props) {
       const time = (now - start) / 1000;
       const delta = Math.min(Math.max(time - lastTime, 0), 0.05);
       lastTime = time;
+      const motionTime = prefersReducedMotion ? 14 : time;
+      const motionDelta = prefersReducedMotion ? 0 : delta;
       const activeSlug = activeRef.current;
       const transition = landingTransition;
       if (transition && !transition.startTime) transition.startTime = time;
       const transitionElapsed = transition ? time - transition.startTime : 0;
 
-      sunMaterial.uniforms.uTime.value = time;
-      sunGroup.rotation.y = Math.PI * 0.5 + time * 0.28;
-      sunGroup.rotation.x = BODY_FACE_TILT_X + Math.sin(time * 0.14) * 0.018;
+      sunMaterial.uniforms.uTime.value = motionTime;
+      sunGroup.rotation.y = Math.PI * 0.5 + motionTime * 0.28;
+      sunGroup.rotation.x = BODY_FACE_TILT_X + Math.sin(motionTime * 0.14) * 0.018;
       sunGroup.rotation.z = BODY_FACE_TILT_Z;
-      const glowPulse = 1 + Math.sin(time * 1.4) * 0.035;
+      const glowPulse = 1 + Math.sin(motionTime * 1.4) * 0.035;
       sunGlow.scale.set(3.75 * glowPulse, 3.75 * glowPulse, 1);
 
       sunParticles.forEach((particle) => {
-        const progress = (time * particle.speed + particle.phase) % 1;
+        const progress = (motionTime * particle.speed + particle.phase) % 1;
         const distance = 1.34 + progress * 0.59;
         particle.sprite.position.copy(particle.direction).multiplyScalar(distance);
-        particle.sprite.material.opacity = (1 - progress) * 0.46;
+        particle.sprite.material.opacity = prefersReducedMotion ? 0 : (1 - progress) * 0.46;
         particle.sprite.scale.setScalar(particle.size * (0.72 + progress * 1.05));
       });
 
       const centerLabel = labelsRef.current[centerTransitionConfig.slug];
       if (centerLabel) {
+        const stageRectForSun = stageElement.getBoundingClientRect();
+        projected.set(0, 0, 0).project(camera);
+        topProjected.set(0, sunRadius * 1.12, 0).project(camera);
+        const sunCenterY = (-projected.y * 0.5 + 0.5) * stageRectForSun.height;
+        const sunTopY = (-topProjected.y * 0.5 + 0.5) * stageRectForSun.height;
+        const sunLabelLift = Math.max(96, sunCenterY - sunTopY + 20);
+        centerLabel.style.transform = `translate(-50%, ${-sunLabelLift}px)`;
         centerLabel.style.setProperty("--label-opacity", transition ? "0" : activeSlug === centerTransitionConfig.slug ? "1" : "0.55");
         centerLabel.style.setProperty("--label-accent", centerTransitionConfig.accent);
         centerLabel.style.setProperty("--label-rgb", planetThemeMap["mars-cats-voyage"].accentRgb);
@@ -927,7 +938,7 @@ export function OrbitLanding({ collections }: Props) {
         const { config } = planet;
         const isActive = activeSlug === config.slug;
         const speed = isActive ? config.orbitSpeed * 0.08 : config.orbitSpeed;
-        planet.angle += delta * speed;
+        planet.angle += motionDelta * speed;
         const point = orbitPoint(config, index, planet.angle);
         return { x: point.x, y: point.y, z: point.z, isActive };
       });
@@ -947,7 +958,7 @@ export function OrbitLanding({ collections }: Props) {
         const overlapFade = THREE.MathUtils.smoothstep(nearestNeighbor, 0.78, 1.28);
 
         planet.hover += ((isActive ? 1 : 0) - planet.hover) * Math.min(1, delta * 9);
-        sphere.material.uniforms.uTime.value = time;
+        sphere.material.uniforms.uTime.value = motionTime;
         sphere.material.uniforms.uHover.value = planet.hover;
 
         for (let k = 0; k < TRAIL_POINTS; k += 1) {
@@ -997,8 +1008,8 @@ export function OrbitLanding({ collections }: Props) {
           group.position.set(x, y, z);
           group.scale.setScalar(isTransitioningOtherPlanet ? scale * 0.92 : scale);
           group.renderOrder = Math.round(closeness * 20);
-          sphere.rotation.y += (isActive ? config.spinSpeed * 0.15 : config.spinSpeed) * 0.016;
-          sphere.rotation.x = BODY_FACE_TILT_X + Math.sin(time * 0.18 + index) * 0.05;
+          sphere.rotation.y += (isActive ? config.spinSpeed * 0.15 : config.spinSpeed) * 0.016 * (prefersReducedMotion ? 0 : 1);
+          sphere.rotation.x = BODY_FACE_TILT_X + Math.sin(motionTime * 0.18 + index) * 0.05;
           sphere.rotation.z = BODY_FACE_TILT_Z;
           atmosphere.material.uniforms.uIntensity.value =
             (isTransitioningOtherPlanet ? 0.16 : 0.42 + closeness * 0.22 + planet.hover * 0.55) * overlapFade;
@@ -1011,14 +1022,19 @@ export function OrbitLanding({ collections }: Props) {
         (atmosphere.material.uniforms.uSunDir.value as THREE.Vector3).copy(sunDirScratch);
 
         projected.copy(group.position).project(camera);
+        topProjected.copy(group.position);
+        topProjected.y += config.radius * group.scale.x * 1.05;
+        topProjected.project(camera);
         const stageRect = stageElement.getBoundingClientRect();
+        const centerY = (-projected.y * 0.5 + 0.5) * stageRect.height;
+        const topY = (-topProjected.y * 0.5 + 0.5) * stageRect.height;
         labelStates.push({
           config,
           closeness,
           isActive,
           overlapFade,
           x: THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * stageRect.width, 110, stageRect.width - 110),
-          y: THREE.MathUtils.clamp((-projected.y * 0.5 + 0.5) * stageRect.height, 52, stageRect.height - 30),
+          y: THREE.MathUtils.clamp(Math.min(topY, centerY), 52, stageRect.height - 30),
           stageWidth: stageRect.width,
           stageHeight: stageRect.height,
         });

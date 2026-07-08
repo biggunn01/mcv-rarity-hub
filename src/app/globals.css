@@ -6262,8 +6262,8 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
 .heroGhostTitle {
   max-width: calc(100% + 8px);
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, #000 72%, transparent 98%);
-  mask-image: linear-gradient(90deg, #000 72%, transparent 98%);
+  -webkit-mask-image: linear-gradient(90deg, #000 52%, transparent 90%);
+  mask-image: linear-gradient(90deg, #000 52%, transparent 90%);
 }
 
 /* Rarity table: tighter data density */
@@ -6685,13 +6685,16 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
   }
 }
 
-/* Key traits: single quiet line, never uneven rows */
+/* Key traits: whole chips only — extras drop to a hidden second line */
 .marketRankTable td.keyTraitsCell {
-  max-width: 320px;
-  white-space: nowrap;
+  max-width: 340px;
+}
+
+.keyTraitChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 32px;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, #000 84%, transparent 99%);
-  mask-image: linear-gradient(90deg, #000 84%, transparent 99%);
 }
 
 /* Header nav: scroll affordance on small screens */
