@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 import { ClientSortLink, CollectionFilterForm, FilterBubbleLink } from "@/components/CollectionFilterControls";
+import { FilterRail } from "@/components/FilterRail";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getCollection, getCollectionSlugs } from "@/lib/rarity-data";
 
@@ -397,7 +398,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
       )}
 
       <section className="marketCollectionGrid">
-        <aside className="filterBar marketFilterRail" aria-label="Collection filters">
+        <FilterRail>
           <CollectionFilterForm key={filterStateKey}>
             <label className="marketControlGroup">
               <span>Search</span>
@@ -509,11 +510,12 @@ export default async function CollectionPage({ params, searchParams }: Props) {
               </div>
             )}
           </CollectionFilterForm>
-        </aside>
+        </FilterRail>
 
         <div className="tableWrap marketTableWrap">
           <div className="tableMeta">
             <span>Showing {tokens.length.toLocaleString()} of {filteredTokens.length.toLocaleString()} tokens</span>
+            <span className="scoreMethodNote">Trait-weighted scoring — rarer traits carry exponentially more weight</span>
             <span>Page {page.toLocaleString()} of {totalPages.toLocaleString()}</span>
           </div>
           <table className="marketRankTable">
@@ -580,7 +582,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
                     </span>
                   </td>
                   <td className="keyTraitsCell">
-                    {token.attributes.slice(0, 3).map((item) => (
+                    {token.attributes.filter((item) => !/trait count/i.test(item.traitType)).slice(0, 3).map((item) => (
                       <span className="keyTraitChip" key={`${item.traitType}-${item.value}`}>{item.value}</span>
                     ))}
                   </td>

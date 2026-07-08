@@ -128,12 +128,12 @@ type LandingTransition = {
 };
 
 const orbitPresets = [
-  { orbitRadius: 3.38, orbitHeight: 0.82, orbitDepth: 1.56, phase: 2.55, orbitSpeed: 0.18, radius: 0.38, spinSpeed: 0.28 },
-  { orbitRadius: 4.36, orbitHeight: 1.02, orbitDepth: 1.98, phase: 5.05, orbitSpeed: 0.145, radius: 0.35, spinSpeed: 0.24 },
-  { orbitRadius: 5.32, orbitHeight: 1.34, orbitDepth: 2.36, phase: 3.35, orbitSpeed: 0.12, radius: 0.37, spinSpeed: 0.22 },
-  { orbitRadius: 6.28, orbitHeight: 1.52, orbitDepth: 2.74, phase: 0.2, orbitSpeed: 0.1, radius: 0.41, spinSpeed: 0.2 },
-  { orbitRadius: 4.92, orbitHeight: 1.92, orbitDepth: 2.98, phase: 1.35, orbitSpeed: 0.088, radius: 0.36, spinSpeed: 0.17 },
-  { orbitRadius: 6.82, orbitHeight: 2.16, orbitDepth: 3.44, phase: 4.45, orbitSpeed: 0.078, radius: 0.38, spinSpeed: 0.15 },
+  { orbitRadius: 3.38, orbitHeight: 0.82, orbitDepth: 1.56, phase: 2.55, orbitSpeed: 0.1, radius: 0.38, spinSpeed: 0.28 },
+  { orbitRadius: 4.36, orbitHeight: 1.02, orbitDepth: 1.98, phase: 5.05, orbitSpeed: 0.08, radius: 0.35, spinSpeed: 0.24 },
+  { orbitRadius: 5.32, orbitHeight: 1.34, orbitDepth: 2.36, phase: 3.35, orbitSpeed: 0.066, radius: 0.37, spinSpeed: 0.22 },
+  { orbitRadius: 6.28, orbitHeight: 1.52, orbitDepth: 2.74, phase: 0.2, orbitSpeed: 0.055, radius: 0.41, spinSpeed: 0.2 },
+  { orbitRadius: 4.92, orbitHeight: 1.92, orbitDepth: 2.98, phase: 1.35, orbitSpeed: 0.048, radius: 0.36, spinSpeed: 0.17 },
+  { orbitRadius: 6.82, orbitHeight: 2.16, orbitDepth: 3.44, phase: 4.45, orbitSpeed: 0.043, radius: 0.38, spinSpeed: 0.15 },
 ];
 
 const ORBIT_TILT_X = -0.42;
@@ -383,7 +383,7 @@ export function OrbitLanding({ collections }: Props) {
     const renderer = new THREE.WebGLRenderer({ canvas: canvasElement, antialias: true, alpha: true, powerPreference: "high-performance" });
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setClearColor(0x000000, 0);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x03050d, 0.035);
@@ -444,7 +444,7 @@ export function OrbitLanding({ collections }: Props) {
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       });
-      const mesh = new THREE.Mesh(new THREE.SphereGeometry(config.radius * 1.24, 48, 48), material);
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(config.radius * 1.24, 32, 32), material);
       mesh.renderOrder = 4;
       return mesh;
     }
@@ -527,7 +527,7 @@ export function OrbitLanding({ collections }: Props) {
     }
 
     const sunRadius = 1.3125;
-    const sun = new THREE.Mesh(new THREE.SphereGeometry(sunRadius, 96, 96), sunMaterial);
+    const sun = new THREE.Mesh(new THREE.SphereGeometry(sunRadius, 64, 64), sunMaterial);
     sun.renderOrder = 2;
     sunGroup.add(sun);
 
@@ -708,7 +708,7 @@ export function OrbitLanding({ collections }: Props) {
       group.userData = { slug: config.slug, route: config.route, name: config.name };
 
       const material = makePlanetMaterial(config, archetype);
-      const sphere = new THREE.Mesh(new THREE.SphereGeometry(config.radius, 72, 72), material);
+      const sphere = new THREE.Mesh(new THREE.SphereGeometry(config.radius, 48, 48), material);
       sphere.userData = group.userData;
       group.add(sphere);
 

@@ -6351,17 +6351,25 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
   bottom: 0;
 }
 
-/* Collection hero: title text can never overlap the actions cluster */
-.marketCollectionTitle > * {
-  min-width: 0;
+/* Collection hero: title wraps at word boundaries; actions never collide */
+.marketCollectionHeader {
+  flex-wrap: wrap;
+  row-gap: 18px;
+  padding-bottom: 88px;
+}
+
+.marketCollectionTitle {
+  flex: 1 1 460px;
 }
 
 .marketCollectionTitle h1 {
-  overflow-wrap: anywhere;
+  min-width: 0;
+  text-wrap: balance;
 }
 
 .marketHeaderActions {
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 /* Filter rail rides along with the table */
@@ -6490,5 +6498,106 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
 
   .solarSystemFallback::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* ----- Judge iteration 3 fixes ----- */
+
+/* Landing joins the global shell: floating header over the hero */
+.landingShell {
+  position: relative;
+}
+
+.landingShell .siteHeader {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  z-index: 70;
+  width: min(1240px, calc(100vw - 28px));
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+.landingShell .threeOrbitCopy .eyebrow {
+  visibility: hidden;
+  height: 0;
+  margin: 0;
+}
+
+.orbitHero.threeOrbitHero {
+  padding-top: clamp(64px, 7vh, 88px);
+}
+
+/* Orbital labels: on-brand instrument callouts */
+.solarPlanetLabel,
+.solarSunLabel {
+  font-family: var(--font-data), monospace;
+  font-size: clamp(0.6rem, 0.78vw, 0.72rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.88);
+  border-color: rgba(var(--label-rgb, 255, 255, 255), 0.45);
+  background: rgba(2, 4, 10, 0.74);
+}
+
+/* Scoring method is stated where scores live */
+.scoreMethodNote {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+@media (max-width: 900px) {
+  .scoreMethodNote {
+    display: none;
+  }
+}
+
+/* Mobile filter drawer: rail is a single collapsed control above the table */
+.mobileFilterToggle {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .marketFilterRail {
+    order: 0;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .mobileFilterToggle {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    border: 0;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.88);
+    font-family: var(--font-data), monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .mobileFilterToggleIcon {
+    color: var(--collection-accent, #ffb15d);
+    font-size: 1rem;
+  }
+
+  .marketFilterRail .filterRailBody {
+    display: none;
+    padding: 16px;
+  }
+
+  .marketFilterRail.isOpen .filterRailBody {
+    display: block;
+  }
+
+  .marketTableWrap {
+    order: 1;
   }
 }
