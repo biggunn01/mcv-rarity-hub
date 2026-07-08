@@ -853,11 +853,30 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       if (slug) startLandingTransition(slug);
     };
 
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted || !landingTransition) return;
+      if (landingTransition.particles.length) removeExplosionParticles(landingTransition.particles);
+      clearTransitionTimers();
+      landingTransition = null;
+      setTransitionOverlay(null);
+      stageElement.removeAttribute("data-transitioning");
+      stageElement.style.cursor = "default";
+      sunGlow.visible = true;
+      sunGroup.visible = true;
+      sunGroup.position.set(0, 0, 0);
+      sunGroup.scale.setScalar(1);
+      runtimePlanets.forEach((planet) => {
+        planet.group.visible = true;
+      });
+      setActive(null);
+    };
+
     canvasElement.addEventListener("pointermove", onPointerMove);
     canvasElement.addEventListener("pointerleave", onPointerLeave);
     canvasElement.addEventListener("pointerdown", onPointerDown);
     canvasElement.addEventListener("click", onClick);
     stageElement.addEventListener("click", onClick);
+    window.addEventListener("pageshow", onPageShow);
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(stageElement);
     resize();
@@ -1133,6 +1152,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       canvasElement.removeEventListener("pointerdown", onPointerDown);
       canvasElement.removeEventListener("click", onClick);
       stageElement.removeEventListener("click", onClick);
+      window.removeEventListener("pageshow", onPageShow);
       renderer.dispose();
       scene.traverse((object) => {
         if (object instanceof THREE.Mesh || object instanceof THREE.Line) {
