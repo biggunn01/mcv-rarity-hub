@@ -50,6 +50,7 @@ const defaultArchetype: PlanetArchetype = { band: 0.4, warp: 0.7, crack: 0, cap:
 
 type Props = {
   collections: CollectionSummary[];
+  chainCount: number;
 };
 
 type PlanetConfig = {
@@ -342,7 +343,7 @@ function withNoise(shader: string) {
   return shader.replace("__NOISE__", NOISE_GLSL);
 }
 
-export function OrbitLanding({ collections }: Props) {
+export function OrbitLanding({ collections, chainCount }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const labelsRef = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -1061,7 +1062,7 @@ export function OrbitLanding({ collections }: Props) {
         const label = labelsRef.current[state.config.slug];
         if (!label) return;
         let opacity = state.isActive ? 1 : (0.52 + state.closeness * 0.2) * Math.max(0.5, state.overlapFade);
-        const collides = placedLabels.some((other) => Math.abs(state.x - other.x) < 170 && Math.abs(state.y - other.y) < 44);
+        const collides = placedLabels.some((other) => Math.abs(state.x - other.x) < 195 && Math.abs(state.y - other.y) < 56);
         if (collides && !state.isActive) opacity = 0;
         if (state.y > state.stageHeight - 130 && !state.isActive) opacity *= 0.2;
         if (opacity > 0.05) placedLabels.push({ x: state.x, y: state.y });
@@ -1147,7 +1148,7 @@ export function OrbitLanding({ collections }: Props) {
         <p className="orbitStatLine">
           <span>{collections.length} collections</span>
           <span>{collections.reduce((sum, entry) => sum + entry.collection.actualTokenCount, 0).toLocaleString()} tokens ranked</span>
-          <span>3 chains</span>
+          <span>{chainCount} chains</span>
         </p>
       </div>
 

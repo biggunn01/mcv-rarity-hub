@@ -179,8 +179,8 @@ export default async function TokenPage({ params }: Props) {
               </div>
             </dl>
             <div className="links">
-              {marketplaceUrl && <a href={marketplaceUrl}>Marketplace</a>}
-              {explorerUrl && <a href={explorerUrl}>Explorer</a>}
+              {marketplaceUrl && <a href={marketplaceUrl} target="_blank" rel="noopener noreferrer">Marketplace</a>}
+              {explorerUrl && <a href={explorerUrl} target="_blank" rel="noopener noreferrer">Explorer</a>}
             </div>
           </div>
           {rarestTraits.length > 0 && (
@@ -225,7 +225,7 @@ export default async function TokenPage({ params }: Props) {
               <div>
                 <span>{trait.count} total</span>
                 <span>Rarity {trait.percentage.toFixed(2)}%</span>
-                <span>Weight {trait.rarityWeight.toFixed(2)}</span>
+                <span>{trait.rarityWeight >= 9999 ? "1 of 1 — max weight" : `Weight ${trait.rarityWeight.toFixed(2)}`}</span>
               </div>
               <small>{trait.includedInScore === false ? "Display only" : "Included in score"}</small>
             </article>

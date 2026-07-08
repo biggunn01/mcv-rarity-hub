@@ -67,6 +67,9 @@ function buildSpotlights(): Spotlight[] {
 export function LandingBelowFold() {
   const spotlights = buildSpotlights();
   const totalRanked = spotlights.reduce((sum, spotlight) => sum + spotlight.supply, 0);
+  const chainCount = new Set(
+    getCollectionSlugs().flatMap((slug) => getCollection(slug)?.collection.sources.map((source) => source.chain.toLowerCase()) ?? []),
+  ).size;
   const tickerItems = spotlights.map((spotlight) => ({
     slug: spotlight.slug,
     label: spotlight.collectionName,
@@ -135,7 +138,7 @@ export function LandingBelowFold() {
           ))}
           <li className="hallCard hallStatCard" aria-label={`${totalRanked.toLocaleString()} tokens ranked in total`}>
             <span className="hallStatNumber">{totalRanked.toLocaleString()}</span>
-            <span className="hallStatLabel">tokens ranked across {spotlights.length} worlds · 3 chains</span>
+            <span className="hallStatLabel">tokens ranked across {spotlights.length} worlds · {chainCount} chains</span>
             <span className="hallStatRule" aria-hidden="true" />
             <span className="hallStatHint">Every score recomputed from raw trait data</span>
           </li>
@@ -146,7 +149,7 @@ export function LandingBelowFold() {
         <p className="siteFooterWordmark" aria-hidden="true">Mars Cats</p>
         <div className="siteFooterRow">
           <p className="siteFooterNote">
-            Mars Cats Ventures Rarity Hub — trait-weighted rankings across {spotlights.length} collections and 3 chains, recomputed from imported metadata.
+            Mars Cats Ventures Rarity Hub — trait-weighted rankings across {spotlights.length} collections and {chainCount} chains, recomputed from imported metadata.
           </p>
           <nav className="siteFooterNav" aria-label="Collections">
             {spotlights.map((spotlight) => (

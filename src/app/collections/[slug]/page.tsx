@@ -523,7 +523,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
 
         <div className="tableWrap marketTableWrap">
           <div className="tableMeta">
-            <span>Showing {tokens.length.toLocaleString()} of {filteredTokens.length.toLocaleString()} tokens</span>
+            <span>Showing {tokens.length.toLocaleString()} of {filteredTokens.length.toLocaleString()} token{filteredTokens.length === 1 ? "" : "s"}</span>
             <span className="scoreMethodNote">Trait-weighted scoring — rarer traits carry exponentially more weight</span>
             <span>Page {page.toLocaleString()} of {totalPages.toLocaleString()}</span>
           </div>
