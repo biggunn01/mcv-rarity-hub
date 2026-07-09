@@ -16,6 +16,15 @@ const badgeMap: Record<string, string> = {
   "cream-cats": "/collection-badges/cream-cats.png",
 };
 
+const decalMap: Record<string, string> = {
+  "mars-alien-cats": "/collection-decals/mars-alien-cats.png",
+  "mars-cats-in-spacesuits": "/collection-decals/mars-cats-in-spacesuits.png",
+  "mars-cats-snipers": "/collection-decals/mars-cats-snipers.png",
+  metazoku: "/collection-decals/metazoku.png",
+  "battle-pawss": "/collection-decals/battle-pawss.png",
+  "cream-cats": "/collection-decals/cream-cats.png",
+};
+
 const planetThemeMap: Record<string, { color: number; accent: string; accentRgb: string }> = {
   "mars-cats-voyage": { color: 0xffa34a, accent: "#ff9a32", accentRgb: "255, 154, 50" },
   "mars-alien-cats": { color: 0x75e6ff, accent: "#75e6ff", accentRgb: "117, 230, 255" },
@@ -219,6 +228,8 @@ const PLANET_FRAGMENT_GLSL = /* glsl */ `
   uniform float uCrack;
   uniform float uCap;
   uniform float uNoiseScale;
+  uniform sampler2D uBadge;
+  uniform float uBadgeStrength;
 
   __NOISE__
 
@@ -262,6 +273,17 @@ const PLANET_FRAGMENT_GLSL = /* glsl */ `
     float diffuse = dot(Nb, normalize(uSunDir));
     float light = smoothstep(-0.42, 0.5, diffuse);
     col *= 0.15 + 1.18 * light;
+
+    vec3 anchor = normalize(vec3(0.35, 0.18, 1.0));
+    vec3 decalT = normalize(cross(anchor, vec3(0.0, 1.0, 0.0)));
+    vec3 decalB = cross(anchor, decalT);
+    float anchorFacing = dot(p, anchor);
+    vec2 decalUv = vec2(dot(p, decalT), dot(p, decalB)) / 0.78;
+    if (uBadgeStrength > 0.0 && anchorFacing > 0.15 && abs(decalUv.x) < 1.0 && abs(decalUv.y) < 1.0) {
+      vec4 badge = texture2D(uBadge, vec2(0.5 - decalUv.x * 0.5, 0.5 - decalUv.y * 0.5));
+      float edgeFade = smoothstep(1.0, 0.8, max(abs(decalUv.x), abs(decalUv.y))) * smoothstep(0.15, 0.45, anchorFacing);
+      col += mix(uHigh, vec3(1.0), 0.3) * badge.a * edgeFade * (0.26 + 0.5 * light) * uBadgeStrength;
+    }
 
     float fresnel = pow(1.0 - max(dot(V, N), 0.0), 2.6);
     float sunSideRim = 0.45 + 0.55 * smoothstep(-0.2, 0.7, diffuse);
@@ -457,6 +479,8 @@ export function OrbitLanding({ collections, chainCount }: Props) {
           uCrack: { value: archetype.crack },
           uCap: { value: archetype.cap },
           uNoiseScale: { value: archetype.noiseScale },
+          uBadge: { value: null },
+          uBadgeStrength: { value: 0 },
         },
       });
     }
@@ -784,6 +808,8 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       return { line, geometry, positions };
     }
 
+    const badgeTextureLoader = new THREE.TextureLoader();
+
     planets.forEach((config, index) => {
       makeOrbitEllipse(config, index);
       const archetype = planetArchetypes[config.slug] ?? defaultArchetype;
@@ -792,6 +818,15 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       group.userData = { slug: config.slug, route: config.route, name: config.name };
 
       const material = makePlanetMaterial(config, archetype);
+      const badgeUrl = decalMap[config.slug];
+      if (badgeUrl) {
+        badgeTextureLoader.load(badgeUrl, (texture) => {
+          texture.colorSpace = THREE.SRGBColorSpace;
+          texture.anisotropy = 4;
+          material.uniforms.uBadge.value = texture;
+          material.uniforms.uBadgeStrength.value = 1;
+        });
+      }
       const sphere = new THREE.Mesh(new THREE.SphereGeometry(config.radius, 48, 48), material);
       sphere.userData = group.userData;
       group.add(sphere);
@@ -1090,14 +1125,15 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       if (!prefersReducedMotion) {
         pointerParallax.x += (pointerParallax.targetX - pointerParallax.x) * Math.min(1, delta * 3);
         pointerParallax.y += (pointerParallax.targetY - pointerParallax.y) * Math.min(1, delta * 3);
-        const idleX = Math.sin(time * 0.07) * 0.16;
-        const idleY = Math.cos(time * 0.05) * 0.09;
+        const idleX = Math.sin(time * 0.07) * 0.16 + Math.sin(time * 0.023) * 0.52;
+        const idleY = Math.cos(time * 0.05) * 0.09 + Math.cos(time * 0.016) * 0.17;
+        const idleZ = Math.sin(time * 0.012) * 0.38;
         camera.position.set(
           pointerParallax.x * 0.42 + idleX,
           baseCamera.y + pointerParallax.y * -0.26 + idleY,
-          baseCamera.z,
+          baseCamera.z + idleZ,
         );
-        camera.lookAt(0, 0, 0);
+        camera.lookAt(Math.sin(time * 0.019) * 0.42, Math.sin(time * 0.014) * 0.15, 0);
       }
 
       const positions = runtimePlanets.map((planet, index) => {
@@ -1290,7 +1326,12 @@ export function OrbitLanding({ collections, chainCount }: Props) {
         if (object instanceof THREE.Mesh || object instanceof THREE.Line) {
           object.geometry.dispose();
           const materials = Array.isArray(object.material) ? object.material : [object.material];
-          materials.forEach((material) => material.dispose());
+          materials.forEach((material) => {
+            if (material instanceof THREE.ShaderMaterial && material.uniforms.uBadge?.value) {
+              (material.uniforms.uBadge.value as THREE.Texture).dispose();
+            }
+            material.dispose();
+          });
         }
       });
     };
