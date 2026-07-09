@@ -245,9 +245,21 @@ const PLANET_FRAGMENT_GLSL = /* glsl */ `
     float capMask = uCap * smoothstep(0.62, 0.86, abs(p.y)) * (0.62 + 0.38 * field);
     col = mix(col, mix(uHigh, vec3(1.0), 0.55), capMask);
 
+    float micro = fbm(q * 5.2 + vec3(9.4));
+    col *= 0.9 + 0.2 * micro;
+
     vec3 N = normalize(vNormalW);
     vec3 V = normalize(vViewW);
-    float diffuse = dot(N, normalize(uSunDir));
+    vec3 tW = normalize(cross(N, vec3(0.0, 1.0, 0.0)) + vec3(0.0001, 0.0, 0.0));
+    vec3 bW = normalize(cross(N, tW));
+    vec3 tO = normalize(cross(p, vec3(0.0, 1.0, 0.0)) + vec3(0.0001, 0.0, 0.0));
+    vec3 bO = normalize(cross(p, tO));
+    float relief = 0.05;
+    float h0 = fbm(q * 2.6);
+    float hx = fbm((p + tO * relief) * uNoiseScale * 2.6);
+    float hy = fbm((p + bO * relief) * uNoiseScale * 2.6);
+    vec3 Nb = normalize(N - (tW * (hx - h0) + bW * (hy - h0)) * 2.2);
+    float diffuse = dot(Nb, normalize(uSunDir));
     float light = smoothstep(-0.42, 0.5, diffuse);
     col *= 0.15 + 1.18 * light;
 
@@ -325,18 +337,26 @@ const SUN_FRAGMENT_GLSL = /* glsl */ `
     vec3 flow = vec3(t, -t * 0.7, t * 0.4);
     float churn = fbm(p + flow + 1.4 * vec3(fbm(p * 1.6 + vec3(0.0, t * 1.3, 0.0))));
     float granulation = fbm(p * 6.5 - vec3(0.0, 0.0, t * 2.0));
-    float heat = clamp(churn * 0.92 + granulation * 0.5 - 0.16, 0.0, 1.0);
+    float fine = fbm(p * 13.0 + vec3(t * 1.6, -t * 1.1, 0.0));
+    float filaments = 1.0 - abs(2.0 * fbm(p * 3.1 + flow * 1.7) - 1.0);
+    float heat = clamp(churn * 0.78 + granulation * 0.34 + fine * 0.24 + pow(filaments, 3.0) * 0.3 - 0.2, 0.0, 1.0);
 
-    vec3 col = mix(uEmber, uFlame, smoothstep(0.05, 0.52, heat));
-    col = mix(col, uGold, smoothstep(0.52, 0.78, heat));
-    col = mix(col, uCore, smoothstep(0.78, 0.97, heat));
+    float spots = smoothstep(0.34, 0.16, fbm(p * 2.3 - flow * 0.8));
+    heat = mix(heat, heat * 0.35, spots * 0.8);
+
+    vec3 col = mix(uEmber, uFlame, smoothstep(0.05, 0.5, heat));
+    col = mix(col, uGold, smoothstep(0.5, 0.76, heat));
+    col = mix(col, uCore, smoothstep(0.76, 0.96, heat));
 
     vec3 N = normalize(vNormalW);
     vec3 V = normalize(vViewW);
-    float limb = pow(max(dot(V, N), 0.0), 0.6);
-    col *= 0.55 + 0.45 * limb;
-    float rim = pow(1.0 - max(dot(V, N), 0.0), 3.0);
-    col += uFlame * rim * 0.9;
+    float facing = max(dot(V, N), 0.0);
+    float limb = pow(facing, 0.78);
+    col *= 0.38 + 0.62 * limb;
+    float rim = pow(1.0 - facing, 2.7);
+    float flare = 0.65 + 0.55 * fbm(normalize(vObj) * 5.0 + vec3(0.0, t * 3.2, t));
+    col += uFlame * rim * flare * 1.15;
+    col += uGold * pow(rim, 2.2) * flare * 0.55;
 
     gl_FragColor = vec4(col, 1.0);
   }
@@ -385,10 +405,16 @@ export function OrbitLanding({ collections, chainCount }: Props) {
     const canvasElement = canvas;
     const stageElement = stage;
 
-    const renderer = new THREE.WebGLRenderer({ canvas: canvasElement, antialias: true, alpha: true, powerPreference: "high-performance" });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas: canvasElement, antialias: true, alpha: true, powerPreference: "high-performance" });
+    } catch {
+      stageElement.setAttribute("data-webgl", "failed");
+      return;
+    }
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setClearColor(0x000000, 0);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x03050d, 0.035);
@@ -553,47 +579,84 @@ export function OrbitLanding({ collections, chainCount }: Props) {
     sunGlow.renderOrder = -4;
     scene.add(sunGlow);
 
-    const sunCorona = new THREE.Sprite(
+    function makeCoronaTexture() {
+      const size = 512;
+      const canvasTexture = document.createElement("canvas");
+      canvasTexture.width = size;
+      canvasTexture.height = size;
+      const context = canvasTexture.getContext("2d");
+      if (!context) return null;
+
+      context.translate(size / 2, size / 2);
+      context.globalCompositeOperation = "lighter";
+      const rayCount = 130;
+      for (let i = 0; i < rayCount; i += 1) {
+        const angle = (i / rayCount) * Math.PI * 2 + Math.sin(i * 12.9898) * 0.06;
+        const seed = Math.abs(Math.sin(i * 78.233 + 1.5));
+        const length = size * (0.17 + seed * 0.31);
+        const startRadius = size * 0.09;
+        const gradient = context.createLinearGradient(
+          Math.cos(angle) * startRadius,
+          Math.sin(angle) * startRadius,
+          Math.cos(angle) * length,
+          Math.sin(angle) * length,
+        );
+        gradient.addColorStop(0, `rgba(255, 255, 255, ${(0.1 + seed * 0.17).toFixed(3)})`);
+        gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+        context.strokeStyle = gradient;
+        context.lineWidth = 1 + seed * 2.4;
+        context.beginPath();
+        context.moveTo(Math.cos(angle) * startRadius, Math.sin(angle) * startRadius);
+        context.lineTo(Math.cos(angle) * length, Math.sin(angle) * length);
+        context.stroke();
+      }
+      const base = context.createRadialGradient(0, 0, size * 0.04, 0, 0, size * 0.5);
+      base.addColorStop(0, "rgba(255, 255, 255, 0.5)");
+      base.addColorStop(0.3, "rgba(255, 255, 255, 0.13)");
+      base.addColorStop(1, "rgba(255, 255, 255, 0)");
+      context.fillStyle = base;
+      context.fillRect(-size / 2, -size / 2, size, size);
+
+      const texture = new THREE.CanvasTexture(canvasTexture);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      return texture;
+    }
+
+    const coronaTexture = makeCoronaTexture();
+    const coronaA = new THREE.Sprite(
       new THREE.SpriteMaterial({
-        map: sunGlowTexture,
-        color: 0xffe0a0,
+        map: coronaTexture,
+        color: 0xffb85c,
         transparent: true,
-        opacity: 0.55,
+        opacity: 0.58,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
         depthTest: false,
       }),
     );
-    sunCorona.scale.set(3.1, 3.1, 1);
-    sunCorona.position.set(0, 0, -0.06);
-    sunCorona.renderOrder = -3;
-    scene.add(sunCorona);
+    coronaA.scale.set(4.9, 4.9, 1);
+    coronaA.position.set(0, 0, -0.06);
+    coronaA.renderOrder = -3;
+    scene.add(coronaA);
+
+    const coronaB = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: coronaTexture,
+        color: 0xff7c2e,
+        transparent: true,
+        opacity: 0.4,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        depthTest: false,
+        rotation: 2.1,
+      }),
+    );
+    coronaB.scale.set(3.9, 3.9, 1);
+    coronaB.position.set(0, 0, -0.07);
+    coronaB.renderOrder = -3;
+    scene.add(coronaB);
 
     const sunParticleTexture = makeSunParticleTexture();
-    const sunParticles = Array.from({ length: 26 }, (_, index) => {
-      const angle = index * 2.39996;
-      const lift = Math.sin(index * 1.73) * 0.46;
-      const direction = new THREE.Vector3(Math.cos(angle), lift, Math.sin(angle) * 0.34).normalize();
-      const sprite = new THREE.Sprite(
-        new THREE.SpriteMaterial({
-          map: sunParticleTexture,
-          color: 0xffc76a,
-          transparent: true,
-          opacity: 0.65,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-        }),
-      );
-      sprite.renderOrder = 3;
-      scene.add(sprite);
-      return {
-        sprite,
-        direction,
-        phase: (index / 26) * Math.PI * 2,
-        speed: 0.34 + (index % 7) * 0.045,
-        size: 0.045 + (index % 5) * 0.012,
-      };
-    });
 
     let landingTransition: LandingTransition | null = null;
     const raycaster = new THREE.Raycaster();
@@ -908,7 +971,8 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       stageElement.removeAttribute("data-transitioning");
       stageElement.parentElement?.removeAttribute("data-transitioning");
       sunGlow.visible = true;
-      sunCorona.visible = true;
+      coronaA.visible = true;
+      coronaB.visible = true;
       sunGroup.visible = true;
       sunGroup.position.set(0, 0, 0);
       sunGroup.scale.setScalar(1);
@@ -968,15 +1032,10 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       sunGroup.rotation.z = BODY_FACE_TILT_Z;
       const glowPulse = 1 + Math.sin(motionTime * 1.4) * 0.035;
       sunGlow.scale.set(5.4 * glowPulse, 5.4 * glowPulse, 1);
-      sunCorona.scale.set(3.1 * (2 - glowPulse), 3.1 * (2 - glowPulse), 1);
-
-      sunParticles.forEach((particle) => {
-        const progress = (motionTime * particle.speed + particle.phase) % 1;
-        const distance = 1.34 + progress * 0.59;
-        particle.sprite.position.copy(particle.direction).multiplyScalar(distance);
-        particle.sprite.material.opacity = prefersReducedMotion ? 0 : (1 - progress) * 0.46;
-        particle.sprite.scale.setScalar(particle.size * (0.72 + progress * 1.05));
-      });
+      coronaA.material.rotation = motionTime * 0.021;
+      coronaA.scale.set(4.9 * glowPulse, 4.9 * glowPulse, 1);
+      coronaB.material.rotation = 2.1 - motionTime * 0.014;
+      coronaB.scale.set(3.9 * (2 - glowPulse), 3.9 * (2 - glowPulse), 1);
 
       const centerLabel = labelsRef.current[centerTransitionConfig.slug];
       if (centerLabel) {
@@ -1005,7 +1064,8 @@ export function OrbitLanding({ collections, chainCount }: Props) {
           transition.particles = createExplosionParticles(transition.config, transition.group.position);
           transition.group.visible = false;
           sunGlow.visible = false;
-          sunCorona.visible = false;
+          coronaA.visible = false;
+          coronaB.visible = false;
         }
 
         if (transition.hasExploded) {
@@ -1170,6 +1230,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
         placedLabels.push({ x: stageW / 2, y: stageH / 2 - 124, halfWidth: 116, halfHeight: 30 });
         placedLabels.push({ x: stageW / 2, y: stageH / 2, halfWidth: 150, halfHeight: 118 });
       }
+      const dockZoneActive = (labelStates[0]?.stageWidth ?? 0) <= 720;
       labelStates.forEach((state) => {
         const label = labelsRef.current[state.config.slug];
         if (!label) return;
@@ -1187,7 +1248,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
             Math.abs(state.x - other.planetX) < halfWidth + other.planetRadius + 8 &&
             Math.abs(state.y - other.planetY) < 24 + other.planetRadius + 8,
         );
-        const inDockZone = state.y > state.stageHeight - 130;
+        const inDockZone = dockZoneActive && state.y > state.stageHeight - 130;
         const wantVisible =
           state.isActive ||
           (!collides &&

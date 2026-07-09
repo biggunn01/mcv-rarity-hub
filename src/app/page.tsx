@@ -1,6 +1,5 @@
 import { LandingBelowFold } from "@/components/LandingBelowFold";
 import { OrbitLanding } from "@/components/OrbitLanding";
-import { SiteHeader } from "@/components/SiteHeader";
 import { getCollection, getCollectionSlugs, getCollectionSummaries } from "@/lib/rarity-data";
 
 export default function Home() {
@@ -11,7 +10,6 @@ export default function Home() {
 
   return (
     <main className="landingShell">
-      <SiteHeader />
       <OrbitLanding collections={collections} chainCount={chainCount} />
       <LandingBelowFold />
     </main>

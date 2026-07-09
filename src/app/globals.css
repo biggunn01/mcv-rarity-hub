@@ -7255,3 +7255,36 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
     padding: 12px 14px;
   }
 }
+
+/* ============================================================
+   De-chrome pass — 2026-07-09
+   Landing loses its redundant chrome: the header pill nav is gone
+   (JSX) and the bottom dock hides on desktop — planet labels are
+   the single source of collection names. The dock survives on
+   small screens and as the no-WebGL fallback. The hero eyebrow
+   returns as the brand mark since the header no longer covers it.
+   ============================================================ */
+
+.landingShell .threeOrbitCopy .eyebrow {
+  visibility: visible;
+  height: auto;
+  margin: 0 0 14px;
+}
+
+@media (min-width: 721px) {
+  .landingShell .solarSystemFallback {
+    display: none;
+  }
+
+  .landingShell .solarSystemStage::after {
+    content: none;
+  }
+
+  .landingShell .solarSystemStage[data-webgl="failed"] .solarSystemFallback {
+    display: flex;
+  }
+
+  .landingShell .solarSystemStage[data-webgl="failed"]::after {
+    content: "";
+  }
+}
