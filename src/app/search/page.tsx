@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { CSSProperties } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { displayCollectionName } from "@/lib/display-names";
 import { getCollection, getCollectionSlugs } from "@/lib/rarity-data";
 
 export const dynamic = "force-dynamic";
@@ -45,7 +46,7 @@ function findMatches(query: string): Match[] {
       .slice(0, 4)
       .map((token) => ({
         slug,
-        collectionName: data.collection.name,
+        collectionName: displayCollectionName(slug, data.collection.name),
         tokenName: token.name.replace(/\s*\(#\d+\)\s*$/, ""),
         canonicalTokenId: String(token.canonicalTokenId),
         image: token.image,

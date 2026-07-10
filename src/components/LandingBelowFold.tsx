@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { displayCollectionName } from "@/lib/display-names";
 import { getCollection, getCollectionSlugs } from "@/lib/rarity-data";
 
 const accentMap: Record<string, { accent: string; accentRgb: string }> = {
@@ -48,7 +49,7 @@ function buildSpotlights(): Spotlight[] {
       const theme = accentMap[slug] ?? { accent: "#8adce8", accentRgb: "138, 220, 232" };
       return {
         slug,
-        collectionName: data.collection.name,
+        collectionName: displayCollectionName(slug, data.collection.name),
         tokenName: top.name.replace(/\s*\(#\d+\)\s*$/, ""),
         image: top.image,
         score: top.rarityScore.toFixed(1),

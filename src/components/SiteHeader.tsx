@@ -16,7 +16,7 @@ const shortNameMap: Record<string, string> = {
   "mars-cats-voyage": "Mars Cats",
   "mars-alien-cats": "Alien Cats",
   "mars-cats-in-spacesuits": "Spacesuits",
-  "mars-cats-snipers": "Snipers",
+  "mars-cats-snipers": "Sniper Cats",
   metazoku: "MetaZoku",
   "battle-pawss": "Battle Pawss",
   "cream-cats": "Cream Cats",

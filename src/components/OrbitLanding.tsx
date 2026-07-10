@@ -4,6 +4,7 @@ import NextImage from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import * as THREE from "three";
+import { displayCollectionName } from "@/lib/display-names";
 import type { CollectionSummary } from "@/lib/types";
 
 const badgeMap: Record<string, string> = {
@@ -359,16 +360,23 @@ const SUN_FRAGMENT_GLSL = /* glsl */ `
     vec3 flow = vec3(t, -t * 0.7, t * 0.4);
     float churn = fbm(p + flow + 1.4 * vec3(fbm(p * 1.6 + vec3(0.0, t * 1.3, 0.0))));
     float granulation = fbm(p * 6.5 - vec3(0.0, 0.0, t * 2.0));
-    float fine = fbm(p * 13.0 + vec3(t * 1.6, -t * 1.1, 0.0));
+    float fine = fbm(p * 13.0 + vec3(t * 2.4, -t * 1.7, 0.0));
     float filaments = 1.0 - abs(2.0 * fbm(p * 3.1 + flow * 1.7) - 1.0);
-    float heat = clamp(churn * 0.78 + granulation * 0.34 + fine * 0.24 + pow(filaments, 3.0) * 0.3 - 0.2, 0.0, 1.0);
+    float heat = clamp(churn * 0.78 + granulation * 0.34 + fine * 0.26 + pow(filaments, 3.0) * 0.32 - 0.21, 0.0, 1.0);
 
-    float spots = smoothstep(0.34, 0.16, fbm(p * 2.3 - flow * 0.8));
-    heat = mix(heat, heat * 0.35, spots * 0.8);
+    float spotField = fbm(p * 2.1 - flow * 0.9);
+    float umbra = smoothstep(0.32, 0.17, spotField);
+    float penumbra = smoothstep(0.42, 0.32, spotField) - umbra;
+    heat = mix(heat, heat * 0.16, umbra);
+    heat = mix(heat, heat * 0.68, penumbra);
+
+    float heatWave = 0.9 + 0.2 * fbm(p * 1.3 + vec3(0.0, t * 2.6, t * 1.3));
 
     vec3 col = mix(uEmber, uFlame, smoothstep(0.05, 0.5, heat));
     col = mix(col, uGold, smoothstep(0.5, 0.76, heat));
     col = mix(col, uCore, smoothstep(0.76, 0.96, heat));
+    col *= heatWave;
+    col += uGold * penumbra * 0.22;
 
     vec3 N = normalize(vNormalW);
     vec3 V = normalize(vViewW);
@@ -377,8 +385,13 @@ const SUN_FRAGMENT_GLSL = /* glsl */ `
     col *= 0.38 + 0.62 * limb;
     float rim = pow(1.0 - facing, 2.7);
     float flare = 0.65 + 0.55 * fbm(normalize(vObj) * 5.0 + vec3(0.0, t * 3.2, t));
+    float ang = atan(vObj.y, vObj.x);
+    float prom = fbm(vec3(cos(ang) * 2.1, sin(ang) * 2.1, t * 2.9));
+    float flareSpike = pow(clamp(prom * 2.4 - 1.1, 0.0, 1.0), 1.5) * 2.6;
     col += uFlame * rim * flare * 1.15;
     col += uGold * pow(rim, 2.2) * flare * 0.55;
+    col += uGold * rim * flareSpike;
+    col += uCore * pow(rim, 2.4) * flareSpike * 0.55;
 
     gl_FragColor = vec4(col, 1.0);
   }
@@ -411,7 +424,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
           return {
             entry,
             slug,
-            name: entry.collection.name,
+            name: displayCollectionName(slug, entry.collection.name),
             route: `/collections/${slug}`,
             ...preset,
             ...theme,
@@ -1374,11 +1387,11 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       <div className="orbitCopy threeOrbitCopy">
         <p className="eyebrow">Mars Cats Ventures Rarity Hub</p>
         <h1>
-          <span>Every Mars Cats token,</span>{" "}
+          <span>Every MCV Digital Collectible,</span>{" "}
           <span className="mobileTitleBreak">ranked by rarity.</span>
         </h1>
         <p className="lede">
-          Trait-weighted scores recomputed from raw on-chain metadata — check any token&apos;s rank, or drop into a world below.
+          Trait-weighted scores recomputed from raw on-chain metadata. Check any collectible&apos;s rank, or drop into a world below.
         </p>
         <form className="heroSearch" action="/search" role="search">
           <input
