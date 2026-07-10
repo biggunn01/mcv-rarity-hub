@@ -51,6 +51,35 @@ for (const collection of targets) {
 
   writeJson(path.join(root, "data", "market", "opensea-listings", `${collection.slug}.json`), output);
   console.log(`${collection.slug}: wrote ${output.length} active marketplace listing records`);
+
+  const stats = [];
+  for (const source of openSeaSources) {
+    try {
+      const response = await fetchWithRetry(`https://api.opensea.io/api/v2/collections/${source.openSea.slug}/stats`, {
+        headers: {
+          ...(process.env.OPENSEA_API_KEY ? { "x-api-key": process.env.OPENSEA_API_KEY } : {}),
+          "user-agent": "mcv-rarity-hub-opensea-listings-importer",
+        },
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      stats.push({
+        chain: source.chain,
+        collectionSlug: source.openSea.slug,
+        floorPrice: payload.total?.floor_price ?? 0,
+        floorPriceSymbol: payload.total?.floor_price_symbol || "ETH",
+        numOwners: payload.total?.num_owners ?? 0,
+        totalVolume: payload.total?.volume ?? 0,
+        totalSales: payload.total?.sales ?? 0,
+      });
+    } catch (error) {
+      console.warn(`${collection.slug} ${source.chain}: stats fetch failed (${error.message}), keeping previous file`);
+    }
+  }
+  if (stats.length > 0) {
+    writeJson(path.join(root, "data", "market", "opensea-stats", `${collection.slug}.json`), stats);
+    console.log(`${collection.slug}: wrote marketplace stats for ${stats.length} source(s)`);
+  }
 }
 
 async function fetchCollectionListings(collection, source) {

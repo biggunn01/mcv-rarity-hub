@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 import { ClientSortLink, CollectionFilterForm, FilterBubbleLink } from "@/components/CollectionFilterControls";
 import { FilterRail } from "@/components/FilterRail";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getMarketStats } from "@/lib/market-stats";
 import { getCollection, getCollectionSlugs } from "@/lib/rarity-data";
 
 type Props = {
@@ -285,6 +286,10 @@ export default async function CollectionPage({ params, searchParams }: Props) {
     return token.listing.price.native < floor.listing.price.native ? token : floor;
   }, null);
   const floorText = floorListing?.listing?.price.display ?? "Needed";
+  const marketStats = getMarketStats(slug);
+  const volumeText = marketStats && marketStats.totalVolume > 0
+    ? `${marketStats.totalVolume >= 100 ? Math.round(marketStats.totalVolume).toLocaleString() : marketStats.totalVolume.toFixed(2)} ${marketStats.floorPriceSymbol}`
+    : "—";
   const topListedToken = listedTokens.reduce<(typeof listedTokens)[number] | null>(
     (best, token) => (!best || token.rank < best.rank ? token : best),
     null,
@@ -398,16 +403,16 @@ export default async function CollectionPage({ params, searchParams }: Props) {
         ) : (
           <>
             <div>
-              <span>Top Listed</span>
-              <strong>{topListedText}</strong>
+              <span>{listedTokens.length > 0 ? "Top Listed" : "Owners"}</span>
+              <strong>{listedTokens.length > 0 ? topListedText : marketStats ? marketStats.numOwners.toLocaleString() : "—"}</strong>
             </div>
             <div>
-              <span>Floor</span>
-              <strong>{floorText}</strong>
+              <span>{floorListing ? "Floor" : "Volume"}</span>
+              <strong>{floorListing ? floorText : volumeText}</strong>
             </div>
             <div>
               <span>Listed</span>
-              <strong>{listedText}</strong>
+              <strong>{listedTokens.length > 0 ? listedText : "0 (0%)"}</strong>
             </div>
           </>
         )}

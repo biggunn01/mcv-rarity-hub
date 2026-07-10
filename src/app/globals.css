@@ -7414,3 +7414,94 @@ html:has(.collectionShell) ::-webkit-scrollbar-thumb:hover {
   -webkit-mask-image: linear-gradient(90deg, #000 0, #000 34%, transparent 49%);
   mask-image: linear-gradient(90deg, #000 0, #000 34%, transparent 49%);
 }
+
+/* ============================================================
+   Provenance & balance pass — 2026-07-09 (3)
+   1) Cream Cats token pages surface Bitcoin sat provenance:
+      rarity chip + satribute chips + sat/block/year detail.
+   2) Landing rebalance: the copy block compacts so the solar
+      system is unmistakably the main feature.
+   ============================================================ */
+
+.satProvenance {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 14px;
+}
+
+.satProvenanceLabel {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--font-data), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.satChip {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-family: var(--font-data), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: capitalize;
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.satChip--uncommon,
+.satChip--rare,
+.satChip--epic,
+.satChip--legendary,
+.satChip--mythic {
+  border-color: rgba(var(--collection-accent-rgb, 244, 207, 122), 0.55);
+  color: var(--collection-accent, #f4cf7a);
+  background: rgba(var(--collection-accent-rgb, 244, 207, 122), 0.1);
+  box-shadow: 0 0 14px rgba(var(--collection-accent-rgb, 244, 207, 122), 0.18);
+}
+
+.satChip--attr {
+  border-style: dashed;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.satProvenanceDetail {
+  width: 100%;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-data), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+}
+
+/* --- Landing rebalance: system leads, copy follows --- */
+
+@media (min-width: 721px) {
+  .orbitHero.threeOrbitHero {
+    padding-top: clamp(28px, 4vh, 44px);
+  }
+
+  .threeOrbitCopy h1 {
+    font-size: clamp(1.9rem, 3.2vw, 2.8rem);
+  }
+
+  .threeOrbitCopy .lede {
+    max-width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 0.95rem;
+  }
+
+  .threeOrbitCopy .heroSearch {
+    margin-top: 12px;
+  }
+
+  .threeOrbitCopy .orbitStatLine {
+    margin-top: 10px;
+    font-size: 0.7rem;
+  }
+}

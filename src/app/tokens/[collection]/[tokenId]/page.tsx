@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getCollection, getToken } from "@/lib/rarity-data";
+import { getSatInfo } from "@/lib/sat-types";
 
 type Props = {
   params: Promise<{ collection: string; tokenId: string }>;
@@ -58,6 +59,7 @@ export default async function TokenPage({ params }: Props) {
   const data = getCollection(collection);
   const token = getToken(collection, tokenId);
   if (!data || !token) notFound();
+  const satInfo = getSatInfo(collection, String(token.canonicalTokenId));
 
   const isOrdinalCollection = data.collection.slug === "cream-cats" || data.collection.sources.some((source) => {
     const chain = source.chain.toLowerCase();
@@ -182,6 +184,18 @@ export default async function TokenPage({ params }: Props) {
                 <dd>{token.rawTraitScore.toFixed(4)}</dd>
               </div>
             </dl>
+            {satInfo && (
+              <div className="satProvenance" aria-label="Bitcoin sat provenance">
+                <span className="satProvenanceLabel">Minted on</span>
+                <span className={`satChip satChip--${satInfo.satRarity}`}>{satInfo.satRarity} sat</span>
+                {satInfo.satributes.map((attribute) => (
+                  <span className="satChip satChip--attr" key={attribute}>{attribute}</span>
+                ))}
+                <span className="satProvenanceDetail">
+                  sat {satInfo.sat} · block {satInfo.satBlock.toLocaleString()} · {satInfo.satYear}
+                </span>
+              </div>
+            )}
             <div className="links">
               {marketplaceUrl && <a href={marketplaceUrl} target="_blank" rel="noopener noreferrer">Marketplace</a>}
               {explorerUrl && <a href={explorerUrl} target="_blank" rel="noopener noreferrer">Explorer</a>}

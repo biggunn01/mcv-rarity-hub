@@ -927,7 +927,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
 
     launchTransitionRef.current = startLandingTransition;
 
-    const baseCamera = { y: 8.1, z: 9.9 };
+    const baseCamera = { y: 8.1, z: 9.3 };
     const pointerParallax = { targetX: 0, targetY: 0, x: 0, y: 0 };
 
     function resize() {
@@ -938,7 +938,7 @@ export function OrbitLanding({ collections, chainCount }: Props) {
       camera.aspect = width / height;
       camera.fov = camera.aspect < 0.72 ? 45 : 37;
       baseCamera.y = camera.aspect < 0.72 ? 9.8 : 8.1;
-      baseCamera.z = camera.aspect < 0.72 ? 13.8 : 9.9;
+      baseCamera.z = camera.aspect < 0.72 ? 13.8 : 9.3;
       camera.position.set(0, baseCamera.y, baseCamera.z);
       camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
